@@ -20,9 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./  # package.json이 있는 디렉토리로 설정
 
       - name: Build the project
         run: npm run build
+        working-directory: ./  # 빌드도 프로젝트 루트에서 실행
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
