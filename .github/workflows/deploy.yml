@@ -29,5 +29,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub Actions의 기본 token 사용
           publish_dir: ./moviewsd/dist  # `dist` 폴더가 `moviewsd` 내에 있음
