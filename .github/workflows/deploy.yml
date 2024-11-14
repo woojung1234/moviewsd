@@ -20,14 +20,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./  # package.json이 있는 디렉토리로 설정
+        working-directory: ./moviewsd  # `moviewsd` 폴더에서 실행
 
       - name: Build the project
         run: npm run build
-        working-directory: ./  # 빌드도 프로젝트 루트에서 실행
+        working-directory: ./moviewsd  # `moviewsd` 폴더에서 빌드 실행
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./moviewsd/dist  # `dist` 폴더가 `moviewsd` 내에 있음
