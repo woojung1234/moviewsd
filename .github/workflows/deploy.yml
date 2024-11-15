@@ -24,6 +24,10 @@ jobs:
       - name: Build the project
         run: npm run build
         working-directory: ./moviewsd  # 빌드 실행
+      - name: Set Git committer identity
+        run: |
+          git config --global user.name "woojung1234"
+          git config --global user.email "corall5@naver.com"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
