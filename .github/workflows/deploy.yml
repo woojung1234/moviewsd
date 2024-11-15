@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main  # main 브랜치에 푸시할 때마다 배포
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -29,5 +28,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # GITHUB_TOKEN 사용
+          github_token: ${{ secrets.GH_TOKEN }}  # 새로 추가한 GH_TOKEN 사용
           publish_dir: ./moviewsd/dist  # dist 폴더로 배포
