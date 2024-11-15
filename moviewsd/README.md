@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+# moviewsd
+=======
 # moviewsd
 
 ## Project setup
@@ -22,3 +25,4 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+>>>>>>> 0e151ad (a)

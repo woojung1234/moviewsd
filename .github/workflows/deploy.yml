@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # main 브랜치에 푸시할 때마다 배포
+      - feature/*
 
 jobs:
   build-and-deploy:

@@ -4,34 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="03825a05-f5b9-48d2-b9fd-feb724dd5be6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/moviewsd/src/views/MovieList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/projects.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/.browserslistrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/.eslintrc.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/babel.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/jsconfig.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/public/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/public/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/src/App.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/src/assets/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/src/components/HelloWorld.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/src/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/src/router/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/src/store/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/src/views/AboutView.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/src/views/HomeView.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie/vue.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+    <list default="true" id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,13 +13,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/moviewsd" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 6
-}</component>
-  <component name="ProjectId" id="2oq6zxOnpE5wv9C4XKKTKCWhvFR" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="2oqNu1jBwEH1xoOAjsOzmqvAqaj" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -53,19 +28,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feature/movie-data",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -76,16 +52,39 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="03825a05-f5b9-48d2-b9fd-feb724dd5be6" name="Changes" comment="" />
-      <created>1731585025598</created>
+      <changelist id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="" />
+      <created>1731593365172</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1731585025598</updated>
-      <workItem from="1731585027039" duration="3145000" />
+      <updated>1731593365172</updated>
+      <workItem from="1731593366486" duration="12249000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
