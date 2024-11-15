@@ -34,7 +34,7 @@ jobs:
         run: |
           git fetch origin gh-pages
           git checkout main
-          git merge origin/gh-pages --no-ff --commit --message "Merge gh-pages deployment"
+          git merge origin/gh-pages --allow-unrelated-histories --no-ff --commit --message "Merge gh-pages deployment"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
