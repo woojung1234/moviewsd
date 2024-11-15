@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <input v-model="query" @input="searchMovies" placeholder="영화 검색..." />
+    <input v-model="query" @input="debouncedSearch" placeholder="영화 검색..." />
     <div v-if="movies.length > 0" class="movie-list">
       <div v-for="movie in movies" :key="movie.id" class="movie-card">
         <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
@@ -16,13 +16,18 @@
 
 <script>
 import axios from 'axios';
+import { debounce } from 'lodash';
 
 export default {
   data() {
     return {
       query: '',
-      movies: []
+      movies: [],
     };
+  },
+  created() {
+    // 디바운싱된 searchMovies 메서드를 생성합니다
+    this.debouncedSearch = debounce(this.searchMovies, 500);
   },
   methods: {
     async searchMovies() {
@@ -32,7 +37,12 @@ export default {
           this.movies = response.data.results;
         } catch (error) {
           console.error('영화 검색 오류:', error);
+          this.movies = []; // 검색 결과 초기화
+          // 사용자에게 에러 메시지 표시 (예시)
+          alert('영화 검색에 실패했습니다. 다시 시도해주세요.');
         }
+      } else {
+        this.movies = [];  // 검색어가 비어 있으면 결과를 비웁니다
       }
     }
   }
