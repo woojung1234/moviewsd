@@ -3,9 +3,12 @@
     <h1>영화 목록</h1>
     <div class="movie-list">
       <div v-for="movie in movies" :key="movie.id" class="movie-card">
-        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-        <h3>{{ movie.title }}</h3>
-        <p>{{ movie.overview }}</p>
+        <!-- 영화 상세 페이지로 이동하는 링크 -->
+        <router-link :to="{ name: 'movie-details', params: { id: movie.id } }">
+          <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+          <h3>{{ movie.title }}</h3>
+          <p>{{ movie.overview }}</p>
+        </router-link>
       </div>
     </div>
   </div>
