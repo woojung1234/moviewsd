@@ -15,9 +15,14 @@ const routes = [
     props: true, // URL 매개변수를 컴포넌트로 전달
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    path: '/search', // 영화 검색 페이지 경로
+    name: 'search',
+    component: SearchMovies, // 검색 페이지
+  },
+  {
+    path: '/genre', // 장르별 영화 필터링 페이지 경로
+    name: 'genre',
+    component: GenreMovies,  // 장르별 필터링 페이지
   },
 ];
 
