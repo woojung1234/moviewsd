@@ -8,7 +8,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: PopularMovies,
-    redirect: '/'
   },
   {
     path: '/movie/:id', // 영화 상세 페이지 경로
@@ -30,7 +29,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
