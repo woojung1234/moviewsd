@@ -22,7 +22,7 @@ const routes = [
   },
   {
     path: '/genre/:id', // 장르별 영화 필터링 페이지 경로
-    name: 'genre-movies',
+    name: 'genre',
     component: GenreMovies, // 장르별 영화 컴포넌트
     props: true, // URL 매개변수를 컴포넌트로 전달
   },
