@@ -1,9 +1,13 @@
 <template>
   <div class="movies">
     <h1>영화 목록</h1>
-    <div class="movie-list">
+
+    <!-- 로딩 상태 표시 -->
+    <div v-if="loading" class="loading">로딩 중...</div>
+
+    <!-- 영화 목록이 로드되었을 때만 표시 -->
+    <div class="movie-list" v-else>
       <div v-for="movie in movies" :key="movie.id" class="movie-card">
-        <!-- 영화 상세 페이지로 이동하는 링크 -->
         <router-link :to="{ name: 'movie-details', params: { id: movie.id } }">
           <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
           <h3>{{ movie.title }}</h3>
@@ -20,7 +24,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      movies: [],
+      movies: [], // 영화 목록
+      loading: true,  // 데이터 로딩 중 상태
     };
   },
   mounted() {
@@ -28,12 +33,14 @@ export default {
   },
   methods: {
     async fetchMovies() {
-      const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14';  // 여기에 API 키를 입력하세요
+      const apiKey = process.env.VUE_APP_TMDB_API_KEY;
       try {
         const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=1`);
         this.movies = response.data.results;
       } catch (error) {
         console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
+      } finally {
+        this.loading = false;  // 로딩 완료 후 상태 변경
       }
     },
   },
@@ -41,6 +48,13 @@ export default {
 </script>
 
 <style scoped>
+.loading {
+  font-size: 20px;
+  color: #555;
+  text-align: center;
+  margin-top: 50px;
+}
+
 .movies {
   text-align: center;
 }
