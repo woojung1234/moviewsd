@@ -5,7 +5,7 @@ import SearchMovies from '../views/SearchMovies.vue';  // 추가된 컴포넌트
 import GenreMovies from '../views/GenreMovies.vue';  // 추가된 컴포넌트
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: PopularMovies,
   },
