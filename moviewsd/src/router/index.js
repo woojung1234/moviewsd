@@ -8,6 +8,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: PopularMovies,
+    redirect: '/'
   },
   {
     path: '/movie/:id', // 영화 상세 페이지 경로
