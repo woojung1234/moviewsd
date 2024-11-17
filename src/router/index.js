@@ -3,11 +3,17 @@ import PopularMovies from '../views/PopularMovies.vue';
 import MovieDetailsPage from '../views/MovieDetailsPage.vue'; // 추가
 import SearchMovies from '../views/SearchMovies.vue';  // 추가된 컴포넌트
 import GenreMovies from '../views/GenreMovies.vue';  // 추가된 컴포넌트
+import TrendMovies from '../views/TrendMovies.vue';
 const routes = [
   {
     path: '/',
     name: 'home',
     component: PopularMovies,
+  },
+  {
+    path: '/popular',
+    name: 'popular',
+    component: TrendMovies, // 대세 콘텐츠 페이지 경로 설정
   },
   {
     path: '/movie/:id', // 영화 상세 페이지 경로
