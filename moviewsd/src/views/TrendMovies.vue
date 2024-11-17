@@ -8,7 +8,7 @@
     <!-- Table View -->
     <div v-if="view === 'table'" class="table-view">
       <div v-for="movie in paginatedMovies" :key="movie.id" class="movie-card">
-        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+        <img :src="getMoviePoster(movie)" :alt="movie.title" />
         <h3>{{ movie.title }}</h3>
       </div>
       <div class="pagination">
@@ -21,7 +21,7 @@
     <!-- Infinite Scroll View -->
     <div v-else class="infinite-scroll" @scroll="handleScroll">
       <div v-for="movie in displayedMovies" :key="movie.id" class="movie-card">
-        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+        <img :src="getMoviePoster(movie)" :alt="movie.title" />
         <h3>{{ movie.title }}</h3>
       </div>
       <div v-if="loading" class="loading">Loading...</div>
@@ -56,11 +56,17 @@ export default {
     },
   },
   methods: {
+    // 영화 포스터 경로를 얻는 메서드
+    getMoviePoster(movie) {
+      const posterUrl = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Image'; // 기본 이미지 처리
+      return posterUrl;
+    },
     async fetchMovies() {
       try {
         const response = await axios.get(
             `https://api.themoviedb.org/3/movie/popular?api_key=1cc6831125c4a1baf8f809dc1f68ec14&language=ko-KR&page=1`
         );
+        console.log(response.data); // API 호출 결과 확인
         this.movies = response.data.results;
         this.calculateItemsPerPage(); // 페이지 크기 재조정
         this.updateDisplayedMovies();
