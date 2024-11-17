@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/moviewsd/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/moviewsd/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/moviewsd/src/components/HelloWorld.vue" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/moviewsd/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/moviewsd/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/moviewsd/src/views/HomeView.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/moviewsd/src/views/PopularMovies.vue" beforeDir="false" afterPath="$PROJECT_DIR$/moviewsd/src/views/PopularMovies.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,18 +21,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/moviewsd" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "woojung1234"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;woojung1234&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/woojung1234/moviewsd.git",
-    "accountId": "8dd883f3-7676-4239-afd7-de9febabca38"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/woojung1234/moviewsd.git&quot;,
+    &quot;accountId&quot;: &quot;8dd883f3-7676-4239-afd7-de9febabca38&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 6
@@ -73,7 +75,8 @@
       <option name="presentableId" value="Default" />
       <updated>1731593365172</updated>
       <workItem from="1731593366486" duration="19851000" />
-      <workItem from="1731758474332" duration="5036000" />
+      <workItem from="1731758474332" duration="6084000" />
+      <workItem from="1731834005393" duration="1138000" />
     </task>
     <servers />
   </component>
