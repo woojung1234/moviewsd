@@ -20,7 +20,7 @@
 
     <!-- Infinite Scroll View -->
     <div v-else class="infinite-scroll" @scroll="handleScroll">
-      <div v-for="movie in movies" :key="movie.id" class="movie-card">
+      <div v-for="movie in displayedMovies" :key="movie.id" class="movie-card">
         <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
         <h3>{{ movie.title }}</h3>
       </div>
@@ -36,28 +36,24 @@ export default {
   data() {
     return {
       movies: [], // 전체 영화 데이터
-      currentPage: 1, // 현재 페이지
-      itemsPerPage: 10, // 기본 페이지당 영화 개수 (가로 * 세로)
+      currentPage: 1, // 현재 페이지 번호
+      itemsPerPage: 10, // 기본 페이지당 영화 개수
       view: 'table', // 현재 뷰 ('table' or 'infinite')
-      loading: false, // 로딩 상태
+      loading: false, // 무한 스크롤 로딩 상태
+      displayedMovies: [], // 무한 스크롤에서 표시되는 영화
     };
   },
   computed: {
-    // 한 페이지에 표시할 영화 데이터
+    // Table View에서 한 페이지의 영화 데이터
     paginatedMovies() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
       return this.movies.slice(startIndex, endIndex);
     },
-    // 총 페이지 수
+    // Table View에서 총 페이지 수
     totalPages() {
       return Math.ceil(this.movies.length / this.itemsPerPage);
     },
-  },
-  watch: {
-    // 뷰포트 크기가 변경되면 영화 개수 재계산
-    '$root.$el.clientWidth': 'calculateItemsPerPage',
-    '$root.$el.clientHeight': 'calculateItemsPerPage',
   },
   methods: {
     async fetchMovies() {
@@ -67,50 +63,53 @@ export default {
         );
         this.movies = response.data.results;
         this.calculateItemsPerPage();
+        this.updateDisplayedMovies();
       } catch (error) {
         console.error('영화 데이터를 가져오는 데 실패했습니다.', error);
       }
     },
-    // 현재 뷰 변경
     toggleView(viewType) {
       this.view = viewType;
     },
-    // 이전 페이지 이동
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
     },
-    // 다음 페이지 이동
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
       }
     },
-    // 무한 스크롤 핸들링
-    async handleScroll(event) {
+    handleScroll(event) {
       const scrollable = event.target.scrollHeight - event.target.clientHeight;
       const scrolled = event.target.scrollTop;
       if (scrollable - scrolled <= 100 && !this.loading) {
         this.loading = true;
-        // Fetch next page or append more data
         setTimeout(() => {
+          this.updateDisplayedMovies();
           this.loading = false;
         }, 1000);
       }
     },
-    // 페이지 크기에 따른 itemsPerPage 재계산
+    updateDisplayedMovies() {
+      const startIndex = this.displayedMovies.length;
+      const nextMovies = this.movies.slice(
+          startIndex,
+          startIndex + this.itemsPerPage
+      );
+      this.displayedMovies.push(...nextMovies);
+    },
     calculateItemsPerPage() {
       const width = this.$root.$el.clientWidth;
       const height = this.$root.$el.clientHeight;
-      const columns = Math.floor(width / 200); // 영화 카드 1개당 폭 200px 기준
-      const rows = Math.floor(height / 300); // 영화 카드 1개당 높이 300px 기준
-      this.itemsPerPage = columns * rows;
+      const columns = Math.floor(width / 200); // 1열에 표시되는 포스터 수 (200px 기준)
+      const rows = Math.floor(height / 300); // 1행에 표시되는 포스터 수 (300px 기준)
+      this.itemsPerPage = columns * rows; // 한 페이지에 표시되는 총 포스터 수
     },
   },
   mounted() {
     this.fetchMovies();
-    this.calculateItemsPerPage();
     window.addEventListener('resize', this.calculateItemsPerPage);
   },
   beforeUnmount() {
@@ -133,14 +132,13 @@ export default {
 .infinite-scroll {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   gap: 20px;
 }
 
 .movie-card {
-  width: 180px;
+  width: 200px; /* 포스터 고정 크기 */
   text-align: center;
-  border-radius: 10px;
   overflow: hidden;
 }
 
