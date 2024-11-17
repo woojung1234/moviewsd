@@ -2,7 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/search">Search Movies</router-link> |
-    <router-link to="/genre">Genre Movies</router-link> |
+    <router-link to="/genre/28">Genre Movies</router-link> |
   </nav>
   <router-view/>
 </template>
