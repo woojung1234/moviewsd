@@ -5,6 +5,11 @@
       <button @click="toggleView('infinite')">Infinite Scroll</button>
     </div>
 
+    <!-- No Data Message -->
+    <div v-if="!movies.length && !loading" class="no-data">
+      <p>영화를 불러오는 중입니다. 잠시만 기다려주세요.</p>
+    </div>
+
     <!-- Table View -->
     <div v-if="view === 'table'" class="table-view">
       <div v-for="movie in paginatedMovies" :key="movie.id" class="movie-card">
@@ -70,6 +75,10 @@ export default {
     },
     toggleView(viewType) {
       this.view = viewType;
+      if (viewType === 'infinite') {
+        this.displayedMovies = [];
+        this.updateDisplayedMovies();
+      }
     },
     prevPage() {
       if (this.currentPage > 1) {
@@ -101,11 +110,11 @@ export default {
       this.displayedMovies.push(...nextMovies);
     },
     calculateItemsPerPage() {
-      const width = this.$root.$el.clientWidth;
-      const height = this.$root.$el.clientHeight;
-      const columns = Math.floor(width / 200); // 1열에 표시되는 포스터 수 (200px 기준)
-      const rows = Math.floor(height / 300); // 1행에 표시되는 포스터 수 (300px 기준)
-      this.itemsPerPage = columns * rows; // 한 페이지에 표시되는 총 포스터 수
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const columns = Math.floor(width / 200); // 1열에 표시되는 포스터 수
+      const rows = Math.floor(height / 300); // 1행에 표시되는 포스터 수
+      this.itemsPerPage = Math.max(columns * rows, 1); // 최소값은 1
     },
   },
   mounted() {
@@ -130,14 +139,13 @@ export default {
 
 .table-view,
 .infinite-scroll {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
 }
 
 .movie-card {
-  width: 200px; /* 포스터 고정 크기 */
+  width: 200px;
   text-align: center;
   overflow: hidden;
 }
@@ -158,6 +166,12 @@ export default {
 }
 
 .loading {
+  text-align: center;
+  font-size: 16px;
+  color: #888;
+}
+
+.no-data {
   text-align: center;
   font-size: 16px;
   color: #888;
