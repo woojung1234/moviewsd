@@ -14,7 +14,7 @@
     </div>
 
     <!-- Infinite Scroll View -->
-    <div v-else class="infinite-scroll" @scroll="loadMore">
+    <div v-else class="infinite-scroll" @scroll="handleScroll">
       <div v-for="movie in movies" :key="movie.id" class="movie-card">
         <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
         <h3>{{ movie.title }}</h3>
@@ -37,40 +37,46 @@ export default {
     };
   },
   async mounted() {
-    await this.fetchMovies(); // 페이지 로드 시 첫 영화 목록 불러오기
+    await this.loadInitialMovies(); // 페이지 로드 시 첫 영화 목록 불러오기
   },
   methods: {
-    async fetchMovies() {
-      const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14'; // TMDB API 키
+    async loadInitialMovies() {
+      const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14';
       try {
+        this.loading = true;
         const movies = [];
-        for (let i = 1; i <= 5; i++) { // 5페이지까지 처음에 로드
-          const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${i}`);
+        for (let i = 1; i <= 5; i++) { // 초기 5페이지 데이터 로드
+          const response = await axios.get(
+              `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${i}`
+          );
           movies.push(...response.data.results);
         }
-        this.movies = movies;
+        this.movies = movies; // 초기 데이터 설정
       } catch (error) {
         console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
+      } finally {
+        this.loading = false;
       }
     },
-    async loadMore(event) {
-      const bottom = event.target.scrollHeight === event.target.scrollTop + event.target.clientHeight;
-      if (bottom && !this.loading) {
+    async fetchMoreMovies() {
+      const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14';
+      try {
         this.loading = true;
-        try {
-          const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14';
-          const movies = [];
-          for (let i = 0; i < 2; i++) { // 무한 스크롤 시 2페이지씩 로드
-            this.page++;
-            const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.page}`);
-            movies.push(...response.data.results);
-          }
-          this.movies = [...this.movies, ...movies];
-        } catch (error) {
-          console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
-        } finally {
-          this.loading = false;
-        }
+        this.page++;
+        const response = await axios.get(
+            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.page}`
+        );
+        this.movies = [...this.movies, ...response.data.results]; // 기존 데이터에 추가
+      } catch (error) {
+        console.error('영화 데이터를 추가 로드하는 데 오류가 발생했습니다.', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    handleScroll(event) {
+      const { scrollTop, clientHeight, scrollHeight } = event.target;
+      if (scrollTop + clientHeight >= scrollHeight - 10 && !this.loading) {
+        this.fetchMoreMovies(); // 스크롤이 하단에 도달 시 추가 데이터 로드
       }
     },
     toggleView(view) {
