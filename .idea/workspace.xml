@@ -43,7 +43,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/trends",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -71,7 +71,7 @@
       <updated>1731593365172</updated>
       <workItem from="1731593366486" duration="19851000" />
       <workItem from="1731758474332" duration="6084000" />
-      <workItem from="1731834005393" duration="6956000" />
+      <workItem from="1731834005393" duration="8229000" />
     </task>
     <servers />
   </component>
