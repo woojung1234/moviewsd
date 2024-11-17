@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: GenreMovies,
+    component: PopularMovies,
   },
   {
     path: '/movie/:id', // 영화 상세 페이지 경로
