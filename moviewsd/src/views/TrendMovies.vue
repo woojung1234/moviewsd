@@ -37,77 +37,84 @@ export default {
     return {
       movies: [], // 전체 영화 데이터
       currentPage: 1, // 현재 페이지
-      itemsPerPage: 12, // 페이지당 영화 개수
-      totalPages: 1, // 총 페이지 수
+      itemsPerPage: 10, // 기본 페이지당 영화 개수 (가로 * 세로)
+      view: 'table', // 현재 뷰 ('table' or 'infinite')
       loading: false, // 로딩 상태
-      view: 'table', // 현재 보기 모드 ('table' 또는 'infinite')
-      infiniteScrollPage: 1, // 무한 스크롤의 현재 페이지
     };
   },
   computed: {
+    // 한 페이지에 표시할 영화 데이터
     paginatedMovies() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.movies.slice(start, end); // 현재 페이지의 영화 데이터 반환
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.movies.slice(startIndex, endIndex);
+    },
+    // 총 페이지 수
+    totalPages() {
+      return Math.ceil(this.movies.length / this.itemsPerPage);
     },
   },
-  async mounted() {
-    await this.loadInitialMovies(); // 첫 영화 목록 불러오기
+  watch: {
+    // 뷰포트 크기가 변경되면 영화 개수 재계산
+    '$root.$el.clientWidth': 'calculateItemsPerPage',
+    '$root.$el.clientHeight': 'calculateItemsPerPage',
   },
   methods: {
-    async loadInitialMovies() {
-      const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14';
+    async fetchMovies() {
       try {
-        this.loading = true;
-        const movies = [];
-        for (let i = 1; i <= 5; i++) {
-          const response = await axios.get(
-              `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${i}`
-          );
-          movies.push(...response.data.results);
-        }
-        this.movies = movies; // 전체 영화 데이터 저장
-        this.totalPages = Math.ceil(this.movies.length / this.itemsPerPage); // 총 페이지 수 계산
+        const response = await axios.get(
+            `https://api.themoviedb.org/3/movie/popular?api_key=1cc6831125c4a1baf8f809dc1f68ec14&language=ko-KR&page=1`
+        );
+        this.movies = response.data.results;
+        this.calculateItemsPerPage();
       } catch (error) {
-        console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
-      } finally {
-        this.loading = false;
+        console.error('영화 데이터를 가져오는 데 실패했습니다.', error);
       }
     },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      }
+    // 현재 뷰 변경
+    toggleView(viewType) {
+      this.view = viewType;
     },
+    // 이전 페이지 이동
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
     },
-    async fetchMoreMovies() {
-      const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14';
-      try {
+    // 다음 페이지 이동
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    // 무한 스크롤 핸들링
+    async handleScroll(event) {
+      const scrollable = event.target.scrollHeight - event.target.clientHeight;
+      const scrolled = event.target.scrollTop;
+      if (scrollable - scrolled <= 100 && !this.loading) {
         this.loading = true;
-        this.infiniteScrollPage++;
-        const response = await axios.get(
-            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.infiniteScrollPage}`
-        );
-        this.movies = [...this.movies, ...response.data.results];
-      } catch (error) {
-        console.error('영화 데이터를 추가 로드하는 데 오류가 발생했습니다.', error);
-      } finally {
-        this.loading = false;
+        // Fetch next page or append more data
+        setTimeout(() => {
+          this.loading = false;
+        }, 1000);
       }
     },
-    handleScroll(event) {
-      const { scrollTop, clientHeight, scrollHeight } = event.target;
-      if (scrollTop + clientHeight >= scrollHeight - 10 && !this.loading) {
-        this.fetchMoreMovies();
-      }
+    // 페이지 크기에 따른 itemsPerPage 재계산
+    calculateItemsPerPage() {
+      const width = this.$root.$el.clientWidth;
+      const height = this.$root.$el.clientHeight;
+      const columns = Math.floor(width / 200); // 영화 카드 1개당 폭 200px 기준
+      const rows = Math.floor(height / 300); // 영화 카드 1개당 높이 300px 기준
+      this.itemsPerPage = columns * rows;
     },
-    toggleView(view) {
-      this.view = view;
-    },
+  },
+  mounted() {
+    this.fetchMovies();
+    this.calculateItemsPerPage();
+    window.addEventListener('resize', this.calculateItemsPerPage);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.calculateItemsPerPage);
   },
 };
 </script>
@@ -122,29 +129,19 @@ export default {
   margin-bottom: 20px;
 }
 
-.view-toggle button {
-  margin: 0 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.table-view {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 */
-  gap: 20px;
-}
-
+.table-view,
 .infinite-scroll {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개 */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
   gap: 20px;
-  max-height: 600px;
-  overflow-y: auto;
 }
 
 .movie-card {
+  width: 180px;
   text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .movie-card img {
@@ -153,24 +150,18 @@ export default {
   border-radius: 10px;
 }
 
-.pagination {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
+.movie-card h3 {
+  margin: 10px 0;
+  font-size: 14px;
 }
 
-.pagination button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+.pagination {
+  margin-top: 20px;
 }
 
 .loading {
   text-align: center;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
   color: #888;
 }
 </style>
