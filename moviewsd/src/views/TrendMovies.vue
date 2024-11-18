@@ -181,7 +181,12 @@ h1 {
   overflow-y: auto;  /* 스크롤 가능하도록 설정 */
   max-height: 80vh;  /* 화면 크기에 맞게 최대 높이 설정 */
 }
-
+@media screen and (max-width: 768px) {
+  .infinite-scroll {
+    overflow-y: visible; /* 모바일에서는 전체 스크롤 사용 */
+    max-height: unset; /* 높이 제한 해제 */
+  }
+}
 .loading {
   text-align: center;
   font-size: 18px;
