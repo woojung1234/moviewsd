@@ -55,7 +55,6 @@ export default {
   },
   mounted() {
     this.fetchMovies(); // 초기 데이터 가져오기
-    this.setupScrollListener();  // 무한 스크롤 리스너 설정
   },
   watch: {
     viewType(newViewType) {
@@ -100,33 +99,32 @@ export default {
       this.fetchMovies();  // 페이지 변경 후 새로 영화 목록을 가져옴
     },
 
-    // 무한 스크롤 감지 이벤트 설정
+    // 스크롤 이벤트 리스너 추가
     setupScrollListener() {
       // 'infinite' 뷰일 때만 이벤트 리스너를 추가
-      if (this.viewType === 'infinite') {
-        const container = this.$refs.scrollContainer;
-        if (container) {
-          container.addEventListener('scroll', this.onScroll, { passive: true });
-        }
+      const container = this.$refs.scrollContainer;
+      if (container) {
+        container.addEventListener('scroll', this.onScroll, { passive: true });
       }
     },
 
     // 스크롤 끝에 도달했는지 확인
     async onScroll() {
       const container = this.$refs.scrollContainer;
-      if (!container) return;  // container가 없으면 이벤트를 처리하지 않음
-      const bottom = container.scrollHeight === container.scrollTop + container.clientHeight;
+      if (container) {
+        const bottom = container.scrollHeight === container.scrollTop + container.clientHeight;
 
-      if (bottom && !this.loading) {
-        this.loading = true;
-        this.page++;  // 페이지 증가
-        this.fetchMovies();  // 다음 페이지 데이터 로딩
+        if (bottom && !this.loading) {
+          this.loading = true;
+          this.page++;  // 페이지 증가
+          await this.fetchMovies();  // 다음 페이지 데이터 로딩
+        }
       }
     },
 
     // 스크롤 이벤트 리스너 제거
     removeScrollListener() {
-      const container = this.$refs.scrollContainer || window;
+      const container = this.$refs.scrollContainer;
       if (container) {
         container.removeEventListener('scroll', this.onScroll);
       }
@@ -242,4 +240,3 @@ h1 {
   line-height: 30px;
 }
 </style>
-
