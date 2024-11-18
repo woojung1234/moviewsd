@@ -17,7 +17,7 @@
 
       <!-- 페이지네이션 (이전/다음) -->
       <div class="pagination">
-        <button @click="changePage('previous')" :disabled="page === 1">이전</button>
+        <button @click="changePage('previous')" :disabled="page === 1 || loading">이전</button>
         <span>페이지 {{ page }}</span>
         <button @click="changePage('next')" :disabled="loading">다음</button>
       </div>
@@ -73,6 +73,7 @@ export default {
       try {
         this.loading = true;
         const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.page}`);
+        // 페이지가 1일 때 새로운 데이터를 덮어쓰고, 그 외 페이지에서는 기존 목록에 새 데이터를 추가
         this.movies = this.page === 1 ? response.data.results : [...this.movies, ...response.data.results];
       } catch (error) {
         console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
@@ -91,10 +92,10 @@ export default {
 
     // 페이지네이션 (이전/다음) 버튼 동작
     changePage(direction) {
-      if (direction === 'previous' && this.page > 1) {
-        this.page--;
+      if (direction === 'previous' && this.page > 1 && !this.loading) {
+        this.page--;  // 페이지 감소
       } else if (direction === 'next' && !this.loading) {
-        this.page++;
+        this.page++;  // 페이지 증가
       }
       this.fetchMovies();  // 페이지 변경 후 새로 영화 목록을 가져옴
     },
