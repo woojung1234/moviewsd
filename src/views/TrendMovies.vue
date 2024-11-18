@@ -55,6 +55,7 @@ export default {
   },
   mounted() {
     this.fetchMovies(); // 초기 데이터 가져오기
+    this.setupScrollListener();
   },
   methods: {
     // 영화 데이터 가져오기
@@ -65,6 +66,8 @@ export default {
         this.movies = response.data.results;
       } catch (error) {
         console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -84,6 +87,16 @@ export default {
         this.page++;
       }
       this.fetchMovies();  // 페이지 변경 후 새로 영화 목록을 가져옴
+    },
+    setupScrollListener() {
+      const container = this.$refs.scrollContainer || window; // 모바일에서는 window 스크롤 감지
+      container.addEventListener('scroll', this.onScroll, { passive: true });
+    },
+
+    // 무한 스크롤 감지 이벤트 해제
+    removeScrollListener() {
+      const container = this.$refs.scrollContainer || window;
+      container.removeEventListener('scroll', this.onScroll);
     },
 
     // 무한 스크롤에서 더 많은 영화 로딩
