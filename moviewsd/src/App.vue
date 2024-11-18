@@ -4,6 +4,7 @@
     <router-link to="/popular">Popular</router-link> |
     <router-link to="/search">Search Movies</router-link> |
     <router-link to="/genre/28">Genre Movies</router-link> |
+    <router-link to="/wishlist">WishList</router-link> |
   </nav>
   <router-view/>
 </template>

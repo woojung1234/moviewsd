@@ -19,14 +19,24 @@
       />
 
       <input type="date" v-model="releaseDate" @change="applyFilters" />
+
+      <!-- 필터 초기화 버튼 추가 -->
+      <button @click="resetFilters">필터 초기화</button>
     </div>
 
     <!-- 영화 목록 -->
     <div class="movie-list" ref="scrollContainer" @scroll="handleScroll">
       <div v-for="movie in filteredMovies" :key="movie.id" class="movie-card">
-        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+        <div class="poster-wrapper">
+          <img
+              :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+              :alt="movie.title"
+              @click="toggleWishlist(movie)"
+          />
+          <!-- 찜된 영화에 별 표시 -->
+          <span v-if="isInWishlist(movie)" class="wishlist-star">★</span>
+        </div>
         <h3>{{ movie.title }}</h3>
-        <p>{{ movie.overview }}</p>
       </div>
       <div v-if="loading" class="loading">로딩 중...</div>
     </div>
@@ -119,6 +129,14 @@ export default {
       // 필터를 적용한 뒤 결과를 업데이트
       this.movies = this.allMovies;
     },
+    resetFilters() {
+      // 필터 초기화 함수
+      this.query = '';
+      this.selectedGenre = '';
+      this.minRating = '';
+      this.releaseDate = '';
+      this.applyFilters(); // 필터링 재적용
+    },
     async searchMovies() {
       const apiKey = process.env.VUE_APP_TMDB_API_KEY;
       if (this.query.trim()) {
@@ -134,6 +152,32 @@ export default {
         // 검색어가 비어 있으면 초기 데이터로 복원
         this.movies = this.allMovies;
       }
+    },
+    // 찜 기능 토글
+    toggleWishlist(movie) {
+      let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const movieIndex = wishlist.findIndex(item => item.id === movie.id);
+
+      if (movieIndex === -1) {
+        wishlist.push(movie);
+      } else {
+        wishlist.splice(movieIndex, 1);
+      }
+
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+      // 찜 상태 즉시 반영
+      this.movies = this.movies.map(m => {
+        if (m.id === movie.id) {
+          m.isInWishlist = !m.isInWishlist;
+        }
+        return m;
+      });
+    },
+    // 해당 영화가 위시리스트에 있는지 확인
+    isInWishlist(movie) {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      return wishlist.some(item => item.id === movie.id);
     },
   },
 };
@@ -160,11 +204,21 @@ export default {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
+  position: relative;
 }
 
 .movie-card img {
   max-width: 100%;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+.wishlist-star {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 2rem;
+  color: gold;
 }
 
 .loading {
@@ -172,4 +226,22 @@ export default {
   font-size: 18px;
   color: #555;
 }
+
+button {
+  padding: 5px 10px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #3a9c6c;
+}
+
+button:focus {
+  outline: none;
+}
 </style>
+
