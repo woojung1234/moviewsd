@@ -19,7 +19,7 @@
       <div class="pagination">
         <button @click="changePage('previous')" :disabled="page === 1">이전</button>
         <span>페이지 {{ page }}</span>
-        <button @click="changePage('next')">다음</button>
+        <button @click="changePage('next')" :disabled="loading">다음</button>
       </div>
     </div>
 
@@ -58,7 +58,7 @@ export default {
   },
   watch: {
     viewType(newViewType) {
-      // 보기 형식이 변경되면, 스크롤 리스너 설정을 리셋
+      // 보기 형식이 변경되면, 영화 목록 초기화 및 페이지 리셋
       if (newViewType === 'infinite') {
         this.setupScrollListener();
       } else {
@@ -93,7 +93,7 @@ export default {
     changePage(direction) {
       if (direction === 'previous' && this.page > 1) {
         this.page--;
-      } else if (direction === 'next') {
+      } else if (direction === 'next' && !this.loading) {
         this.page++;
       }
       this.fetchMovies();  // 페이지 변경 후 새로 영화 목록을 가져옴
