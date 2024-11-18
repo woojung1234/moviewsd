@@ -4,6 +4,7 @@ import MovieDetailsPage from '../views/MovieDetailsPage.vue'; // 추가
 import SearchMovies from '../views/SearchMovies.vue';  // 추가된 컴포넌트
 import GenreMovies from '../views/GenreMovies.vue';  // 추가된 컴포넌트
 import TrendMovies from '../views/TrendMovies.vue';
+import WishList from '../views/WishList.vue';
 const routes = [
   {
     path: '/',
@@ -25,6 +26,11 @@ const routes = [
     path: '/search', // 영화 검색 페이지 경로
     name: 'search',
     component: SearchMovies, // 검색 페이지
+  },
+  {
+    path: '/wishlist',  // 위시리스트 페이지 경로
+    name: 'wishlist',
+    component: WishList
   },
   {
     path: '/genre/:id', // 장르별 영화 필터링 페이지 경로

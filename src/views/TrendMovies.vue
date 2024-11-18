@@ -10,12 +10,11 @@
 
     <!-- Table View일 때 -->
     <div v-if="viewType === 'table'" class="movie-list table-view">
-      <div v-for="movie in paginatedMovies" :key="movie.id" class="movie-card">
-        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-        <h3>{{ movie.title }}</h3>
-      </div>
-
-      <!-- 페이지네이션 (이전/다음) -->
+      <movie-card
+          v-for="movie in paginatedMovies"
+          :key="movie.id"
+          :movie="movie"
+      />
       <div class="pagination">
         <button @click="changePage('previous')" :disabled="page === 1">이전</button>
         <span>페이지 {{ page }}</span>
@@ -30,11 +29,11 @@
         @scroll="loadMore"
         ref="scrollContainer"
     >
-      <div v-for="movie in movies" :key="movie.id" class="movie-card">
-        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-        <h3>{{ movie.title }}</h3>
-      </div>
-
+      <movie-card
+          v-for="movie in movies"
+          :key="movie.id"
+          :movie="movie"
+      />
       <div v-if="loading" class="loading">Loading...</div>
     </div>
   </div>
@@ -42,8 +41,11 @@
 
 <script>
 import axios from 'axios';
+import MovieCard from "@/components/MovieCard.vue";
+
 
 export default {
+  components: {MovieCard},
   data() {
     return {
       viewType: 'table',  // 초기 화면은 Table View
@@ -85,6 +87,21 @@ export default {
       }
     },
 
+    // 영화가 위시리스트에 추가/삭제될 때 호출되는 메서드
+    toggleWishlist(movie) {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+      const movieIndex = wishlist.findIndex(item => item.id === movie.id);
+
+      if (movieIndex === -1) {
+        wishlist.push(movie);  // 영화 추가
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      } else {
+        wishlist.splice(movieIndex, 1);  // 영화 삭제
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      }
+    },
+
     // 보기 형식 변경 (Table View 또는 Infinite Scroll)
     changeView(type) {
       this.viewType = type;
@@ -111,7 +128,8 @@ export default {
       }
     },
   },
-};
+}
+
 </script>
 
 <style scoped>

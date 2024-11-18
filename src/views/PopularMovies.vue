@@ -26,19 +26,11 @@
             class="movie-slider"
             @wheel.prevent="handleScroll($event, index)"
         >
-          <div
+          <MovieCard
               v-for="movie in genre.movies"
               :key="movie.id"
-              class="movie-card"
-          >
-            <router-link :to="{ name: 'movie-details', params: { id: movie.id } }">
-              <img
-                  :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path"
-                  :alt="movie.title"
-              />
-              <h3>{{ movie.title }}</h3>
-            </router-link>
-          </div>
+              :movie="movie"
+          />
         </div>
       </div>
     </div>
@@ -47,8 +39,12 @@
 
 <script>
 import axios from "axios";
+import MovieCard from "@/components/MovieCard.vue"; // MovieCard 컴포넌트 임포트
 
 export default {
+  components: {
+    MovieCard, // MovieCard 컴포넌트 등록
+  },
   data() {
     return {
       featuredMovie: null,
@@ -135,20 +131,25 @@ export default {
 
 .movie-slider {
   display: flex;
-  overflow-x: scroll;
+  overflow-x: auto; /* 'scroll' 대신 'auto'로 설정하여 필요할 때만 스크롤이 표시됨 */
   gap: 10px;
   padding: 0 10px;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox에서 스크롤바 스타일 설정 */
+  -ms-overflow-style: none; /* IE/Edge에서 스크롤바 스타일 설정 */
 }
 
 .movie-slider::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none; /* 스크롤바 높이 설정 */
+}
+
+.movie-slider::-webkit-scrollbar-thumb {
+  background: #888; /* 스크롤바의 색 */
+  border-radius: 4px; /* 스크롤바의 둥근 모서리 */
 }
 
 .movie-card {
-  flex: 0 0 auto;
-  width: 150px;
+  flex: 0 0 auto; /* 카드들이 고정 크기로 배치되도록 설정 */
+  width: 150px; /* 각 카드의 고정 너비 */
   text-align: center;
 }
 
@@ -157,10 +158,6 @@ export default {
   border-radius: 8px;
 }
 
-.movie-card h3 {
-  font-size: 14px;
-  margin: 5px 0;
-}
 
 @media (max-width: 768px) {
   .featured-info h1 {
@@ -170,10 +167,5 @@ export default {
   .featured-info p {
     font-size: 12px;
   }
-
-  .movie-card {
-    width: 120px;
-  }
 }
 </style>
-
