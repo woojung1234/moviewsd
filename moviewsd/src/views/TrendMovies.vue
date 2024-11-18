@@ -8,6 +8,15 @@
       <button @click="changeView('infinite')">Infinite Scroll</button>
     </div>
 
+    <!-- 무한 스크롤일 때 -->
+    <div v-if="viewType === 'infinite'" class="movie-list infinite-scroll" @scroll="loadMore" ref="scrollContainer">
+      <div v-for="movie in movies" :key="movie.id" class="movie-card">
+        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+        <h3>{{ movie.title }}</h3>
+      </div>
+      <div v-if="loading" class="loading">Loading...</div>
+    </div>
+
     <!-- Table View일 때 -->
     <div v-if="viewType === 'table'" class="movie-list table-view">
       <div v-for="movie in movies" :key="movie.id" class="movie-card">
@@ -22,15 +31,6 @@
         <button @click="changePage('next')">다음</button>
       </div>
     </div>
-
-    <!-- 무한 스크롤일 때 -->
-    <div v-if="viewType === 'infinite'" class="movie-list infinite-scroll" @scroll="loadMore" ref="scrollContainer">
-      <div v-for="movie in movies" :key="movie.id" class="movie-card">
-        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-        <h3>{{ movie.title }}</h3>
-      </div>
-      <div v-if="loading" class="loading">Loading...</div>
-    </div>
   </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
       movies: [],         // 영화 목록
       page: 1,            // 현재 페이지
       loading: false,     // 로딩 상태
-      itemsPerPage: 30,   // 한 페이지에 표시될 영화 개수
+      itemsPerPage: 50,   // 처음에 불러오는 영화 개수 (50개로 증가)
     };
   },
   mounted() {
