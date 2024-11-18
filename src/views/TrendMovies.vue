@@ -10,7 +10,7 @@
 
     <!-- Table View일 때 -->
     <div v-if="viewType === 'table'" class="movie-list table-view">
-      <div v-for="movie in movies" :key="movie.id" class="movie-card">
+      <div v-for="movie in paginatedMovies" :key="movie.id" class="movie-card">
         <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
         <h3>{{ movie.title }}</h3>
       </div>
@@ -19,7 +19,7 @@
       <div class="pagination">
         <button @click="changePage('previous')" :disabled="page === 1">이전</button>
         <span>페이지 {{ page }}</span>
-        <button @click="changePage('next')">다음</button>
+        <button @click="changePage('next')" :disabled="page * itemsPerPage >= totalResults">다음</button>
       </div>
     </div>
 
@@ -47,23 +47,37 @@ export default {
   data() {
     return {
       viewType: 'table',  // 초기 화면은 Table View
-      movies: [],
-      page: 1,
-      loading: false,
-      itemsPerPage: 30,  // 페이지당 영화 개수
+      movies: [],          // 전체 영화 목록
+      page: 1,             // 현재 페이지
+      loading: false,      // 로딩 상태
+      itemsPerPage: 20,    // 페이지당 영화 개수
+      totalResults: 0,     // 전체 영화 수
     };
   },
   mounted() {
     this.fetchMovies(); // 초기 데이터 가져오기
-    this.setupScrollListener();
+  },
+  computed: {
+    // 테이블 페이지에서 현재 페이지에 맞는 영화 목록을 반환
+    paginatedMovies() {
+      const startIndex = (this.page - 1) * this.itemsPerPage;
+      const endIndex = this.page * this.itemsPerPage;
+      return this.movies.slice(startIndex, endIndex);
+    },
   },
   methods: {
     // 영화 데이터 가져오기
     async fetchMovies() {
-      const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14'; // 여기에 API 키를 입력하세요
+      const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14'; // TMDB API 키
       try {
+        this.loading = true;
         const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.page}`);
-        this.movies = response.data.results;
+        if (this.page === 1) {
+          this.movies = response.data.results; // 첫 번째 페이지일 때는 새 데이터로 덮어씁니다.
+        } else {
+          this.movies.push(...response.data.results); // 이후 페이지는 기존 목록에 추가
+        }
+        this.totalResults = response.data.total_results;  // 전체 영화 개수 업데이트
       } catch (error) {
         console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
       } finally {
@@ -75,7 +89,7 @@ export default {
     changeView(type) {
       this.viewType = type;
       this.page = 1;  // 페이지 리셋
-      this.movies = []; // 이전 영화 목록 초기화
+      this.movies = []; // 영화 목록 초기화
       this.fetchMovies();  // 새로 영화 목록을 가져옴
     },
 
@@ -83,40 +97,17 @@ export default {
     changePage(direction) {
       if (direction === 'previous' && this.page > 1) {
         this.page--;
-      } else if (direction === 'next') {
+      } else if (direction === 'next' && this.page * this.itemsPerPage < this.totalResults) {
         this.page++;
       }
       this.fetchMovies();  // 페이지 변경 후 새로 영화 목록을 가져옴
     },
-    setupScrollListener() {
-      const container = this.$refs.scrollContainer || window; // 모바일에서는 window 스크롤 감지
-      container.addEventListener('scroll', this.onScroll, { passive: true });
-    },
-
-    // 무한 스크롤 감지 이벤트 해제
-    removeScrollListener() {
-      const container = this.$refs.scrollContainer || window;
-      container.removeEventListener('scroll', this.onScroll);
-    },
 
     // 무한 스크롤에서 더 많은 영화 로딩
     async loadMore() {
-      const container = this.$refs.scrollContainer;
-      const bottom = container.scrollHeight === container.scrollTop + container.clientHeight;
-
-      if (bottom && !this.loading) {
-        this.loading = true;
+      if (!this.loading) {
         this.page++;  // 페이지 증가
-
-        try {
-          const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14'; // 여기에 API 키를 입력하세요
-          const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.page}`);
-          this.movies = [...this.movies, ...response.data.results];
-        } catch (error) {
-          console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
-        } finally {
-          this.loading = false;
-        }
+        await this.fetchMovies();
       }
     },
   },
