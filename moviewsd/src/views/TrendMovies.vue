@@ -44,7 +44,8 @@ export default {
       movies: [],         // 영화 목록
       page: 1,            // 현재 페이지
       loading: false,     // 로딩 상태
-      itemsPerPage: 50,   // 처음에 불러오는 영화 개수 (50개로 증가)
+      itemsPerPage: 20,   // 처음에 불러오는 영화 개수 (20개로 설정)
+      totalResults: 0,    // 전체 영화 수
     };
   },
   mounted() {
@@ -56,7 +57,12 @@ export default {
       const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14'; // API 키
       try {
         const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.page}`);
-        this.movies = response.data.results;
+        if (this.page === 1) {
+          this.movies = response.data.results;
+        } else {
+          this.movies.push(...response.data.results); // 다음 페이지 데이터 추가
+        }
+        this.totalResults = response.data.total_results;  // 전체 영화 개수 업데이트
       } catch (error) {
         console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
       } finally {
@@ -76,29 +82,21 @@ export default {
     changePage(direction) {
       if (direction === 'previous' && this.page > 1) {
         this.page--;
-      } else if (direction === 'next') {
+      } else if (direction === 'next' && this.page * this.itemsPerPage < this.totalResults) {
         this.page++;
       }
       this.fetchMovies();  // 페이지 변경 후 새로 영화 목록을 가져옴
     },
 
     // 무한 스크롤에서 더 많은 영화 로딩
-    async loadMore() {
+    loadMore() {
       const container = this.$refs.scrollContainer;
       const bottom = container.scrollHeight === container.scrollTop + container.clientHeight;
 
-      if (bottom && !this.loading && this.viewType === 'infinite') {
+      if (bottom && !this.loading && this.viewType === 'infinite' && this.movies.length < this.totalResults) {
         this.loading = true;
         this.page++;  // 페이지 증가
-        try {
-          const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14'; // API 키
-          const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.page}`);
-          this.movies = [...this.movies, ...response.data.results];  // 기존 목록에 새 데이터 추가
-        } catch (error) {
-          console.error('영화 데이터를 가져오는 데 오류가 발생했습니다.', error);
-        } finally {
-          this.loading = false;
-        }
+        this.fetchMovies();  // 새 데이터 로드
       }
     },
   },
@@ -162,6 +160,7 @@ h1 {
   gap: 20px;
   overflow-y: auto;
   max-height: 80vh;
+  padding-bottom: 50px;
 }
 
 .loading {
