@@ -18,17 +18,16 @@ jobs:
         with:
           node-version: 16
 
-      - name: Navigate to project directory
-        run: cd C:/projects/moviewsd
-
       - name: Install dependencies
+        working-directory: projects/moviewsd
         run: npm install
 
       - name: Build project
+        working-directory: projects/moviewsd
         run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: C:/projects/moviewsd/dist
+          publish_dir: projects/moviewsd/dist
