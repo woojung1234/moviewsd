@@ -4,7 +4,13 @@ import MovieDetailsPage from '../views/MovieDetailsPage.vue'; // 추가
 import SearchMovies from '../views/SearchMovies.vue';
 import TrendMovies from '../views/TrendMovies.vue';
 import WishList from '../views/WishList.vue';
+import Signin from '../views/Signin.vue';
 const routes = [
+  {
+    path: '/signin',
+    name: 'Signin',
+    component: Signin,  // /signin 경로로 Signin.vue 연결
+  },
   {
     path: '/',
     name: 'home',

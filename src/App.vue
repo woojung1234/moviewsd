@@ -2,11 +2,15 @@
   <nav>
     <router-link to="/">홈</router-link> |
     <router-link to="/popular">인기 영화</router-link> |
-    <router-link to="/search">찾아보기</router-link> |
-    <router-link to="/wishlist">내 영화</router-link> |
+    <router-link to="/search">검색하기</router-link> |
+    <router-link to="/wishlist">좋아하는 영화</router-link> |
+    <router-link to="/signin">로그인</router-link>
   </nav>
   <router-view/>
 </template>
+
+<script setup lang="ts">
+</script>
 
 <style>
 #app {
