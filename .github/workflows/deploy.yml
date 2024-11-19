@@ -3,30 +3,42 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # main 브랜치에 푸시할 때마다 배포
+      - main
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # 1. 소스 코드 가져오기
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      # 2. Node.js 설정
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 16
 
-      - name: Install dependencies
+      # 3. Dependencies 설치
+      - name: Install Dependencies
         run: npm install
-        working-directory: ./moviewsd  # `moviewsd` 폴더에서 실행
 
-      - name: Build the project
+      # 4. 프로젝트 빌드
+      - name: Build Project
         run: npm run build
-        working-directory: ./moviewsd  # 빌드 실행
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}  # 새로 추가한 GH_TOKEN 사용
-          publish_dir: ./moviewsd/dist  # dist 폴더로 배포
+      # 5. 빌드된 결과물을 `/docs` 디렉터리로 이동
+      - name: Move Build to Docs
+        run: |
+          rm -rf ./docs
+          mv ./dist ./docs
+
+      # 6. 변경된 파일을 커밋 및 푸시 (새 커밋 없이)
+      - name: Commit and Push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git commit -m "Build and deploy"
+          git push origin main
