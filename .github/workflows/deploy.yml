@@ -28,7 +28,7 @@ jobs:
 
       - name: Deploy to GitHub Pages from main
         run: |
-          git config --global user.name "GitHub Actions"
+          git config --global user.name "woojung1234"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           git worktree add dist gh-pages
