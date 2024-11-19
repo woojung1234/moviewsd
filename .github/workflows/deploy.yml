@@ -26,13 +26,18 @@ jobs:
         working-directory: moviewsd
         run: npm run build
 
-      - name: Commit and Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # dist 폴더 경로
-          publish_dir: moviewsd/dist
-          # 배포할 브랜치 (gh-pages)
-          publish_branch: gh-pages
-          # 커밋 메시지 설정
-          commit_message: "Deploy to GitHub Pages"
+      - name: Deploy to GitHub Pages from main
+        run: |
+          # gh-pages 브랜치에 배포하기 위해 현재 작업 디렉토리에서 dist를 복사하고 git 설정
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # dist 폴더를 gh-pages 브랜치에 푸시
+          git worktree add dist gh-pages
+          cp -R moviewsd/dist/* dist/
+
+          # gh-pages 브랜치로 커밋하고 푸시
+          cd dist
+          git add .
+          git commit -m "Deploy to GitHub Pages"
+          git push origin gh-pages
