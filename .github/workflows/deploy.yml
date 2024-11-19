@@ -33,6 +33,6 @@ jobs:
           # dist 폴더 경로
           publish_dir: moviewsd/dist
           # 배포할 브랜치 (gh-pages)
-          publish_branch: gh-pages
+          publish_branch: main
           # 커밋 메시지 설정
           commit_message: "Deploy to GitHub Pages"
