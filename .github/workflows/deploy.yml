@@ -10,35 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 소스 코드 가져오기
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Node.js 설정
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      # 3. Dependencies 설치
-      - name: Install Dependencies
+      - name: Navigate to project directory
+        run: cd projects/moviewsd
+
+      - name: Install dependencies
         run: npm install
 
-      # 4. 프로젝트 빌드
-      - name: Build Project
+      - name: Build project
         run: npm run build
 
-      # 5. 빌드된 결과물을 `/docs` 디렉터리로 이동
-      - name: Move Build to Docs
-        run: |
-          rm -rf ./docs
-          mv ./dist ./docs
-
-      # 6. 변경된 파일을 커밋 및 푸시 (새 커밋 없이)
-      - name: Commit and Push changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs
-          git commit -m "Build and deploy"
-          git push origin main
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: projects/moviewsd/dist

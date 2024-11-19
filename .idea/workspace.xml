@@ -11,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/moviewsd" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -71,7 +71,7 @@
       <workItem from="1731758474332" duration="6084000" />
       <workItem from="1731834005393" duration="15043000" />
       <workItem from="1731918246087" duration="15347000" />
-      <workItem from="1732015992678" duration="634000" />
+      <workItem from="1732015992678" duration="961000" />
     </task>
     <servers />
   </component>
