@@ -24,21 +24,19 @@ jobs:
           pwd
           echo "Listing root directory:"
           ls -al
-          echo "Listing projects directory:"
-          ls -al projects
           echo "Listing moviewsd directory:"
-          ls -al projects/moviewsd
+          ls -al moviewsd
 
       - name: Install dependencies
-        working-directory: projects/moviewsd
+        working-directory: moviewsd
         run: npm install
 
       - name: Build project
-        working-directory: projects/moviewsd
+        working-directory: moviewsd
         run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: projects/moviewsd/dist
+          publish_dir: moviewsd/dist
