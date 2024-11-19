@@ -28,15 +28,12 @@ jobs:
 
       - name: Deploy to GitHub Pages from main
         run: |
-          # gh-pages 브랜치에 배포하기 위해 현재 작업 디렉토리에서 dist를 복사하고 git 설정
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # dist 폴더를 gh-pages 브랜치에 푸시
           git worktree add dist gh-pages
           cp -R moviewsd/dist/* dist/
 
-          # gh-pages 브랜치로 커밋하고 푸시
           cd dist
           git add .
           git commit -m "Deploy to GitHub Pages"
