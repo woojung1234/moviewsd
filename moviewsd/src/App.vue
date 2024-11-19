@@ -1,10 +1,9 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/popular">Popular</router-link> |
-    <router-link to="/search">Search Movies</router-link> |
-    <router-link to="/genre/28">Genre Movies</router-link> |
-    <router-link to="/wishlist">WishList</router-link> |
+    <router-link to="/">홈</router-link> |
+    <router-link to="/popular">인기 영화</router-link> |
+    <router-link to="/search">찾아보기</router-link> |
+    <router-link to="/wishlist">내 영화</router-link> |
   </nav>
   <router-view/>
 </template>
