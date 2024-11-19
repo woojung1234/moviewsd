@@ -18,6 +18,17 @@ jobs:
         with:
           node-version: 16
 
+      - name: Debug file paths
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Listing root directory:"
+          ls -al
+          echo "Listing projects directory:"
+          ls -al projects
+          echo "Listing moviewsd directory:"
+          ls -al projects/moviewsd
+
       - name: Install dependencies
         working-directory: projects/moviewsd
         run: npm install
