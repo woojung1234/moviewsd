@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PopularMovies from '../views/PopularMovies.vue';
 import MovieDetailsPage from '../views/MovieDetailsPage.vue'; // 추가
-import SearchMovies from '../views/SearchMovies.vue';  // 추가된 컴포넌트
-import GenreMovies from '../views/GenreMovies.vue';  // 추가된 컴포넌트
+import SearchMovies from '../views/SearchMovies.vue';
 import TrendMovies from '../views/TrendMovies.vue';
 import WishList from '../views/WishList.vue';
 const routes = [
