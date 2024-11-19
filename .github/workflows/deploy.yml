@@ -18,21 +18,29 @@ jobs:
         with:
           node-version: 16
 
-      # 'projects/moviewsd' 디렉토리로 이동
-      - name: Navigate to project directory
-        run: cd projects/moviewsd && pwd  # 정확한 디렉토리 확인
+      - name: Debug file paths
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Listing root directory:"
+          ls -al
+          echo "Listing moviewsd directory:"
+          ls -al moviewsd
 
-      # dependencies 설치
       - name: Install dependencies
-        run: cd projects/moviewsd && npm install  # 정확한 디렉토리에서 npm install 실행
+        working-directory: moviewsd
+        run: npm install
 
-      # 빌드 실행
       - name: Build project
-        run: cd projects/moviewsd && npm run build  # 빌드 실행
+        working-directory: moviewsd
+        run: npm run build
 
-      # GitHub Pages에 배포
-      - name: Deploy to GitHub Pages
+      - name: Commit and Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: projects/moviewsd/dist  # dist 디렉토리 경로
+          # dist 폴더의 경로가 맞는지 확인
+          publish_dir: moviewsd/dist
+          # 브랜치 이름 설정 (gh-pages)
+          publish_branch: gh-pages
+          commit_message: "Deploy to GitHub Pages"
