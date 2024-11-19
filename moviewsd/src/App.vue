@@ -3,7 +3,7 @@
     <router-link to="/">홈</router-link> |
     <router-link to="/popular">인기 영화</router-link> |
     <router-link to="/search">검색하기</router-link> |
-    <router-link to="/wishlist">보고싶은 영화</router-link> |
+    <router-link to="/wishlist">관심 영화</router-link> |
   </nav>
   <router-view/>
 </template>
