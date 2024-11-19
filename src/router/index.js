@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PopularMovies from '../views/PopularMovies.vue';
 import MovieDetailsPage from '../views/MovieDetailsPage.vue'; // 추가
-import SearchMovies from '../views/SearchMovies.vue';  // 추가된 컴포넌트
-import GenreMovies from '../views/GenreMovies.vue';  // 추가된 컴포넌트
+import SearchMovies from '../views/SearchMovies.vue';
 import TrendMovies from '../views/TrendMovies.vue';
 import WishList from '../views/WishList.vue';
 const routes = [
@@ -31,12 +30,6 @@ const routes = [
     path: '/wishlist',  // 위시리스트 페이지 경로
     name: 'wishlist',
     component: WishList
-  },
-  {
-    path: '/genre/:id', // 장르별 영화 필터링 페이지 경로
-    name: 'genre',
-    component: GenreMovies, // 장르별 영화 컴포넌트
-    props: true, // URL 매개변수를 컴포넌트로 전달
   },
 ];
 
