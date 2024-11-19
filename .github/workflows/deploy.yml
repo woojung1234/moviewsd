@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # main 브랜치에 푸시되면 트리거
 
 jobs:
   build-and-deploy:
@@ -18,25 +18,15 @@ jobs:
         with:
           node-version: 16
 
-      - name: Debug file paths
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Listing root directory:"
-          ls -al
-          echo "Listing moviewsd directory:"
-          ls -al moviewsd
-
       - name: Install dependencies
-        working-directory: moviewsd
         run: npm install
 
       - name: Build project
-        working-directory: moviewsd
         run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: moviewsd/dist
+          publish_dir: ./dist  # dist 디렉토리로 배포
+          # 여기에 추가적으로 branch 설정을 할 수도 있습니다.
