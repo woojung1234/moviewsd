@@ -4,7 +4,14 @@ import MovieDetailsPage from '../views/MovieDetailsPage.vue'; // 추가
 import SearchMovies from '../views/SearchMovies.vue';
 import TrendMovies from '../views/TrendMovies.vue';
 import WishList from '../views/WishList.vue';
+import SignInPage from '../views/SingInPage.vue'; // 오타 수정
+
 const routes = [
+  {
+    path: '/signin',
+    name: 'signin',
+    component: SignInPage, // /signin 경로로 SignInPage.vue 연결
+  },
   {
     path: '/',
     name: 'home',
@@ -27,9 +34,9 @@ const routes = [
     component: SearchMovies, // 검색 페이지
   },
   {
-    path: '/wishlist',  // 위시리스트 페이지 경로
+    path: '/wishlist', // 위시리스트 페이지 경로
     name: 'wishlist',
-    component: WishList
+    component: WishList,
   },
 ];
 
@@ -38,5 +45,15 @@ const router = createRouter({
   routes,
 });
 
-export default router;
+// 라우터 가드 추가
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('email'); // 로컬스토리지에 email이 있으면 로그인 상태
+  if (to.name !== 'signin' && !isAuthenticated) {
+    // 로그인하지 않은 상태에서 로그인 페이지가 아닌 곳으로 가려하면
+    next({ name: 'signin' }); // 로그인 페이지로 리다이렉트
+  } else {
+    next(); // 그렇지 않으면 원래 경로로 진행
+  }
+});
 
+export default router;
