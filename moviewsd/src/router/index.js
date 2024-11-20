@@ -4,13 +4,13 @@ import MovieDetailsPage from '../views/MovieDetailsPage.vue'; // 추가
 import SearchMovies from '../views/SearchMovies.vue';
 import TrendMovies from '../views/TrendMovies.vue';
 import WishList from '../views/WishList.vue';
-import SignInPage from '../views/SingInPage.vue'; // 오타 수정
+import SingInPage from "@/views/SingInPage.vue"; // 오타 수정
 
 const routes = [
   {
     path: '/signin',
     name: 'signin',
-    component: SignInPage, // /signin 경로로 SignInPage.vue 연결
+    component: SingInPage, // /signin 경로로 SignInPage.vue 연결
   },
   {
     path: '/',
