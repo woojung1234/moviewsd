@@ -10,8 +10,8 @@
             <span v-if="email && !isValidEmail" class="error">올바른 이메일 형식을 입력하세요.</span>
           </div>
           <div>
-            <label for="password">비밀번호: </label>
-            <input v-model="password" type="password" id="password" required placeholder="비밀번호를 입력하세요" />
+            <label for="apiKey">TMDB API Key: </label>
+            <input v-model="apiKey" type="password" id="apiKey" required placeholder="TMDB API Key를 입력하세요" />
           </div>
           <div>
             <label>
@@ -31,19 +31,8 @@
             <span v-if="email && !isValidEmail" class="error">올바른 이메일 형식을 입력하세요.</span>
           </div>
           <div>
-            <label for="password">비밀번호: </label>
-            <input v-model="password" type="password" id="password" required placeholder="비밀번호를 입력하세요" />
-          </div>
-          <div>
-            <label for="passwordConfirm">비밀번호 확인: </label>
-            <input v-model="passwordConfirm" type="password" id="passwordConfirm" required placeholder="비밀번호를 다시 입력하세요" />
-            <span v-if="password !== passwordConfirm" class="error">비밀번호가 일치하지 않습니다.</span>
-          </div>
-          <div>
-            <label>
-              <input v-model="agreeTerms" type="checkbox" /> 약관 동의
-            </label>
-            <span v-if="!agreeTerms" class="error">약관에 동의해야 합니다.</span>
+            <label for="apiKey">TMDB API Key: </label>
+            <input v-model="apiKey" type="password" id="apiKey" required placeholder="TMDB API Key를 입력하세요" />
           </div>
           <button type="submit">회원가입</button>
         </form>
@@ -58,10 +47,8 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const email = ref('');
-const password = ref('');
-const passwordConfirm = ref('');
+const apiKey = ref('');
 const rememberMe = ref(false);
-const agreeTerms = ref(false);
 const isLogin = ref(true);
 
 const router = useRouter();
@@ -79,48 +66,36 @@ const toggleForm = () => {
 
 // 회원가입 처리
 const submitSignup = () => {
-  if (!isValidEmail.value || !email.value || !password.value || password.value !== passwordConfirm.value || !agreeTerms.value) {
+  if (!isValidEmail.value || !email.value || !apiKey.value) {
     alert('입력값을 확인해주세요.');
     return;
   }
 
-  const users = JSON.parse(localStorage.getItem('users')) || [];
-  const userExists = users.some(user => user.email === email.value);
-
-  if (userExists) {
-    alert('이미 등록된 이메일입니다.');
-    return;
-  }
-
-  users.push({ email: email.value, password: password.value });
-  localStorage.setItem('users', JSON.stringify(users));
-
+  // 로컬 스토리지에 이메일 및 API Key 저장
+  localStorage.setItem(email.value, apiKey.value);
   alert('회원가입 성공!');
   toggleForm();
 };
 
 // 로그인 처리
 const submitLogin = () => {
-  if (!isValidEmail.value || !email.value || !password.value) {
+  if (!isValidEmail.value || !email.value || !apiKey.value) {
     alert('입력값을 확인해주세요.');
     return;
   }
 
-  const users = JSON.parse(localStorage.getItem('users')) || [];
-  const user = users.find(user => user.email === email.value && user.password === password.value);
+  // 로컬 스토리지에서 API Key 확인
+  const storedApiKey = localStorage.getItem(email.value);
 
-  if (!user) {
-    alert('로그인 실패. 아이디와 비밀번호를 확인해주세요.');
-    return;
+  if (storedApiKey === apiKey.value) {
+    alert('로그인 성공!');
+    if (rememberMe.value) {
+      localStorage.setItem('rememberMe', 'true');
+    }
+    router.push('/');
+  } else {
+    alert('로그인 실패. 아이디와 비밀번호(API Key)를 확인해주세요.');
   }
-
-  localStorage.setItem('isLoggedIn', 'true');
-  if (rememberMe.value) {
-    localStorage.setItem('rememberMe', 'true');
-  }
-
-  alert('로그인 성공!');
-  router.push('/');
 };
 </script>
 
