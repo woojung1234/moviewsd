@@ -1,55 +1,60 @@
 <template>
   <div class="auth-container">
-    <transition name="fade">
-      <div v-if="isLogin" key="login">
+    <!-- 로그인/회원가입 폼 -->
+    <transition name="fade" mode="out-in">
+      <div v-if="isLogin" key="login" class="form-container">
         <h2>로그인</h2>
         <form @submit.prevent="submitLogin">
-          <div>
-            <label for="email">아이디 (이메일): </label>
+          <div class="form-group">
+            <label for="email">아이디 (이메일):</label>
             <input v-model="email" type="email" id="email" required placeholder="이메일을 입력하세요" />
             <span v-if="email && !isValidEmail" class="error">올바른 이메일 형식을 입력하세요.</span>
           </div>
-          <div>
-            <label for="password">비밀번호: </label>
+          <div class="form-group">
+            <label for="password">비밀번호:</label>
             <input v-model="password" type="password" id="password" required placeholder="비밀번호를 입력하세요" />
           </div>
-          <div>
+          <div class="form-group remember-me">
             <label>
               <input v-model="rememberMe" type="checkbox" /> Remember me
             </label>
           </div>
-          <button type="submit">로그인</button>
+          <button type="submit" class="btn">로그인</button>
         </form>
       </div>
 
-      <div v-else key="signup">
+      <div v-else key="signup" class="form-container">
         <h2>회원가입</h2>
         <form @submit.prevent="submitSignup">
-          <div>
-            <label for="email">아이디 (이메일): </label>
+          <div class="form-group">
+            <label for="email">아이디 (이메일):</label>
             <input v-model="email" type="email" id="email" required placeholder="이메일을 입력하세요" />
             <span v-if="email && !isValidEmail" class="error">올바른 이메일 형식을 입력하세요.</span>
           </div>
-          <div>
-            <label for="password">비밀번호: </label>
+          <div class="form-group">
+            <label for="password">비밀번호:</label>
             <input v-model="password" type="password" id="password" required placeholder="비밀번호를 입력하세요" />
           </div>
-          <div>
-            <label for="passwordConfirm">비밀번호 확인: </label>
+          <div class="form-group">
+            <label for="passwordConfirm">비밀번호 확인:</label>
             <input v-model="passwordConfirm" type="password" id="passwordConfirm" required placeholder="비밀번호를 다시 입력하세요" />
             <span v-if="password !== passwordConfirm" class="error">비밀번호가 일치하지 않습니다.</span>
           </div>
-          <div>
+          <div class="form-group agree-terms">
             <label>
               <input v-model="agreeTerms" type="checkbox" /> 약관 동의
             </label>
             <span v-if="!agreeTerms" class="error">약관에 동의해야 합니다.</span>
           </div>
-          <button type="submit">회원가입</button>
+          <button type="submit" class="btn">회원가입</button>
         </form>
       </div>
     </transition>
-    <p @click="toggleForm">{{ isLogin ? '회원가입' : '로그인' }}으로 전환</p>
+
+    <!-- 전환 버튼 -->
+    <p class="toggle-form" @click="toggleForm">
+      {{ isLogin ? '회원가입' : '로그인' }}으로 전환
+    </p>
   </div>
 </template>
 
@@ -87,23 +92,31 @@ const submitLogin = async () => {
 
   try {
     const apiKey = process.env.VUE_APP_TMDB_API_KEY;
-    const response = await axios.post(
-        `https://api.themoviedb.org/3/authentication/token/validate_with_login`,
+
+    const tokenResponse = await axios.get(
+        `https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}`
+    );
+
+    const requestToken = tokenResponse.data.request_token;
+
+    await axios.post(
+        `https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=${apiKey}`,
         {
           username: email.value,
           password: password.value,
-          request_token: apiKey,
+          request_token: requestToken,
         }
     );
 
-    // 로컬 스토리지 저장
     localStorage.setItem('email', email.value);
-    if (rememberMe.value) localStorage.setItem('rememberMe', 'true');
+    if (rememberMe.value) {
+      localStorage.setItem('rememberMe', 'true');
+    }
 
-    // 성공 메시지
     alert('로그인 성공!');
     router.push('/');
   } catch (error) {
+    console.error('로그인 실패:', error.response?.data || error.message);
     alert('로그인 실패. 아이디와 비밀번호를 확인해주세요.');
   }
 };
@@ -115,11 +128,9 @@ const submitSignup = () => {
     return;
   }
 
-  // 로컬 스토리지 저장
   localStorage.setItem('email', email.value);
   localStorage.setItem('password', password.value);
 
-  // 성공 메시지
   alert('회원가입 성공!');
   toggleForm();
 };
@@ -127,38 +138,56 @@ const submitSignup = () => {
 
 <style scoped>
 .auth-container {
-  width: 300px;
-  margin: 0 auto;
-  text-align: left;
-}
-
-form div {
-  margin-bottom: 15px;
-}
-
-form button {
-  width: 100%;
-  padding: 10px;
-}
-
-p {
-  cursor: pointer;
+  width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
   text-align: center;
-  color: #42b983;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+.form-container {
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
+.form-group {
+  margin-bottom: 15px;
 }
 
 .error {
   color: red;
   font-size: 12px;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #369f6d;
+}
+
+.toggle-form {
+  cursor: pointer;
+  color: #42b983;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
