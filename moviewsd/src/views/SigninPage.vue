@@ -1,5 +1,6 @@
 <template>
   <div class="auth-container">
+    <button v-if="isAuthenticated" @click="logout" class="logout-button">로그아웃</button>
     <transition name="fade">
       <div v-if="isLogin" key="login">
         <h2>로그인</h2>
@@ -50,6 +51,7 @@ const email = ref('');
 const apiKey = ref('');
 const rememberMe = ref(false);
 const isLogin = ref(true);
+const isAuthenticated = ref(!!localStorage.getItem('email'));
 
 const router = useRouter();
 
@@ -64,17 +66,13 @@ const toggleForm = () => {
   isLogin.value = !isLogin.value;
 };
 
-// 회원가입 처리
-const submitSignup = () => {
-  if (!isValidEmail.value || !email.value || !apiKey.value) {
-    alert('입력값을 확인해주세요.');
-    return;
-  }
-
-  // 로컬 스토리지에 이메일 및 API Key 저장
-  localStorage.setItem(email.value, apiKey.value);
-  alert('회원가입 성공!');
-  toggleForm();
+// 로그아웃
+const logout = () => {
+  localStorage.removeItem('email');
+  localStorage.removeItem('rememberMe');
+  isAuthenticated.value = false;
+  alert('로그아웃 되었습니다.');
+  router.push('/signin');
 };
 
 // 로그인 처리
@@ -84,18 +82,31 @@ const submitLogin = () => {
     return;
   }
 
-  // 로컬 스토리지에서 API Key 확인
   const storedApiKey = localStorage.getItem(email.value);
 
   if (storedApiKey === apiKey.value) {
-    alert('로그인 성공!');
+    localStorage.setItem('email', email.value);
     if (rememberMe.value) {
       localStorage.setItem('rememberMe', 'true');
     }
+    isAuthenticated.value = true;
+    alert('로그인 성공!');
     router.push('/');
   } else {
     alert('로그인 실패. 아이디와 비밀번호(API Key)를 확인해주세요.');
   }
+};
+
+// 회원가입 처리
+const submitSignup = () => {
+  if (!isValidEmail.value || !email.value || !apiKey.value) {
+    alert('입력값을 확인해주세요.');
+    return;
+  }
+
+  localStorage.setItem(email.value, apiKey.value);
+  alert('회원가입 성공!');
+  toggleForm();
 };
 </script>
 
@@ -104,6 +115,17 @@ const submitLogin = () => {
   width: 300px;
   margin: 0 auto;
   text-align: left;
+}
+
+.logout-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 5px;
 }
 
 form div {
@@ -124,5 +146,15 @@ p {
 .error {
   color: red;
   font-size: 12px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
