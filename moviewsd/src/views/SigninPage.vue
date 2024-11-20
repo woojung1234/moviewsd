@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div class="auth-container">
     <transition name="fade">
       <div v-if="isLogin" key="login">
