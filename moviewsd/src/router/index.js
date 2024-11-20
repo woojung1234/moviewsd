@@ -1,42 +1,47 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PopularMovies from '../views/PopularMovies.vue';
-import MovieDetailsPage from '../views/MovieDetailsPage.vue'; // 추가
+import MovieDetailsPage from '../views/MovieDetailsPage.vue';
 import SearchMovies from '../views/SearchMovies.vue';
 import TrendMovies from '../views/TrendMovies.vue';
 import WishList from '../views/WishList.vue';
-import SigninPage from '../views/SigninPage.vue'; // 오타 수정
+import SigninPage from '../views/SigninPage.vue';
 
 const routes = [
   {
     path: '/signin',
     name: 'signin',
-    component: SigninPage, // /signin 경로로 SignInPage.vue 연결
+    component: SigninPage,
   },
   {
     path: '/',
     name: 'home',
     component: PopularMovies,
+    meta: { requiresAuth: true }, // 보호된 경로
   },
   {
     path: '/popular',
     name: 'popular',
-    component: TrendMovies, // 대세 콘텐츠 페이지 경로 설정
+    component: TrendMovies,
+    meta: { requiresAuth: true }, // 보호된 경로
   },
   {
-    path: '/movie/:id', // 영화 상세 페이지 경로
+    path: '/movie/:id',
     name: 'movie-details',
-    component: MovieDetailsPage, // 추가된 컴포넌트
-    props: true, // URL 매개변수를 컴포넌트로 전달
+    component: MovieDetailsPage,
+    props: true,
+    meta: { requiresAuth: true }, // 보호된 경로
   },
   {
-    path: '/search', // 영화 검색 페이지 경로
+    path: '/search',
     name: 'search',
-    component: SearchMovies, // 검색 페이지
+    component: SearchMovies,
+    meta: { requiresAuth: true }, // 보호된 경로
   },
   {
-    path: '/wishlist', // 위시리스트 페이지 경로
+    path: '/wishlist',
     name: 'wishlist',
     component: WishList,
+    meta: { requiresAuth: true }, // 보호된 경로
   },
 ];
 
@@ -45,14 +50,18 @@ const router = createRouter({
   routes,
 });
 
-// 라우터 가드 추가
+// 라우터 가드
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem('email'); // 로컬스토리지에 email이 있으면 로그인 상태
-  if (to.name !== 'signin' && !isAuthenticated) {
-    // 로그인하지 않은 상태에서 로그인 페이지가 아닌 곳으로 가려하면
-    next({ name: 'signin' }); // 로그인 페이지로 리다이렉트
+  const isAuthenticated = localStorage.getItem('isLoggedIn') === 'true'; // 로그인 상태 확인
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    // 인증되지 않은 사용자가 보호된 경로로 접근하려는 경우
+    next({ name: 'signin' });
+  } else if (to.name === 'signin' && isAuthenticated) {
+    // 이미 로그인한 사용자가 /signin 페이지에 접근하려는 경우
+    next({ name: 'home' });
   } else {
-    next(); // 그렇지 않으면 원래 경로로 진행
+    next(); // 그 외는 허용
   }
 });
 

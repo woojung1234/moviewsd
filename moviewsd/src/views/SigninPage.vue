@@ -93,12 +93,14 @@ const submitLogin = async () => {
   try {
     const apiKey = process.env.VUE_APP_TMDB_API_KEY;
 
+    // 1. 요청 토큰 생성
     const tokenResponse = await axios.get(
         `https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}`
     );
 
     const requestToken = tokenResponse.data.request_token;
 
+    // 2. 로그인 요청
     await axios.post(
         `https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=${apiKey}`,
         {
@@ -109,9 +111,8 @@ const submitLogin = async () => {
     );
 
     localStorage.setItem('email', email.value);
-    if (rememberMe.value) {
-      localStorage.setItem('rememberMe', 'true');
-    }
+    localStorage.setItem('isLoggedIn', 'true');
+    if (rememberMe.value) localStorage.setItem('rememberMe', 'true');
 
     alert('로그인 성공!');
     router.push('/');
@@ -138,7 +139,8 @@ const submitSignup = () => {
 
 <style scoped>
 .auth-container {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ddd;
@@ -179,6 +181,17 @@ const submitSignup = () => {
 .toggle-form {
   cursor: pointer;
   color: #42b983;
+}
+
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .btn {
+    font-size: 14px;
+  }
 }
 
 .fade-enter-active,
