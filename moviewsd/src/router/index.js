@@ -16,32 +16,32 @@ const routes = [
     path: '/',
     name: 'home',
     component: PopularMovies,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/popular',
     name: 'popular',
     component: TrendMovies,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/movie/:id',
     name: 'movie-details',
     component: MovieDetailsPage,
     props: true,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/search',
     name: 'search',
     component: SearchMovies,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/wishlist',
     name: 'wishlist',
     component: WishList,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
 ];
 
@@ -56,12 +56,14 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     // 인증되지 않은 사용자가 보호된 경로로 접근하려는 경우
-    next({ name: 'signin' });
+    alert('로그인이 필요합니다.');
+    next({ name: 'signin' }); // 로그인 페이지로 리다이렉트
   } else if (to.name === 'signin' && isAuthenticated) {
-    // 이미 로그인한 사용자가 /signin 페이지에 접근하려는 경우
-    next({ name: 'home' });
+    // 이미 로그인한 사용자가 로그인 페이지로 접근하려는 경우
+    alert('이미 로그인 상태입니다.');
+    next({ name: 'home' }); // 홈 페이지로 리다이렉트
   } else {
-    next(); // 그 외는 허용
+    next(); // 그 외 모든 경우 허용
   }
 });
 
