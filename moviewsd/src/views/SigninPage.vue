@@ -1,6 +1,15 @@
 <template>
   <div class="auth-container">
-    <button v-if="isAuthenticated" @click="logout" class="logout-button">로그아웃</button>
+    <!-- 로그아웃 버튼 -->
+    <button
+        v-if="isAuthenticated"
+        @click="logout"
+        class="logout-button"
+    >
+      로그아웃
+    </button>
+
+    <!-- 로그인/회원가입 폼 -->
     <transition name="fade">
       <div v-if="isLogin" key="login">
         <h2>로그인</h2>
@@ -39,19 +48,21 @@
         </form>
       </div>
     </transition>
+
+    <!-- 폼 전환 링크 -->
     <p @click="toggleForm">{{ isLogin ? '회원가입' : '로그인' }}으로 전환</p>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const email = ref('');
 const apiKey = ref('');
 const rememberMe = ref(false);
 const isLogin = ref(true);
-const isAuthenticated = ref(!!localStorage.getItem('email'));
+const isAuthenticated = ref(!!localStorage.getItem('email')); // 로그인 상태 확인
 
 const router = useRouter();
 
@@ -108,6 +119,13 @@ const submitSignup = () => {
   alert('회원가입 성공!');
   toggleForm();
 };
+
+// 로그인 상태 감시 (필요 시 추가)
+watch(isAuthenticated, (newVal) => {
+  if (!newVal) {
+    router.push('/signin');
+  }
+});
 </script>
 
 <style scoped>
