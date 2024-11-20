@@ -1,5 +1,15 @@
 <template>
   <div class="auth-container">
+    <!-- 로그아웃 버튼 -->
+    <button
+        v-if="isAuthenticated"
+        @click="logout"
+        class="logout-button"
+    >
+      로그아웃
+    </button>
+
+    <!-- 로그인/회원가입 폼 -->
     <transition name="fade">
       <div v-if="isLogin" key="login">
         <h2>로그인</h2>
@@ -10,8 +20,8 @@
             <span v-if="email && !isValidEmail" class="error">올바른 이메일 형식을 입력하세요.</span>
           </div>
           <div>
-            <label for="password">비밀번호: </label>
-            <input v-model="password" type="password" id="password" required placeholder="비밀번호를 입력하세요" />
+            <label for="apiKey">TMDB API Key: </label>
+            <input v-model="apiKey" type="password" id="apiKey" required placeholder="TMDB API Key를 입력하세요" />
           </div>
           <div>
             <label>
@@ -31,39 +41,28 @@
             <span v-if="email && !isValidEmail" class="error">올바른 이메일 형식을 입력하세요.</span>
           </div>
           <div>
-            <label for="password">비밀번호: </label>
-            <input v-model="password" type="password" id="password" required placeholder="비밀번호를 입력하세요" />
-          </div>
-          <div>
-            <label for="passwordConfirm">비밀번호 확인: </label>
-            <input v-model="passwordConfirm" type="password" id="passwordConfirm" required placeholder="비밀번호를 다시 입력하세요" />
-            <span v-if="password !== passwordConfirm" class="error">비밀번호가 일치하지 않습니다.</span>
-          </div>
-          <div>
-            <label>
-              <input v-model="agreeTerms" type="checkbox" /> 약관 동의
-            </label>
-            <span v-if="!agreeTerms" class="error">약관에 동의해야 합니다.</span>
+            <label for="apiKey">TMDB API Key: </label>
+            <input v-model="apiKey" type="password" id="apiKey" required placeholder="TMDB API Key를 입력하세요" />
           </div>
           <button type="submit">회원가입</button>
         </form>
       </div>
     </transition>
+
+    <!-- 폼 전환 링크 -->
     <p @click="toggleForm">{{ isLogin ? '회원가입' : '로그인' }}으로 전환</p>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 
 const email = ref('');
-const password = ref('');
-const passwordConfirm = ref('');
+const apiKey = ref('');
 const rememberMe = ref(false);
-const agreeTerms = ref(false);
 const isLogin = ref(true);
+const isAuthenticated = ref(!!localStorage.getItem('email')); // 로그인 상태 확인
 
 const router = useRouter();
 
@@ -78,51 +77,55 @@ const toggleForm = () => {
   isLogin.value = !isLogin.value;
 };
 
+// 로그아웃
+const logout = () => {
+  localStorage.removeItem('email');
+  localStorage.removeItem('rememberMe');
+  isAuthenticated.value = false;
+  alert('로그아웃 되었습니다.');
+  router.push('/signin');
+};
+
 // 로그인 처리
-const submitLogin = async () => {
-  if (!isValidEmail.value || !email.value || !password.value) {
+const submitLogin = () => {
+  if (!isValidEmail.value || !email.value || !apiKey.value) {
     alert('입력값을 확인해주세요.');
     return;
   }
 
-  try {
-    const apiKey = process.env.VUE_APP_TMDB_API_KEY;
-    const response = await axios.post(
-        `https://api.themoviedb.org/3/authentication/token/validate_with_login`,
-        {
-          username: email.value,
-          password: password.value,
-          request_token: apiKey,
-        }
-    );
+  const storedApiKey = localStorage.getItem(email.value);
 
-    // 로컬 스토리지 저장
+  if (storedApiKey === apiKey.value) {
     localStorage.setItem('email', email.value);
-    if (rememberMe.value) localStorage.setItem('rememberMe', 'true');
-
-    // 성공 메시지
+    if (rememberMe.value) {
+      localStorage.setItem('rememberMe', 'true');
+    }
+    isAuthenticated.value = true;
     alert('로그인 성공!');
     router.push('/');
-  } catch (error) {
-    alert('로그인 실패. 아이디와 비밀번호를 확인해주세요.');
+  } else {
+    alert('로그인 실패. 아이디와 비밀번호(API Key)를 확인해주세요.');
   }
 };
 
 // 회원가입 처리
 const submitSignup = () => {
-  if (!isValidEmail.value || !email.value || !password.value || password.value !== passwordConfirm.value || !agreeTerms.value) {
+  if (!isValidEmail.value || !email.value || !apiKey.value) {
     alert('입력값을 확인해주세요.');
     return;
   }
 
-  // 로컬 스토리지 저장
-  localStorage.setItem('email', email.value);
-  localStorage.setItem('password', password.value);
-
-  // 성공 메시지
+  localStorage.setItem(email.value, apiKey.value);
   alert('회원가입 성공!');
   toggleForm();
 };
+
+// 로그인 상태 감시 (필요 시 추가)
+watch(isAuthenticated, (newVal) => {
+  if (!newVal) {
+    router.push('/signin');
+  }
+});
 </script>
 
 <style scoped>
@@ -130,6 +133,17 @@ const submitSignup = () => {
   width: 300px;
   margin: 0 auto;
   text-align: left;
+}
+
+.logout-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 5px;
 }
 
 form div {
@@ -147,6 +161,11 @@ p {
   color: #42b983;
 }
 
+.error {
+  color: red;
+  font-size: 12px;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
@@ -155,10 +174,5 @@ p {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-}
-
-.error {
-  color: red;
-  font-size: 12px;
 }
 </style>
