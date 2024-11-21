@@ -162,7 +162,7 @@ const handleLogin = async () => {
       }
 
       alert("Login successful!");
-      router.push("/").catch((err) => console.error("Router error:", err)); // 홈으로 리다이렉트
+      router.push("./").catch((err) => console.error("Router error:", err)); // 홈으로 리다이렉트
     }
   } catch (error) {
     alert("Invalid API Key. Please check and try again.");
