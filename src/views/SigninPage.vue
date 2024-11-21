@@ -150,8 +150,8 @@ const handleLogin = async () => {
     });
 
     if (response.status === 200) {
-      // 로그인 성공: Vuex 상태 업데이트
-      store.dispatch("login", {
+      // Vuex 상태 업데이트
+      await store.dispatch("login", {
         apiKey: password.value,
         user: { email: email.value },
       });
@@ -161,8 +161,9 @@ const handleLogin = async () => {
         localStorage.setItem("email", email.value);
       }
 
+      // 로그인 성공 시 홈으로 리다이렉트
       alert("Login successful!");
-      router.push("/").catch((err) => console.error("Router error:", err)); // 홈으로 리다이렉트
+      router.push("/"); // 홈으로 이동
     }
   } catch (error) {
     alert("Invalid API Key. Please check and try again.");
