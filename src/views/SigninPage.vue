@@ -28,7 +28,7 @@
                     @blur="blurInput('password')"
                     required
                 />
-                <label for="password">Password (API Key)</label>
+                <label for="password">Password</label>
               </div>
               <span class="checkbox remember">
                 <input type="checkbox" id="remember" v-model="rememberMe" />
@@ -37,7 +37,7 @@
               <button :disabled="!isLoginFormValid">Login</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Already have an account? <b>Sign up</b>
+              Already have an account? <b>Sign in</b>
             </a>
           </div>
 
@@ -65,8 +65,25 @@
                     @blur="blurInput('registerPassword')"
                     required
                 />
-                <label for="register-password">Password (API Key)</label>
+                <label for="register-password">Password</label>
               </div>
+              <div class="input" :class="{ active: isConfirmPasswordFocused || confirmPassword }">
+                <input
+                    id="confirm-password"
+                    type="password"
+                    v-model="confirmPassword"
+                    @focus="focusInput('confirmPassword')"
+                    @blur="blurInput('confirmPassword')"
+                    required
+                />
+                <label for="confirm-password">Confirm Password</label>
+              </div>
+              <span class="checkbox remember">
+                <input type="checkbox" id="terms" v-model="acceptTerms" required />
+                <label for="terms" class="read-text"
+                >I have read <b>Terms and Conditions</b></label
+                >
+              </span>
               <button :disabled="!isRegisterFormValid">Register</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
@@ -145,7 +162,7 @@ const handleLogin = async () => {
       }
 
       alert("Login successful!");
-      router.push("/"); // 홈으로 리다이렉트
+      router.push("/").catch((err) => console.error("Router error:", err)); // 홈으로 리다이렉트
     }
   } catch (error) {
     alert("Invalid API Key. Please check and try again.");
