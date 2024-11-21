@@ -60,9 +60,15 @@ export default {
       page: 1,
       loading: false,
       isEndOfData: false, // 더 이상 불러올 데이터가 없는지 확인
+      apiKey: localStorage.getItem('apiKey'), // 로컬스토리지에서 API Key 가져오기
     };
   },
   created() {
+    if (!this.apiKey) {
+      alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
+      this.$router.push('/signin');
+      return;
+    }
     this.debouncedSearch = debounce(this.searchMovies, 500);
     this.fetchGenres();
     this.loadInitialMovies(); // 초기 영화 데이터 로드
@@ -86,22 +92,21 @@ export default {
   },
   methods: {
     async fetchGenres() {
-      const apiKey = process.env.VUE_APP_TMDB_API_KEY;
       try {
         const response = await axios.get(
-            `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=ko-KR`
+            `https://api.themoviedb.org/3/genre/movie/list?api_key=${this.apiKey}&language=ko-KR`
         );
         this.genres = response.data.genres;
       } catch (error) {
         console.error('장르 목록 가져오기 실패:', error);
+        alert('장르 데이터를 불러오지 못했습니다.');
       }
     },
     async loadInitialMovies() {
-      const apiKey = process.env.VUE_APP_TMDB_API_KEY;
       try {
         this.loading = true;
         const response = await axios.get(
-            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=${this.page}`
+            `https://api.themoviedb.org/3/movie/popular?api_key=${this.apiKey}&language=ko-KR&page=${this.page}`
         );
         this.allMovies = [...this.allMovies, ...response.data.results];
         this.movies = [...this.allMovies];
@@ -110,6 +115,7 @@ export default {
         }
       } catch (error) {
         console.error('초기 영화 데이터 로드 실패:', error);
+        alert('영화 데이터를 불러오지 못했습니다.');
       } finally {
         this.loading = false;
       }
@@ -138,15 +144,15 @@ export default {
       this.applyFilters(); // 필터링 재적용
     },
     async searchMovies() {
-      const apiKey = process.env.VUE_APP_TMDB_API_KEY;
       if (this.query.trim()) {
         try {
           const response = await axios.get(
-              `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${this.query}&language=ko-KR`
+              `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${this.query}&language=ko-KR`
           );
           this.movies = response.data.results;
         } catch (error) {
           console.error('영화 검색 오류:', error);
+          alert('검색 결과를 가져오지 못했습니다.');
         }
       } else {
         // 검색어가 비어 있으면 초기 데이터로 복원
@@ -244,4 +250,5 @@ button:focus {
   outline: none;
 }
 </style>
+
 

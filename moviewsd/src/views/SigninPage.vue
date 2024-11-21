@@ -1,178 +1,576 @@
 <template>
-  <div class="auth-container">
-    <!-- 로그아웃 버튼 -->
-    <button
-        v-if="isAuthenticated"
-        @click="logout"
-        class="logout-button"
-    >
-      로그아웃
-    </button>
+  <div>
+    <div class="bg-image"></div>
+    <div class="container">
+      <div id="phone">
+        <div id="content-wrapper">
+          <!-- 로그인 카드 -->
+          <div :class="['card', { hidden: !isLoginVisible }]" id="login">
+            <form @submit.prevent="handleLogin">
+              <h1>Sign in</h1>
+              <div class="input" :class="{ active: isEmailFocused || email }">
+                <input
+                    id="email"
+                    type="email"
+                    v-model="email"
+                    @focus="focusInput('email')"
+                    @blur="blurInput('email')"
+                    required
+                />
+                <label for="email">Username or Email</label>
+              </div>
+              <div class="input" :class="{ active: isPasswordFocused || password }">
+                <input
+                    id="password"
+                    type="password"
+                    v-model="password"
+                    @focus="focusInput('password')"
+                    @blur="blurInput('password')"
+                    required
+                />
+                <label for="password">Password</label>
+              </div>
+              <span class="checkbox remember">
+                <input type="checkbox" id="remember" v-model="rememberMe" />
+                <label for="remember" class="read-text">Remember me</label>
+              </span>
+              <span class="checkbox forgot">
+                <a href="#">Forgot Password?</a>
+              </span>
+              <button :disabled="!isLoginFormValid">Login</button>
+            </form>
+            <a href="javascript:void(0)" class="account-check" @click="toggleCard">
+              Don't have an account? <b>Sign up</b>
+            </a>
+          </div>
 
-    <!-- 로그인/회원가입 폼 -->
-    <transition name="fade">
-      <div v-if="isLogin" key="login">
-        <h2>로그인</h2>
-        <form @submit.prevent="submitLogin">
-          <div>
-            <label for="email">아이디 (이메일): </label>
-            <input v-model="email" type="email" id="email" required placeholder="이메일을 입력하세요" />
-            <span v-if="email && !isValidEmail" class="error">올바른 이메일 형식을 입력하세요.</span>
+          <!-- 회원가입 카드 -->
+          <div :class="['card', { hidden: isLoginVisible }]" id="register">
+            <form @submit.prevent="handleRegister">
+              <h1>Sign up</h1>
+              <div class="input" :class="{ active: isRegisterEmailFocused || registerEmail }">
+                <input
+                    id="register-email"
+                    type="email"
+                    v-model="registerEmail"
+                    @focus="focusInput('registerEmail')"
+                    @blur="blurInput('registerEmail')"
+                    required
+                />
+                <label for="register-email">Email</label>
+              </div>
+              <div class="input" :class="{ active: isRegisterPasswordFocused || registerPassword }">
+                <input
+                    id="register-password"
+                    type="password"
+                    v-model="registerPassword"
+                    @focus="focusInput('registerPassword')"
+                    @blur="blurInput('registerPassword')"
+                    required
+                />
+                <label for="register-password">Password</label>
+              </div>
+              <div class="input" :class="{ active: isConfirmPasswordFocused || confirmPassword }">
+                <input
+                    id="confirm-password"
+                    type="password"
+                    v-model="confirmPassword"
+                    @focus="focusInput('confirmPassword')"
+                    @blur="blurInput('confirmPassword')"
+                    required
+                />
+                <label for="confirm-password">Confirm Password</label>
+              </div>
+              <span class="checkbox remember">
+                <input type="checkbox" id="terms" v-model="acceptTerms" required />
+                <label for="terms" class="read-text"
+                >I have read <b>Terms and Conditions</b></label
+                >
+              </span>
+              <button :disabled="!isRegisterFormValid">Register</button>
+            </form>
+            <a href="javascript:void(0)" class="account-check" @click="toggleCard">
+              Already have an account? <b>Sign in</b>
+            </a>
           </div>
-          <div>
-            <label for="apiKey">TMDB API Key: </label>
-            <input v-model="apiKey" type="password" id="apiKey" required placeholder="TMDB API Key를 입력하세요" />
-          </div>
-          <div>
-            <label>
-              <input v-model="rememberMe" type="checkbox" /> Remember me
-            </label>
-          </div>
-          <button type="submit">로그인</button>
-        </form>
+        </div>
       </div>
-
-      <div v-else key="signup">
-        <h2>회원가입</h2>
-        <form @submit.prevent="submitSignup">
-          <div>
-            <label for="email">아이디 (이메일): </label>
-            <input v-model="email" type="email" id="email" required placeholder="이메일을 입력하세요" />
-            <span v-if="email && !isValidEmail" class="error">올바른 이메일 형식을 입력하세요.</span>
-          </div>
-          <div>
-            <label for="apiKey">TMDB API Key: </label>
-            <input v-model="apiKey" type="password" id="apiKey" required placeholder="TMDB API Key를 입력하세요" />
-          </div>
-          <button type="submit">회원가입</button>
-        </form>
-      </div>
-    </transition>
-
-    <!-- 폼 전환 링크 -->
-    <p @click="toggleForm">{{ isLogin ? '회원가입' : '로그인' }}으로 전환</p>
+    </div>
   </div>
 </template>
 
+
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed } from "vue";
 
-const email = ref('');
-const apiKey = ref('');
+const isLoginVisible = ref(true);
+const email = ref("");
+const password = ref("");
+const registerEmail = ref("");
+const registerPassword = ref("");
+const confirmPassword = ref("");
 const rememberMe = ref(false);
-const isLogin = ref(true);
-const isAuthenticated = ref(!!localStorage.getItem('email')); // 로그인 상태 확인
+const acceptTerms = ref(false);
 
-const router = useRouter();
+const isEmailFocused = ref(false);
+const isPasswordFocused = ref(false);
+const isRegisterEmailFocused = ref(false);
+const isRegisterPasswordFocused = ref(false);
+const isConfirmPasswordFocused = ref(false);
 
-// 이메일 형식 확인
-const isValidEmail = computed(() => {
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  return emailRegex.test(email.value);
+const isLoginFormValid = computed(() => email.value && password.value);
+const isRegisterFormValid = computed(() => {
+  return (
+      registerEmail.value &&
+      registerPassword.value &&
+      confirmPassword.value &&
+      registerPassword.value === confirmPassword.value &&
+      acceptTerms.value
+  );
 });
 
-// 폼 전환
-const toggleForm = () => {
-  isLogin.value = !isLogin.value;
+const toggleCard = () => {
+  isLoginVisible.value = !isLoginVisible.value;
 };
 
-// 로그아웃
-const logout = () => {
-  localStorage.removeItem('email');
-  localStorage.removeItem('rememberMe');
-  isAuthenticated.value = false;
-  alert('로그아웃 되었습니다.');
-  router.push('/signin');
+const focusInput = (inputName) => {
+  if (inputName === "email") isEmailFocused.value = true;
+  if (inputName === "password") isPasswordFocused.value = true;
+  if (inputName === "registerEmail") isRegisterEmailFocused.value = true;
+  if (inputName === "registerPassword") isRegisterPasswordFocused.value = true;
+  if (inputName === "confirmPassword") isConfirmPasswordFocused.value = true;
 };
 
-// 로그인 처리
-const submitLogin = () => {
-  if (!isValidEmail.value || !email.value || !apiKey.value) {
-    alert('입력값을 확인해주세요.');
-    return;
-  }
+const blurInput = (inputName) => {
+  if (inputName === "email") isEmailFocused.value = false;
+  if (inputName === "password") isPasswordFocused.value = false;
+  if (inputName === "registerEmail") isRegisterEmailFocused.value = false;
+  if (inputName === "registerPassword") isRegisterPasswordFocused.value = false;
+  if (inputName === "confirmPassword") isConfirmPasswordFocused.value = false;
+};
 
-  const storedApiKey = localStorage.getItem(email.value);
-
-  if (storedApiKey === apiKey.value) {
-    localStorage.setItem('email', email.value);
-    if (rememberMe.value) {
-      localStorage.setItem('rememberMe', 'true');
-    }
-    isAuthenticated.value = true;
-    alert('로그인 성공!');
-    router.push('/');
+const handleLogin = () => {
+  if (email.value && password.value) {
+    alert("Login successful! Redirecting...");
+    // 로그인 성공 시 리다이렉션
+    window.location.href = "/";
   } else {
-    alert('로그인 실패. 아이디와 비밀번호(API Key)를 확인해주세요.');
+    alert("Please fill in all fields.");
   }
 };
 
-// 회원가입 처리
-const submitSignup = () => {
-  if (!isValidEmail.value || !email.value || !apiKey.value) {
-    alert('입력값을 확인해주세요.');
+const handleRegister = () => {
+  if (registerPassword.value !== confirmPassword.value) {
+    alert("Passwords do not match.");
     return;
   }
-
-  localStorage.setItem(email.value, apiKey.value);
-  alert('회원가입 성공!');
-  toggleForm();
-};
-
-// 로그인 상태 감시 (필요 시 추가)
-watch(isAuthenticated, (newVal) => {
-  if (!newVal) {
-    router.push('/signin');
+  if (acceptTerms.value) {
+    alert("Registration successful! Redirecting...");
+    toggleCard(); // 회원가입 성공 시 로그인 화면으로 이동
+  } else {
+    alert("You must accept the terms and conditions.");
   }
-});
+};
 </script>
 
+
 <style scoped>
-.auth-container {
-  width: 300px;
-  margin: 0 auto;
-  text-align: left;
+
+
+:root {
+  --container-start-x: -50%;
+  --container-end-x: -90%;
+  --container-start-y: -58%;
+  --container-end-y: -42%;
+  --container-start-color: #ECECEC;
+  --container-end-color: #100f0f;
 }
 
-.logout-button {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  cursor: pointer;
-  margin-bottom: 20px;
-  border-radius: 5px;
+.bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://images.unsplash.com/photo-1507041957456-9c397ce39c97?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;
+  background-position: center;
 }
 
-form div {
-  margin-bottom: 15px;
+.bg-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(27, 27, 27, 0.90);
 }
 
-form button {
-  width: 100%;
-  padding: 10px;
+a {
+  text-decoration:none;
+  margin:0;
+  padding: 0;
 }
 
-p {
-  cursor: pointer;
+.container {
+  height: 100svh;
+  width: 100svw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#phone {
+  width: 50svw;
+  max-width: 80dvh;
+  max-height: 50dvh;
+  aspect-ratio: 3.35 / 4;
+  border-radius: min(2.5cqw, 2.0cqh);
   text-align: center;
-  color: #42b983;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.error {
-  color: red;
-  font-size: 12px;
+
+@media (max-height: 600px) {
+  #phone {
+    transform: translate(-50%, -50%) scale(0.5); /* Scale down on small screens */
+  }
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+@media (max-height: 400px) {
+  #phone {
+    transform: translate(-50%, -50%) scale(0.3); /* Further scale down */
+  }
 }
 
-.fade-enter,
-.fade-leave-to {
+#content-wrapper {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position:relative;
+}
+
+input {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 2.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+
+.read-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-indent: 10px; /* 원하는 들여쓰기 크기로 조정하세요 */
+  color: #2b2b2b !important;
+  font-weight: 900;
+}
+
+h1 {
+  font-size:24px;
+  font-weight:800;
+  text-align:center;
+  margin-top:0;
+
+  color:#272727;
+}
+
+button {
+  display:block;
+  border-radius:50px;
+  border:none;
+  width:100%;
+  background-color: #2069ff;
+  color:#fff;
+  padding:17px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  box-shadow: 0px 10px 30px rgba(23,83,209,0.3);
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  box-shadow: 0px 2px 10px rgba(23,83,209,0.4)
+}
+
+.input {
+  position: relative;
+  margin-top: 1.5rem;
+}
+
+.line-active {
+  border-bottom:1px solid #2069ff !important;
+  box-shadow: 0px 1px 0px #2069ff !important;
+}
+
+.input input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #9e9e9e;
+  border-radius: 0;
+  outline: none;
+  height: 2.5rem;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  box-sizing: content-box;
+  transition: all 0.3s ease;
+}
+
+.input label {
+  color: #9e9e9e;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  font-size: 1rem;
+  cursor: text;
+  transition: transform .2s ease-out;
+  transform-origin: 0% 100%;
+  text-align: initial;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+.label-active {
+  transform: translateY(-14px) scale(0.8) !important;
+  transform-origin: 0 0 !important;
+}
+
+.label-blue {
+  color: #2069ff !important;
+}
+
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+  position: absolute;
   opacity: 0;
+  pointer-events: none;
+}
+
+[type="checkbox"]+label {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  display: inline-block;
+  height: 25px;
+  line-height: 22px;
+  font-size: 1rem;
+  user-select: none;
+}
+
+[type="checkbox"]+label:before, [type="checkbox"]:not(.filled-in)+label:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  z-index: 0;
+  border: 2px solid #5a5a5a;
+  border-radius: 3px;
+  margin-top: 2px;
+  transition: .2s;
+}
+
+[type="checkbox"]:not(.filled-in)+label:after {
+  border: 0;
+  transform: scale(0);
+}
+
+[type="checkbox"]:checked+label:before {
+  top: -4px;
+  left: -5px;
+  width: 12px;
+  height: 22px;
+  border-top: 2px solid transparent;
+  border-left: 2px solid transparent;
+  border-right: 2px solid #2069ff;
+  border-bottom: 2px solid #2069ff;
+  transform: rotate(40deg);
+  backface-visibility: hidden;
+  transform-origin: 100% 100%;
+  border-radius: 1px;
+}
+
+.checkbox {
+  margin-top:2rem;
+  display:block;
+  margin-bottom:2rem;
+}
+
+.remember {
+  float:left;
+}
+
+.forgot {
+  float:right;
+}
+
+.forgot a {
+  text-decoration:none;
+  color:#000;
+  font-weight:900;
+  line-height: 22px;
+}
+
+.card {
+  border-radius:10px;
+  width:100%;
+  max-width: 800px;
+  position:absolute;
+  background-color:white;
+  padding:27px 30px 46px 30px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.16);
+  transition: all 0.4s 0.1s ease;
+
+  top: 50%;
+
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.card form {
+  transform:translateX(0px);
+  transition: all 0.3s 0.4s ease;
+}
+
+#login {
+  z-index:2;
+  top: 5svh;
+}
+
+#register {
+  z-index:2;
+  top: 5svh;
+}
+
+.account-check {
+  width:100%;
+  text-align:center;
+  position:absolute;
+  bottom:15px;
+  left:0;
+  opacity:0;
+  text-decoration:none;
+  visibility:hidden;
+  color:#fff;
+  padding:10px;
+  transition: all 0.2s ease;
+}
+
+.account-check:active {
+  color:#000;
+  transform: translateY(2px);
+}
+
+#register.hidden {
+  top:calc(5svh + 90px) !important;
+  z-index:1;
+}
+
+#login.hidden {
+  top:calc(5svh + 220px) !important;
+  z-index:1;
+}
+
+.card.hidden {
+  background-color:#2069ff;
+  box-shadow: 0px 20px 40px rgba(23,83,209,0.8);
+  padding:0px 30px 0px 30px;
+
+}
+
+#register.hidden form {
+  transform:translateX(20px);
+}
+
+#login.hidden form {
+  transform:translateX(-20px);
+}
+
+.hidden form {
+  opacity:0;
+  transition: all 0.3s ease;
+}
+
+.hidden .account-check {
+  opacity:1;
+  visibility:visible;
+  z-index:2;
+  transition: all 0.2s ease;
+}
+
+.register-swap {
+  animation: register-swap 0.5s ease forwards;
+}
+
+.login-swap {
+  animation: login-swap 0.5s ease forwards;
+}
+
+.active > label {
+  color: rgba(0, 0, 0, 0);
+}
+
+@keyframes register-swap {
+  0% {transform: translate(0%, 0%)}
+  50% {transform: translate(30%, 0%);}
+  0% {transform: translate(0%, 0%)}
+}
+
+@keyframes login-swap {
+  0% {transform: translate(0%, 0%)}
+  50% {transform: translate(-70%, 0%);}
+  0% {transform: translate(0%, 0%)}
+}
+
+@media (max-width: 768px) {
+
+  #phone {
+    width: 70%;
+    transform: translate(-50%, -70%) scale(1); /* Scale down on small screens */
+  }
+
+  #login {
+    top: -2svh !important;
+  }
+
+  #register {
+    top: -2svh !important;
+  }
+
+  #register.hidden {
+    top:calc(5svh + 90px) !important;
+    z-index:1;
+  }
+
+  #login.hidden {
+    top:calc(5svh + 90px) !important;
+    z-index:1;
+  }
 }
 </style>
