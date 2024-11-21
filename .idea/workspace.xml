@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/moviewsd/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/moviewsd/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/moviewsd/src/views/SigninPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/moviewsd/src/views/SigninPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,7 +76,7 @@
       <workItem from="1731834005393" duration="15043000" />
       <workItem from="1731918246087" duration="15347000" />
       <workItem from="1732015992678" duration="8513000" />
-      <workItem from="1732069890543" duration="31487000" />
+      <workItem from="1732069890543" duration="34855000" />
     </task>
     <servers />
   </component>
