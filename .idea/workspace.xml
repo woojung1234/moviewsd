@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/moviewsd/src/views/SigninPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/moviewsd/src/views/SigninPage.vue" afterDir="false" />
-    </list>
+    <list default="true" id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,7 +72,7 @@
       <workItem from="1731834005393" duration="15043000" />
       <workItem from="1731918246087" duration="15347000" />
       <workItem from="1732015992678" duration="8513000" />
-      <workItem from="1732069890543" duration="41588000" />
+      <workItem from="1732069890543" duration="42494000" />
     </task>
     <servers />
   </component>
