@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import store from '../store'; // Vuex Store 가져오기
 import PopularMovies from '../views/PopularMovies.vue';
 import MovieDetailsPage from '../views/MovieDetailsPage.vue';
 import SearchMovies from '../views/SearchMovies.vue';
@@ -46,25 +47,23 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory('/'), // 기본 URL
+  history: createWebHistory(), // 기본 URL
   routes,
 });
 
 // 라우터 가드
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('isLoggedIn') === 'true' && localStorage.getItem('apiKey');
-  console.log('Navigating to:', to.name);
-  console.log('Is Authenticated:', isAuthenticated);
+  const isAuthenticated = store.getters.isLoggedIn; // Vuex에서 상태 가져오기
 
   if (to.name === 'signin' && isAuthenticated) {
-    console.log('Already logged in. Redirecting to home.');
+    // 이미 로그인된 상태에서 로그인 페이지로 이동 시 홈으로 리다이렉트
     next({ name: 'home' });
   } else if (to.meta.requiresAuth && !isAuthenticated) {
-    console.log('Access denied. Redirecting to signin.');
+    // 인증이 필요한 페이지에 접근하려고 하지만 인증되지 않은 경우
     next({ name: 'signin' });
   } else {
-    console.log('Access granted:', to.name);
-    next(); // 그대로 진행
+    // 접근 허용
+    next();
   }
 });
 
