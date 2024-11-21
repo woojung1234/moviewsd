@@ -102,6 +102,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
 const isLoginVisible = ref(true);
 const email = ref("");
@@ -111,6 +112,7 @@ const registerPassword = ref("");
 const confirmPassword = ref("");
 const rememberMe = ref(false);
 const acceptTerms = ref(false);
+const router = useRouter();
 
 const isEmailFocused = ref(false);
 const isPasswordFocused = ref(false);
@@ -153,7 +155,10 @@ const handleLogin = () => {
   if (email.value && password.value) {
     alert("Login successful! Redirecting...");
     // 로그인 성공 시 리다이렉션
-    window.location.href = "/";
+    console.log("Redirecting to home...");
+    router.push("/")
+        .then(() => console.log("Redirected to home"))
+        .catch((err) => console.error("Router error:", err));
   } else {
     alert("Please fill in all fields.");
   }
