@@ -1,6 +1,5 @@
 <template>
   <div>
-    <button v-if="isLoggedIn" @click="handleLogout">Logout</button>
     <div class="bg-image"></div>
     <div class="container">
       <div id="phone">
@@ -35,13 +34,10 @@
                 <input type="checkbox" id="remember" v-model="rememberMe" />
                 <label for="remember" class="read-text">Remember me</label>
               </span>
-              <span class="checkbox forgot">
-                <a href="#">Forgot Password?</a>
-              </span>
               <button :disabled="!isLoginFormValid">Login</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Already have an account? <b>Sign in</b>
+              Don't have an account? <b>Sign up</b>
             </a>
           </div>
 
@@ -91,7 +87,7 @@
               <button :disabled="!isRegisterFormValid">Register</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Don't have an account? <b>Sign up</b>
+              Already have an account? <b>Sign in</b>
             </a>
           </div>
         </div>
@@ -100,9 +96,9 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, computed } from "vue";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 const isLoginVisible = ref(true);
@@ -113,9 +109,9 @@ const registerPassword = ref("");
 const confirmPassword = ref("");
 const rememberMe = ref(false);
 const acceptTerms = ref(false);
+const store = useStore();
 const router = useRouter();
 
-const isLoggedIn = ref(localStorage.getItem("isLoggedIn") === "true");
 const isEmailFocused = ref(false);
 const isPasswordFocused = ref(false);
 const isRegisterEmailFocused = ref(false);
@@ -155,38 +151,14 @@ const blurInput = (inputName) => {
 
 const handleLogin = () => {
   if (email.value && password.value) {
-    // Mocked API Key
-    const mockApiKey = "1cc6831125c4a1baf8f809dc1f68ec14";
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem("apiKey", mockApiKey);
-
+    const mockApiKey = "1cc6831125c4a1baf8f809dc1f68ec14"; // Mock API Key
+    store.dispatch("login", { apiKey: mockApiKey, user: { email: email.value } });
     alert("Login successful! Redirecting...");
-    router.push("/").catch((err) => console.error("Router error:", err));
+    router.push("/");
   } else {
     alert("Please fill in all fields.");
   }
 };
-
-const handleLogout = () => {
-  // Local Storage에서 로그인 정보 삭제
-  localStorage.removeItem("isLoggedIn");
-  localStorage.removeItem("apiKey");
-
-  // Vue 상태도 업데이트
-  isLoggedIn.value = false;
-
-  // 리다이렉트
-  router.push("/signin")
-      .then(() => {
-        console.log("Redirected to sign-in page.");
-      })
-      .catch((err) => {
-        console.error("Router error:", err);
-      });
-
-  alert("You have been logged out.");
-};
-
 
 const handleRegister = () => {
   if (registerPassword.value !== confirmPassword.value) {
@@ -194,17 +166,17 @@ const handleRegister = () => {
     return;
   }
   if (acceptTerms.value) {
+    const mockApiKey = "1cc6831125c4a1baf8f809dc1f68ec14"; // Mock API Key
+    store.dispatch("login", { apiKey: mockApiKey, user: { email: registerEmail.value } });
     alert("Registration successful! Redirecting...");
-    toggleCard(); // 회원가입 성공 시 로그인 화면으로 이동
+    router.push("/");
   } else {
     alert("You must accept the terms and conditions.");
   }
 };
 </script>
 
-
 <style scoped>
-
 
 :root {
   --container-start-x: -50%;
