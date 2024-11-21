@@ -155,7 +155,10 @@ const handleLogin = () => {
   if (email.value && password.value) {
     alert("Login successful! Redirecting...");
     // 로그인 성공 시 리다이렉션
-    router.push("/");
+    console.log("Redirecting to home...");
+    router.push("/")
+        .then(() => console.log("Redirected to home"))
+        .catch((err) => console.error("Router error:", err));
   } else {
     alert("Please fill in all fields.");
   }
