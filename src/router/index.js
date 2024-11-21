@@ -46,20 +46,27 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory('/'), // 기본 URL
   routes,
 });
 
 // 라우터 가드
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('isLoggedIn') === 'true';
+  const isAuthenticated = localStorage.getItem('isLoggedIn') === 'true' && localStorage.getItem('apiKey');
+  console.log('Navigating to:', to.name);
+  console.log('Is Authenticated:', isAuthenticated);
 
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next({ name: 'signin' }); // 로그인 페이지로 리다이렉트
+  if (to.name === 'signin' && isAuthenticated) {
+    console.log('Already logged in. Redirecting to home.');
+    next({ name: 'home' });
+  } else if (to.meta.requiresAuth && !isAuthenticated) {
+    console.log('Access denied. Redirecting to signin.');
+    next({ name: 'signin' });
   } else {
+    console.log('Access granted:', to.name);
     next(); // 그대로 진행
   }
 });
 
-
 export default router;
+

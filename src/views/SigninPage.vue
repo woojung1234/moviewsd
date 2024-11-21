@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button v-if="isLoggedIn" @click="handleLogout">Logout</button>
     <div class="bg-image"></div>
     <div class="container">
       <div id="phone">
@@ -40,7 +41,7 @@
               <button :disabled="!isLoginFormValid">Login</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Don't have an account? <b>Sign up</b>
+              Already have an account? <b>Sign in</b>
             </a>
           </div>
 
@@ -90,7 +91,7 @@
               <button :disabled="!isRegisterFormValid">Register</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Already have an account? <b>Sign in</b>
+              Don't have an account? <b>Sign up</b>
             </a>
           </div>
         </div>
@@ -114,6 +115,7 @@ const rememberMe = ref(false);
 const acceptTerms = ref(false);
 const router = useRouter();
 
+const isLoggedIn = ref(localStorage.getItem("isLoggedIn") === "true");
 const isEmailFocused = ref(false);
 const isPasswordFocused = ref(false);
 const isRegisterEmailFocused = ref(false);
@@ -153,16 +155,26 @@ const blurInput = (inputName) => {
 
 const handleLogin = () => {
   if (email.value && password.value) {
+    // Mocked API Key
+    const mockApiKey = "1cc6831125c4a1baf8f809dc1f68ec14";
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem("apiKey", mockApiKey);
+
     alert("Login successful! Redirecting...");
-    // 로그인 성공 시 리다이렉션
-    console.log("Redirecting to home...");
-    router.push("/")
-        .then(() => console.log("Redirected to home"))
-        .catch((err) => console.error("Router error:", err));
+    router.push("/").catch((err) => console.error("Router error:", err));
   } else {
     alert("Please fill in all fields.");
   }
 };
+
+const handleLogout = () => {
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("apiKey");
+  alert("You have been logged out.");
+  isLoggedIn.value = false; // 상태 갱신
+  router.push("/signin");
+};
+
 
 const handleRegister = () => {
   if (registerPassword.value !== confirmPassword.value) {
