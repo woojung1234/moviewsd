@@ -30,10 +30,6 @@
                 />
                 <label for="password">Password</label>
               </div>
-              <span class="checkbox remember">
-                <input type="checkbox" id="remember" v-model="rememberMe" />
-                <label for="remember" class="read-text">Remember me</label>
-              </span>
               <button :disabled="!isLoginFormValid">Login</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
@@ -65,25 +61,8 @@
                     @blur="blurInput('registerPassword')"
                     required
                 />
-                <label for="register-password">Password</label>
+                <label for="register-password">Password (API Key)</label>
               </div>
-              <div class="input" :class="{ active: isConfirmPasswordFocused || confirmPassword }">
-                <input
-                    id="confirm-password"
-                    type="password"
-                    v-model="confirmPassword"
-                    @focus="focusInput('confirmPassword')"
-                    @blur="blurInput('confirmPassword')"
-                    required
-                />
-                <label for="confirm-password">Confirm Password</label>
-              </div>
-              <span class="checkbox remember">
-                <input type="checkbox" id="terms" v-model="acceptTerms" required />
-                <label for="terms" class="read-text"
-                >I have read <b>Terms and Conditions</b></label
-                >
-              </span>
               <button :disabled="!isRegisterFormValid">Register</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
@@ -98,36 +77,24 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 const isLoginVisible = ref(true);
 const email = ref("");
 const password = ref("");
 const registerEmail = ref("");
 const registerPassword = ref("");
-const confirmPassword = ref("");
-const rememberMe = ref(false);
-const acceptTerms = ref(false);
-const store = useStore();
-const router = useRouter();
-
 const isEmailFocused = ref(false);
 const isPasswordFocused = ref(false);
 const isRegisterEmailFocused = ref(false);
 const isRegisterPasswordFocused = ref(false);
-const isConfirmPasswordFocused = ref(false);
+
+const router = useRouter();
+const store = useStore();
 
 const isLoginFormValid = computed(() => email.value && password.value);
-const isRegisterFormValid = computed(() => {
-  return (
-      registerEmail.value &&
-      registerPassword.value &&
-      confirmPassword.value &&
-      registerPassword.value === confirmPassword.value &&
-      acceptTerms.value
-  );
-});
+const isRegisterFormValid = computed(() => registerEmail.value && registerPassword.value);
 
 const toggleCard = () => {
   isLoginVisible.value = !isLoginVisible.value;
@@ -138,7 +105,6 @@ const focusInput = (inputName) => {
   if (inputName === "password") isPasswordFocused.value = true;
   if (inputName === "registerEmail") isRegisterEmailFocused.value = true;
   if (inputName === "registerPassword") isRegisterPasswordFocused.value = true;
-  if (inputName === "confirmPassword") isConfirmPasswordFocused.value = true;
 };
 
 const blurInput = (inputName) => {
@@ -146,33 +112,30 @@ const blurInput = (inputName) => {
   if (inputName === "password") isPasswordFocused.value = false;
   if (inputName === "registerEmail") isRegisterEmailFocused.value = false;
   if (inputName === "registerPassword") isRegisterPasswordFocused.value = false;
-  if (inputName === "confirmPassword") isConfirmPasswordFocused.value = false;
 };
 
 const handleLogin = () => {
-  if (email.value && password.value) {
-    const mockApiKey = "1cc6831125c4a1baf8f809dc1f68ec14"; // Mock API Key
-    store.dispatch("login", { apiKey: mockApiKey, user: { email: email.value } });
-    alert("Login successful! Redirecting...");
+  const storedUser = JSON.parse(localStorage.getItem(email.value));
+
+  if (storedUser && storedUser.password === password.value) {
+    // 로그인 성공
+    store.dispatch("login", { apiKey: password.value, user: { email: email.value } });
+    alert("Login successful!");
     router.push("/");
   } else {
-    alert("Please fill in all fields.");
+    alert("Invalid email or password.");
   }
 };
 
 const handleRegister = () => {
-  if (registerPassword.value !== confirmPassword.value) {
-    alert("Passwords do not match.");
+  if (localStorage.getItem(registerEmail.value)) {
+    alert("This email is already registered.");
     return;
   }
-  if (acceptTerms.value) {
-    const mockApiKey = "1cc6831125c4a1baf8f809dc1f68ec14"; // Mock API Key
-    store.dispatch("login", { apiKey: mockApiKey, user: { email: registerEmail.value } });
-    alert("Registration successful! Redirecting...");
-    router.push("/");
-  } else {
-    alert("You must accept the terms and conditions.");
-  }
+
+  localStorage.setItem(registerEmail.value, JSON.stringify({ password: registerPassword.value }));
+  alert("Registration successful! Please log in.");
+  toggleCard(); // 로그인 화면으로 전환
 };
 </script>
 
