@@ -1,36 +1,44 @@
 <template>
   <div class="home">
-    <!-- 대표 영화 섹션 -->
-    <div v-if="featuredMovie" class="featured-movie">
-      <img
-          :src="'https://image.tmdb.org/t/p/original' + featuredMovie.backdrop_path"
-          :alt="featuredMovie.title"
-          class="featured-image"
-      />
-      <div class="featured-info">
-        <h1>{{ featuredMovie.title }}</h1>
-        <p>{{ featuredMovie.overview }}</p>
-      </div>
+    <!-- 로딩 중 표시 -->
+    <div v-if="loading" class="loading">
+      데이터를 불러오는 중입니다...
     </div>
 
-    <!-- 장르별 영화 섹션 -->
-    <div class="genre-sections">
-      <div
-          v-for="(genre, index) in genres"
-          :key="genre.name"
-          class="genre-section"
-          ref="genreSections"
-      >
-        <h2>{{ genre.name }}</h2>
+    <!-- 로딩이 끝난 후 콘텐츠 표시 -->
+    <div v-else>
+      <!-- 대표 영화 섹션 -->
+      <div v-if="featuredMovie" class="featured-movie">
+        <img
+            :src="'https://image.tmdb.org/t/p/original' + featuredMovie.backdrop_path"
+            :alt="featuredMovie.title"
+            class="featured-image"
+        />
+        <div class="featured-info">
+          <h1>{{ featuredMovie.title }}</h1>
+          <p>{{ featuredMovie.overview }}</p>
+        </div>
+      </div>
+
+      <!-- 장르별 영화 섹션 -->
+      <div class="genre-sections">
         <div
-            class="movie-slider"
-            @wheel.prevent="handleScroll($event, index)"
+            v-for="(genre, index) in genres"
+            :key="genre.name"
+            class="genre-section"
+            ref="genreSections"
         >
-          <MovieCard
-              v-for="movie in genre.movies"
-              :key="movie.id"
-              :movie="movie"
-          />
+          <h2>{{ genre.name }}</h2>
+          <div
+              class="movie-slider"
+              @wheel.prevent="handleScroll($event, index)"
+          >
+            <MovieCard
+                v-for="movie in genre.movies"
+                :key="movie.id"
+                :movie="movie"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -39,11 +47,11 @@
 
 <script>
 import axios from "axios";
-import MovieCard from "@/components/MovieCard.vue"; // MovieCard 컴포넌트 임포트
+import MovieCard from "@/components/MovieCard.vue";
 
 export default {
   components: {
-    MovieCard, // MovieCard 컴포넌트 등록
+    MovieCard,
   },
   data() {
     return {
@@ -55,26 +63,41 @@ export default {
         { name: "액션", genreId: 28, movies: [] },
         { name: "로맨스", genreId: 10749, movies: [] },
       ],
+      apiKey: null,
+      loading: true, // 초기 로딩 상태
     };
   },
   async mounted() {
-    const apiKey = process.env.VUE_APP_TMDB_API_KEY;
+    this.apiKey = localStorage.getItem('apiKey');
+
+    if (!this.apiKey) {
+      alert('API Key가 없습니다. 로그인을 먼저 진행해주세요.');
+      this.$router.push('/signin');
+      return;
+    }
 
     try {
+      // 대표 영화 데이터 로드
       const popularResponse = await axios.get(
-          `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=1`
+          `https://api.themoviedb.org/3/movie/popular?api_key=${this.apiKey}&language=ko-KR&page=1`
       );
       this.featuredMovie = popularResponse.data.results[0];
 
+      // 장르별 영화 데이터 로드
       for (let genre of this.genres) {
-        let url = genre.endpoint
-            ? `https://api.themoviedb.org/3/movie/${genre.endpoint}?api_key=${apiKey}&language=ko-KR&page=1`
-            : `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=${genre.genreId}&language=ko-KR&page=1`;
+        const url = genre.endpoint
+            ? `https://api.themoviedb.org/3/movie/${genre.endpoint}?api_key=${this.apiKey}&language=ko-KR&page=1`
+            : `https://api.themoviedb.org/3/discover/movie?api_key=${this.apiKey}&with_genres=${genre.genreId}&language=ko-KR&page=1`;
+
         const response = await axios.get(url);
         genre.movies = response.data.results.slice(0, 10);
       }
     } catch (error) {
-      console.error("영화 데이터를 불러오는 데 실패했습니다.", error);
+      console.error("영화 데이터를 불러오는 데 실패했습니다:", error.message);
+      alert('영화 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요.');
+      this.$router.push('/signin');
+    } finally {
+      this.loading = false; // 로딩 상태 종료
     }
   },
   methods: {
@@ -85,6 +108,8 @@ export default {
   },
 };
 </script>
+
+
 
 <style scoped>
 .home {
@@ -157,7 +182,6 @@ export default {
   width: 100%;
   border-radius: 8px;
 }
-
 
 @media (max-width: 768px) {
   .featured-info h1 {
