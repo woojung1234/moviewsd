@@ -1,76 +1,35 @@
 <template>
-  <div>
-    <div class="bg-image"></div>
-    <div class="container">
-      <div id="phone">
-        <div id="content-wrapper">
-          <!-- 로그인 카드 -->
-          <div :class="['card', { hidden: !isLoginVisible }]" id="login">
-            <form @submit.prevent="handleLogin">
-              <h1>Sign in</h1>
-              <div class="input" :class="{ active: isEmailFocused || email }">
-                <input
-                    id="email"
-                    type="email"
-                    v-model="email"
-                    @focus="focusInput('email')"
-                    @blur="blurInput('email')"
-                    required
-                />
-                <label for="email">Username or Email</label>
-              </div>
-              <div class="input" :class="{ active: isPasswordFocused || password }">
-                <input
-                    id="password"
-                    type="password"
-                    v-model="password"
-                    @focus="focusInput('password')"
-                    @blur="blurInput('password')"
-                    required
-                />
-                <label for="password">Password (API Key)</label>
-              </div>
-              <button :disabled="!isLoginFormValid">Login</button>
-            </form>
-            <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Don't have an account? <b>Sign up</b>
-            </a>
-          </div>
-
-          <!-- 회원가입 카드 -->
-          <div :class="['card', { hidden: isLoginVisible }]" id="register">
-            <form @submit.prevent="handleRegister">
-              <h1>Sign up</h1>
-              <div class="input" :class="{ active: isRegisterEmailFocused || registerEmail }">
-                <input
-                    id="register-email"
-                    type="email"
-                    v-model="registerEmail"
-                    @focus="focusInput('registerEmail')"
-                    @blur="blurInput('registerEmail')"
-                    required
-                />
-                <label for="register-email">Email</label>
-              </div>
-              <div class="input" :class="{ active: isRegisterPasswordFocused || registerPassword }">
-                <input
-                    id="register-password"
-                    type="password"
-                    v-model="registerPassword"
-                    @focus="focusInput('registerPassword')"
-                    @blur="blurInput('registerPassword')"
-                    required
-                />
-                <label for="register-password">Password (API Key)</label>
-              </div>
-              <button :disabled="!isRegisterFormValid">Register</button>
-            </form>
-            <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Already have an account? <b>Sign in</b>
-            </a>
-          </div>
+  <div class="signin-container">
+    <div class="signin-card">
+      <h1>Sign in</h1>
+      <form @submit.prevent="handleLogin">
+        <div class="input-group">
+          <input
+              type="email"
+              v-model="email"
+              placeholder="Username or Email"
+              required
+          />
         </div>
-      </div>
+        <div class="input-group">
+          <input
+              type="password"
+              v-model="password"
+              placeholder="Password (API Key)"
+              required
+          />
+        </div>
+        <div class="remember-me">
+          <input type="checkbox" v-model="rememberMe" id="remember-me" />
+          <label for="remember-me">Remember me</label>
+        </div>
+        <button :disabled="!isLoginFormValid" class="signin-button">
+          Login
+        </button>
+      </form>
+      <p class="signup-link">
+        Don't have an account? <span @click="toggleToRegister">Sign up</span>
+      </p>
     </div>
   </div>
 </template>
@@ -78,75 +37,45 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
 import { useStore } from "vuex";
+import axios from "axios";
 
-const isLoginVisible = ref(true);
 const email = ref("");
 const password = ref("");
-const registerEmail = ref("");
-const registerPassword = ref("");
-const isEmailFocused = ref(false);
-const isPasswordFocused = ref(false);
-const isRegisterEmailFocused = ref(false);
-const isRegisterPasswordFocused = ref(false);
-
+const rememberMe = ref(false);
 const router = useRouter();
 const store = useStore();
 
 const isLoginFormValid = computed(() => email.value && password.value);
-const isRegisterFormValid = computed(() => registerEmail.value && registerPassword.value);
-
-const toggleCard = () => {
-  isLoginVisible.value = !isLoginVisible.value;
-};
-
-const focusInput = (inputName) => {
-  if (inputName === "email") isEmailFocused.value = true;
-  if (inputName === "password") isPasswordFocused.value = true;
-  if (inputName === "registerEmail") isRegisterEmailFocused.value = true;
-  if (inputName === "registerPassword") isRegisterPasswordFocused.value = true;
-};
-
-const blurInput = (inputName) => {
-  if (inputName === "email") isEmailFocused.value = false;
-  if (inputName === "password") isPasswordFocused.value = false;
-  if (inputName === "registerEmail") isRegisterEmailFocused.value = false;
-  if (inputName === "registerPassword") isRegisterPasswordFocused.value = false;
-};
 
 const handleLogin = async () => {
   try {
-    // TMDB API 키 검증
-    const response = await axios.get("https://api.themoviedb.org/3/movie/popular", {
-      params: {
-        api_key: password.value, // 비밀번호로 입력된 API 키
-        language: "ko-KR",
-        page: 1,
-      },
-    });
+    // TMDB API 요청으로 비밀번호(API Key) 검증
+    const response = await axios.get(
+        "https://api.themoviedb.org/3/movie/popular",
+        {
+          params: {
+            api_key: password.value, // 비밀번호를 API 키로 사용
+            language: "en-US",
+            page: 1,
+          },
+        }
+    );
 
     if (response.status === 200) {
-      // 로그인 성공 처리
-      store.dispatch("login", { apiKey: password.value, user: { email: email.value } });
+      // 요청 성공 시 Vuex에 로그인 상태 저장
+      store.dispatch("login", {
+        apiKey: password.value,
+        user: { email: email.value },
+      });
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("apiKey", password.value);
       alert("Login successful!");
-      router.push("/");
+      router.push("/"); // 홈으로 리다이렉트
     }
   } catch (error) {
-    alert("Invalid API Key. Please enter a valid key.");
+    alert("Invalid API Key. Please try again.");
   }
-};
-
-const handleRegister = () => {
-  // 회원가입 시 이메일과 비밀번호를 로컬 스토리지에 저장
-  if (localStorage.getItem(registerEmail.value)) {
-    alert("This email is already registered.");
-    return;
-  }
-
-  localStorage.setItem(registerEmail.value, JSON.stringify({ password: registerPassword.value }));
-  alert("Registration successful! Please log in.");
-  toggleCard(); // 로그인 화면으로 전환
 };
 </script>
 
