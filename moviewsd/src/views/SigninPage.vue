@@ -168,11 +168,23 @@ const handleLogin = () => {
 };
 
 const handleLogout = () => {
+  // Local Storage에서 로그인 정보 삭제
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("apiKey");
+
+  // Vue 상태도 업데이트
+  isLoggedIn.value = false;
+
+  // 리다이렉트
+  router.push("/signin")
+      .then(() => {
+        console.log("Redirected to sign-in page.");
+      })
+      .catch((err) => {
+        console.error("Router error:", err);
+      });
+
   alert("You have been logged out.");
-  isLoggedIn.value = false; // 상태 갱신
-  router.push("/signin");
 };
 
 

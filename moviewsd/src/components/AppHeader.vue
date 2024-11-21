@@ -10,15 +10,19 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
 
+const store = useStore();
 const router = useRouter();
-const isLoggedIn = ref(!!localStorage.getItem('email')); // 로그인 상태 확인
 
+// Vuex의 isLoggedIn 상태를 가져옴
+const isLoggedIn = computed(() => store.getters.isLoggedIn);
+
+// 로그아웃 함수
 const logout = () => {
-  localStorage.clear(); // 로컬스토리지 초기화
-  isLoggedIn.value = false; // 상태 업데이트
+  store.dispatch('logout'); // Vuex의 로그아웃 액션 호출
   router.push('/signin'); // 로그인 페이지로 리다이렉트
 };
 </script>
@@ -54,3 +58,4 @@ button:hover {
   text-decoration: underline;
 }
 </style>
+
