@@ -185,7 +185,7 @@ export default {
 
 .movie-slider::-webkit-scrollbar-thumb {
   background: #888; /* 스크롤바의 색 */
-  border-radius: 4px; /* 스크롤바의 둥근 모서리 */
+  border-radius: 5px; /* 스크롤바의 둥근 모서리 */
 }
 .button-group {
   margin-top: 20px;
