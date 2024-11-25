@@ -101,7 +101,7 @@ export default {
             : `https://api.themoviedb.org/3/discover/movie?api_key=${this.apiKey}&with_genres=${genre.genreId}&language=ko-KR&page=1`;
 
         const response = await axios.get(url);
-        genre.movies = response.data.results.slice(0, 10);
+        genre.movies = response.data.results.slice(0, 20);
       }
     } catch (error) {
       console.error("영화 데이터를 불러오는 데 실패했습니다:", error.message);
