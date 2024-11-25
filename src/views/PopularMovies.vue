@@ -17,6 +17,17 @@
         <div class="featured-info">
           <h1>{{ featuredMovie.title }}</h1>
           <p>{{ featuredMovie.overview }}</p>
+          <div class="button-group">
+            <!-- 재생 버튼 -->
+            <button class="play-button" @click="playMovie">▶ 재생</button>
+            <!-- 상세정보 버튼 -->
+            <button
+                class="details-button"
+                @click="goToDetails(featuredMovie.id)"
+            >
+              상세정보
+            </button>
+          </div>
         </div>
       </div>
 
@@ -105,6 +116,11 @@ export default {
       const slider = this.$refs.genreSections[index].querySelector(".movie-slider");
       slider.scrollLeft += event.deltaY > 0 ? 100 : -100;
     },
+    playMovie() {
+    },
+    goToDetails(movieId) {
+      this.$router.push({ name: "movie-details", params: { id: movieId } });
+    },
   },
 };
 </script>
@@ -170,6 +186,38 @@ export default {
 .movie-slider::-webkit-scrollbar-thumb {
   background: #888; /* 스크롤바의 색 */
   border-radius: 4px; /* 스크롤바의 둥근 모서리 */
+}
+.button-group {
+  margin-top: 20px;
+}
+
+button {
+  background-color: #ff6347;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.1);
+  background-color: #ff4500;
+}
+
+.play-button {
+  margin-right: 10px;
+}
+
+.details-button {
+  background-color: #1e90ff;
+}
+
+.details-button:hover {
+  background-color: #4682b4;
 }
 
 .movie-card {
