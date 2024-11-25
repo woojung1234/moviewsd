@@ -34,12 +34,21 @@
       />
       <div v-if="loading" class="loading">Loading...</div>
     </div>
+    <!-- 무한 스크롤 모드에서만 보이는 "맨 위로" 버튼 -->
+    <button
+        v-if="viewType === 'infinite' && isScrolled"
+        class="scroll-to-top"
+        @click="scrollToTop"
+    >
+      ▲
+    </button>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import MovieCard from "@/components/MovieCard.vue";
+
 
 
 export default {
@@ -52,12 +61,24 @@ export default {
       loading: false,      // 로딩 상태
       itemsPerPage: 20,    // 페이지당 영화 개수
       totalResults: 0,     // 전체 영화 수
+      isScrolled: true,
     };
   },
   mounted() {
     this.calculateItemsPerPage();
     window.addEventListener("resize", this.calculateItemsPerPage);
+
+    // 무한 스크롤 컨테이너의 스크롤 이벤트 감지
+    if (this.$refs.scrollContainer) {
+      this.$refs.scrollContainer.addEventListener("scroll", this.checkScroll);
+    }
     this.fetchMovies(); // 초기 데이터 가져오기
+  },
+  beforeUnmount() {
+    // 컴포넌트가 사라질 때 스크롤 이벤트 제거
+    if (this.$refs.scrollContainer) {
+      this.$refs.scrollContainer.removeEventListener("scroll", this.checkScroll);
+    }
   },
   computed: {
     // 테이블 페이지에서 현재 페이지에 맞는 영화 목록을 반환
@@ -122,6 +143,11 @@ export default {
       this.movies = []; // 영화 목록 초기화
       this.fetchMovies();  // 새로 영화 목록을 가져옴
     },
+    checkScroll() {
+      // 스크롤 상태를 확인
+      const container = this.$refs.scrollContainer;
+      this.isScrolled = container.scrollTop > 300;
+    },
 
     // 페이지네이션 (이전/다음) 버튼 동작
     changePage(direction) {
@@ -139,6 +165,14 @@ export default {
         this.page++;  // 페이지 증가
         await this.fetchMovies();
       }
+    },
+    scrollToTop() {
+      const container = this.$refs.scrollContainer;
+      container.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    checkScrollTopButton() {
+      const container = this.$refs.scrollContainer;
+      this.showScrollTopButton = container.scrollTop > 10; // 스크롤 위치가 300px 이상일 때 버튼 표시
     },
   },
 }
@@ -276,5 +310,25 @@ header, .header {
 .pagination span {
   font-size: 16px;
   font-weight: bold;
+}
+.scroll-to-top {
+  position: fixed;
+  bottom: 50px; /* 화면 하단에서 50px 위 */
+  right: 20px; /* 화면 오른쪽에서 20px 안쪽 */
+  padding: 10px 15px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease; /* 빠르게 커짐 */
+}
+
+.scroll-to-top:hover {
+  transform: scale(1.1); /* 살짝만 커짐 */
+  background-color: #369f6d; /* 호버 시 색상 변경 */
 }
 </style>
