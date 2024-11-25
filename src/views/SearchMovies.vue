@@ -244,6 +244,12 @@ export default {
   border: 1px solid #ddd;
   border-radius: 8px;
   position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.05); /* 살짝 확대 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
 }
 
 .movie-card img {
