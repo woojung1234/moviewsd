@@ -55,6 +55,7 @@
 <script>
 import axios from 'axios';
 import { debounce } from 'lodash';
+import { useToast } from "vue-toastification";
 
 export default {
   data() {
@@ -74,8 +75,10 @@ export default {
     };
   },
   created() {
+    const toast = useToast();
+
     if (!this.apiKey) {
-      alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
+      toast.error('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
       this.$router.push('/signin');
       return;
     }
@@ -120,6 +123,7 @@ export default {
       localStorage.setItem('recentSearches', JSON.stringify(this.recentSearches));
     },
     async fetchGenres() {
+      const toast = useToast();
       try {
         const response = await axios.get(
             `https://api.themoviedb.org/3/genre/movie/list?api_key=${this.apiKey}&language=ko-KR`
@@ -127,10 +131,11 @@ export default {
         this.genres = response.data.genres;
       } catch (error) {
         console.error('장르 목록 가져오기 실패:', error);
-        alert('장르 데이터를 불러오지 못했습니다.');
+        toast.error('장르 데이터를 불러오지 못했습니다.');
       }
     },
     async loadInitialMovies() {
+      const toast = useToast();
       try {
         this.loading = true;
         const response = await axios.get(
@@ -143,7 +148,7 @@ export default {
         }
       } catch (error) {
         console.error('초기 영화 데이터 로드 실패:', error);
-        alert('영화 데이터를 불러오지 못했습니다.');
+        toast.error('영화 데이터를 불러오지 못했습니다.');
       } finally {
         this.loading = false;
       }
@@ -172,6 +177,7 @@ export default {
       this.applyFilters(); // 필터링 재적용
     },
     async searchMovies() {
+      const toast = useToast();
       if (this.query.trim()) {
         this.saveSearchQuery(this.query);
         try {
@@ -181,7 +187,7 @@ export default {
           this.movies = response.data.results;
         } catch (error) {
           console.error('영화 검색 오류:', error);
-          alert('검색 결과를 가져오지 못했습니다.');
+          toast.error('검색 결과를 가져오지 못했습니다.');
         }
       } else {
         // 검색어가 비어 있으면 초기 데이터로 복원

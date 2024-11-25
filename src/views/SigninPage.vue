@@ -101,6 +101,7 @@ import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "axios";
+import { useToast } from "vue-toastification";
 
 const isLoginVisible = ref(true);
 const email = ref("");
@@ -139,6 +140,7 @@ const blurInput = (inputName) => {
 
 // 로그인 함수
 const handleLogin = async () => {
+  const toast = useToast();
   try {
     // 사용자가 입력한 비밀번호를 TMDB API 키로 검증
     const response = await axios.get("https://api.themoviedb.org/3/movie/popular", {
@@ -162,16 +164,17 @@ const handleLogin = async () => {
       }
 
       // 로그인 성공 시 홈으로 리다이렉트
-      alert("Login successful!");
+      toast.success("Login successful!");
       router.push("/"); // 홈으로 이동
     }
   } catch (error) {
-    alert("Invalid API Key. Please check and try again.");
+    toast.success("Invalid API Key. Please check and try again.");
   }
 };
 
 // 회원가입 함수
 const handleRegister = async () => {
+  const toast = useToast();
   try {
     // 사용자가 입력한 API 키 검증
     const response = await axios.get("https://api.themoviedb.org/3/movie/popular", {
@@ -183,9 +186,10 @@ const handleRegister = async () => {
     });
 
     if (response.status === 200) {
+
       // 이미 존재하는 계정인지 확인
       if (localStorage.getItem(registerEmail.value)) {
-        alert("This email is already registered.");
+        toast.error("This email is already registered.");
         return;
       }
 
@@ -195,11 +199,11 @@ const handleRegister = async () => {
           JSON.stringify({ password: registerPassword.value })
       );
 
-      alert("Registration successful! Please log in.");
+      toast.success("Registration successful! Please log in.");
       toggleCard(); // 로그인 화면으로 전환
     }
   } catch (error) {
-    alert("Invalid API Key for registration. Please check and try again.");
+    toast.error("Invalid API Key for registration. Please check and try again.");
   }
 };
 </script>

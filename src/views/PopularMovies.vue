@@ -59,6 +59,7 @@
 <script>
 import axios from "axios";
 import MovieCard from "@/components/MovieCard.vue";
+import { useToast } from "vue-toastification";
 
 export default {
   components: {
@@ -79,10 +80,11 @@ export default {
     };
   },
   async mounted() {
+    const toast = useToast(); // Toast 사용
     this.apiKey = localStorage.getItem('apiKey');
 
     if (!this.apiKey) {
-      alert('API Key가 없습니다. 로그인을 먼저 진행해주세요.');
+      toast.error("API Key가 없습니다. 로그인을 먼저 진행해주세요.");
       this.$router.push('/signin');
       return;
     }
@@ -105,7 +107,7 @@ export default {
       }
     } catch (error) {
       console.error("영화 데이터를 불러오는 데 실패했습니다:", error.message);
-      alert('영화 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요.');
+      toast.error("영화 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요.");
       this.$router.push('/signin');
     } finally {
       this.loading = false; // 로딩 상태 종료
