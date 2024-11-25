@@ -33,13 +33,20 @@ const logout = () => {
 </script>
 
 <style scoped>
+
 .header {
-  padding: 20px;
-  background-color: #1f1f1f; /* 기본 색상 */
+  padding: 10px 20px; /* 수직 여백을 더 추가 */
+  margin: 0;
+  background-color: rgba(31, 31, 31, 1); /* 초기 불투명도 100% */
   display: flex;
   justify-content: center;
-  gap: 10px;
-  transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 15px; /* 링크 사이의 간격 증가 */
+  transition: background-color 0.3s ease, height 0.3s ease;
+  height: 20px; /* 헤더 높이 증가 */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 /* 헤더 호버 상태 */
@@ -75,5 +82,3 @@ button:hover,
   color: #ffbf00; /* 호버 시 강조 색상 */
 }
 </style>
-
-

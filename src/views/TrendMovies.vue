@@ -57,17 +57,32 @@ export default {
     };
   },
   mounted() {
+    this.calculateItemsPerPage();
+    window.addEventListener("resize", this.calculateItemsPerPage);
     this.fetchMovies(); // 초기 데이터 가져오기
   },
   computed: {
     // 테이블 페이지에서 현재 페이지에 맞는 영화 목록을 반환
     paginatedMovies() {
       const startIndex = (this.page - 1) * this.itemsPerPage;
-      const endIndex = this.page * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
       return this.movies.slice(startIndex, endIndex);
     },
   },
   methods: {
+    calculateItemsPerPage() {
+      const cardHeight = 320; // 영화 카드 높이
+      const cardWidth = 220; // 영화 카드 너비
+      const headerHeight = 100; // 헤더 높이
+      const paginationHeight = 50; // 페이지 네이션 높이
+      const availableHeight = window.innerHeight - headerHeight - paginationHeight - 50; // 여백 포함한 사용 가능 높이
+      const availableWidth = window.innerWidth - 50; // 좌우 여백 포함한 사용 가능 너비
+
+      const rows = Math.floor(availableHeight / cardHeight); // 화면에 들어갈 행 수
+      const cols = Math.floor(availableWidth / cardWidth); // 화면에 들어갈 열 수
+
+      this.itemsPerPage = rows * cols; // 한 페이지에 들어갈 영화 개수
+    },
     // 영화 데이터 가져오기
     async fetchMovies() {
       const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14'; // TMDB API 키
@@ -133,22 +148,50 @@ export default {
 </script>
 
 <style scoped>
-.trend-movies {
-  text-align: center;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* 불필요한 스크롤 제거 */
 }
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.trend-movies {
+  flex: 1; /* 헤더 아래 남은 공간 모두 사용 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0; /* 여백 제거 */
+  padding: 0; /* 여백 제거 */
+}
+
+header, .header {
+  margin: 0;
+  padding: 0;
+  height: 50px; /* 고정 높이 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa; /* 헤더 배경색 */
+  border-bottom: 1px solid #ddd; /* 헤더 구분선 */
 }
 
 .view-options button {
   margin: 10px;
-  padding: 10px;
+  padding: 10px 15px;
   background-color: #42b983;
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .view-options button:hover {
@@ -179,8 +222,14 @@ h1 {
   margin-top: 10px;
 }
 
-.table-view .movie-card {
-  width: 200px;
+.table-view {
+  height: calc(100vh - 200px); /* 헤더와 페이지 네이션을 제외한 높이 */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 가로 스크롤 없이 조정 */
+  gap: 20px;
+  justify-content: center;
+  align-content: center;
+  overflow: hidden; /* 스크롤 비활성화 */
 }
 
 .infinite-scroll {
@@ -200,7 +249,7 @@ h1 {
 /* 페이지네이션 버튼을 화면 하단 중앙에 고정 */
 .pagination {
   position: fixed;
-  bottom: 20px;  /* 화면 하단에서 20px 떨어진 위치 */
+  bottom: 10px;  /* 화면 하단에서 20px 떨어진 위치 */
   left: 50%;
   transform: translateX(-50%);  /* 가운데 정렬 */
   display: flex;
@@ -227,7 +276,7 @@ h1 {
 }
 
 .pagination span {
-  font-size: 18px;
-  line-height: 30px;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>
