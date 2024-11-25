@@ -1,7 +1,5 @@
 <template>
   <div class="trend-movies">
-    <h1>대세 콘텐츠</h1>
-
     <!-- 보기 형식 선택 (Table View 또는 무한 스크롤) -->
     <div class="view-options">
       <button @click="changeView('table')">Table View</button>
@@ -205,8 +203,8 @@ header, .header {
 }
 
 .movie-card {
-  width: 200px;
-  margin: 10px;
+  flex: 0 0 auto; /* 카드들이 고정 크기로 배치되도록 설정 */
+  width: 150px; /* 각 카드의 고정 너비 */
   text-align: center;
 }
 
@@ -226,7 +224,7 @@ header, .header {
   height: calc(100vh - 200px); /* 헤더와 페이지 네이션을 제외한 높이 */
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 가로 스크롤 없이 조정 */
-  gap: 20px;
+  gap: 15px;
   justify-content: center;
   align-content: center;
   overflow: hidden; /* 스크롤 비활성화 */
