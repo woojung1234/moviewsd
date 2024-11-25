@@ -3,33 +3,29 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # main 브랜치로 푸시될 때 실행
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 16  # 사용 중인 Node.js 버전에 맞게 수정
 
       - name: Install dependencies
-        working-directory: moviewsd
         run: npm install
 
-      - name: Build project
-        working-directory: moviewsd
+      - name: Build the project
         run: npm run build
 
-      - name: Commit and Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: moviewsd/dist
-          publish_branch: gh-pages
-          commit_message: "Deploy to GitHub Pages"
+          publish_dir: ./dist
