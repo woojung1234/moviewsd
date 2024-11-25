@@ -23,6 +23,15 @@
       <!-- 필터 초기화 버튼 추가 -->
       <button @click="resetFilters">필터 초기화</button>
     </div>
+    <!-- 최근 검색어 -->
+    <div class="recent-searches" v-if="recentSearches.length">
+      <h4>최근 검색어</h4>
+      <ul>
+        <li v-for="search in recentSearches" :key="search" @click="applyRecentSearch(search)">
+          {{ search }}
+        </li>
+      </ul>
+    </div>
 
     <!-- 영화 목록 -->
     <div class="movie-list" ref="scrollContainer" @scroll="handleScroll">
@@ -57,6 +66,7 @@ export default {
       minRating: '',
       releaseDate: '',
       query: '',
+      recentSearches: [],
       page: 1,
       loading: false,
       isEndOfData: false, // 더 이상 불러올 데이터가 없는지 확인
@@ -72,6 +82,7 @@ export default {
     this.debouncedSearch = debounce(this.searchMovies, 500);
     this.fetchGenres();
     this.loadInitialMovies(); // 초기 영화 데이터 로드
+    this.loadRecentSearches(); // 최근 검색어 로드
   },
   computed: {
     filteredMovies() {
@@ -91,6 +102,23 @@ export default {
     },
   },
   methods: {
+    loadRecentSearches() {
+      const searches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+      this.recentSearches = searches;
+    },
+    // 검색어 저장
+    saveSearchQuery(query) {
+      if (!query.trim()) return;
+
+      // 중복 검색어 제거 및 추가
+      const updatedSearches = [query, ...this.recentSearches.filter((q) => q !== query)];
+
+      // 최대 검색어 개수 제한 (예: 10개)
+      this.recentSearches = updatedSearches.slice(0, 10);
+
+      // 로컬 스토리지에 저장
+      localStorage.setItem('recentSearches', JSON.stringify(this.recentSearches));
+    },
     async fetchGenres() {
       try {
         const response = await axios.get(
@@ -145,6 +173,7 @@ export default {
     },
     async searchMovies() {
       if (this.query.trim()) {
+        this.saveSearchQuery(this.query);
         try {
           const response = await axios.get(
               `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${this.query}&language=ko-KR`
@@ -158,6 +187,10 @@ export default {
         // 검색어가 비어 있으면 초기 데이터로 복원
         this.movies = this.allMovies;
       }
+    },
+    applyRecentSearch(query) {
+      this.query = query;
+      this.searchMovies();
     },
     // 찜 기능 토글
     toggleWishlist(movie) {
@@ -248,6 +281,35 @@ button:hover {
 
 button:focus {
   outline: none;
+}
+.recent-searches {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.recent-searches h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.recent-searches ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.recent-searches li {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.recent-searches li:hover {
+  background-color: #dcdcdc;
 }
 </style>
 
