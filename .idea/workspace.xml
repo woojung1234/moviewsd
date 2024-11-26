@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="good">
+      <change afterPath="$PROJECT_DIR$/src/components/LoginCard.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/RegisterCard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Auth/AuthCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Auth/Checkbox.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Auth/InputField.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Auth/LoginForm.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Auth/RegisterForm.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/SigninPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/SigninPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,19 +26,20 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
+        <entry key="$PROJECT_DIR$" value="remake" />
         <entry key="$PROJECT_DIR$/moviewsd" value="main" />
       </map>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/moviewsd" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {}
-}]]></component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {}
+}</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/woojung1234/moviewsd.git&quot;,
-    &quot;accountId&quot;: &quot;8dd883f3-7676-4239-afd7-de9febabca38&quot;
+    &quot;accountId&quot;: &quot;c58acf4e-1b0f-4a89-af8a-712e7bd4d575&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -45,13 +57,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/home",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
     "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
@@ -79,6 +91,8 @@
       <workItem from="1732069890543" duration="50082000" />
       <workItem from="1732430883564" duration="5709000" />
       <workItem from="1732515148963" duration="3037000" />
+      <workItem from="1732580153171" duration="96000" />
+      <workItem from="1732580366615" duration="2475000" />
     </task>
     <task id="LOCAL-00001" summary="good">
       <option name="closed" value="true" />
