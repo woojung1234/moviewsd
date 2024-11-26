@@ -5,6 +5,7 @@ import store from './store'
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
+
 const app = createApp(App);
 // Toast 옵션 (필요에 따라 수정 가능)
 const toastOptions = {
