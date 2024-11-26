@@ -2,6 +2,7 @@ import axios from "axios";
 import { useToast } from "vue-toastification";
 
 export default function createSignInHandlers({ useRouter, useStore, ref, computed }) {
+    const toast = useToast();
     const isLoginVisible = ref(true);
     const email = ref("");
     const password = ref("");
@@ -59,17 +60,16 @@ export default function createSignInHandlers({ useRouter, useStore, ref, compute
                     localStorage.setItem("email", email.value);
                 }
 
-                toast.success("Login successful!");
+                toast.success("반가워요!");
                 router.push("/");
             }
         } catch (error) {
-            toast.error("Invalid API Key. Please check and try again.");
+            toast.error("API 키가 아님.");
         }
     };
 
     // 회원가입 함수
     const handleRegister = async () => {
-        const toast = useToast();
         try {
             const response = await axios.get("https://api.themoviedb.org/3/movie/popular", {
                 params: {
@@ -81,7 +81,7 @@ export default function createSignInHandlers({ useRouter, useStore, ref, compute
 
             if (response.status === 200) {
                 if (localStorage.getItem(registerEmail.value)) {
-                    toast.error("This email is already registered.");
+                    toast.error("이미 등록됨.");
                     return;
                 }
 
@@ -90,13 +90,14 @@ export default function createSignInHandlers({ useRouter, useStore, ref, compute
                     JSON.stringify({ password: registerPassword.value })
                 );
 
-                toast.success("Registration successful! Please log in.");
+                toast.success("회원가입 완료.");
                 toggleCard();
             }
         } catch (error) {
-            toast.error("Invalid API Key for registration. Please check and try again.");
+            toast.error("API키가 아님.");
         }
     };
+
 
     return {
         isLoginVisible,

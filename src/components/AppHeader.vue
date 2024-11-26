@@ -9,26 +9,23 @@
 
     <!-- 중앙 네비게이션 -->
     <nav class="nav-links">
-      <!-- 홈 -->
       <button @click="goToHome" aria-label="홈화면">
         <font-awesome-icon :icon="['fas', 'house']" />
       </button>
-      <!-- 인기 영화 -->
       <button @click="goToPopular" aria-label="인기 영화">
         <font-awesome-icon :icon="['fas', 'fire']" />
       </button>
-      <!-- 좋아하는 영화 -->
       <button @click="goToWishlist" aria-label="좋아하는 영화">
         <font-awesome-icon :icon="['fas', 'heart']" />
       </button>
-      <!-- 검색 -->
       <button class="fab" @click="goToSearch" aria-label="검색">
         <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
       </button>
     </nav>
 
-    <!-- 우측 로그아웃 -->
+    <!-- 우측 사용자 정보 및 로그아웃 -->
     <div class="auth">
+      <span v-if="isLoggedIn" class="user-email">{{ userEmail }}</span>
       <button v-if="isLoggedIn" @click="logout" aria-label="로그아웃">
         <font-awesome-icon :icon="['fas', 'right-from-bracket']" />
       </button>
@@ -39,7 +36,6 @@
   </header>
 </template>
 
-
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
@@ -49,6 +45,10 @@ const store = useStore();
 const router = useRouter();
 
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
+const userEmail = computed(() => {
+  const user = store.getters.user;
+  return user ? user.email : "";
+});
 
 const logout = () => {
   store.dispatch("logout");
@@ -66,11 +66,17 @@ const goToPopular = () => {
 const goToWishlist = () => {
   router.push("/wishlist");
 };
-
 </script>
 
 
 <style scoped>
+
+.user-email {
+  margin-right: 0px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #f4ebeb;
+}
 
 .header {
   padding: 10px 20px;
