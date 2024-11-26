@@ -373,7 +373,7 @@ button:hover {
 
     #phone {
         width: 70%;
-        transform: translate(-50%, -50%) scale(1); /* Scale down on small screens */
+        transform: translate(-50%, -90%) scale(1); /* Scale down on small screens */
     }
 
     #login {
