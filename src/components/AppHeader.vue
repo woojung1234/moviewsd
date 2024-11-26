@@ -148,14 +148,29 @@ button:hover {
 @media (max-width: 768px) {
   .nav-links {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row; /* 모바일에서도 가로로 배치 */
+    gap: 10px; /* 버튼 간 간격 줄이기 */
+    justify-content: center; /* 중앙 정렬 */
   }
 
   .nav-links button {
-    font-size: 18px; /* 모바일에서 버튼 크기 조정 */
+    font-size: 12px; /* 아이콘 크기 줄이기 */
+    width: 20px; /* 버튼 크기 줄이기 */
+    height: 20px; /* 버튼 크기 줄이기 */
+  }
+
+  .fab {
+    width: 20px; /* 검색 버튼 크기 줄이기 */
+    height: 20px; /* 검색 버튼 크기 줄이기 */
+    font-size: 12px; /* 아이콘 크기 조정 */
+  }
+
+  .logo {
+    font-size: 12px; /* 로고 크기 축소 */
+  }
+
+  .auth button {
+    font-size: 12px; /* 로그인/로그아웃 아이콘 크기 축소 */
   }
 }
-
-
 </style>
