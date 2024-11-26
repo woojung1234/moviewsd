@@ -10,7 +10,7 @@
     <!-- 중앙 네비게이션 -->
     <nav class="nav-links">
       <!-- 홈 -->
-      <button @click="goToHome" aria-label="홈">
+      <button @click="goToHome" aria-label="홈화면">
         <font-awesome-icon :icon="['fas', 'house']" />
       </button>
       <!-- 인기 영화 -->
