@@ -372,8 +372,8 @@ button:hover {
 @media (max-width: 768px) {
 
     #phone {
-        width: 70%;
-        transform: translate(-50%, -90%) scale(1); /* Scale down on small screens */
+        width: 50%;
+        transform: translate(-50%, -70%) scale(0.5); /* Scale down on small screens */
     }
 
     #login {
@@ -390,7 +390,7 @@ button:hover {
     }
 
     #login.hidden {
-        top:calc(5svh + 90px) !important;
+        top:calc(5svh + 130px) !important;
         z-index:1;
     }
 }
