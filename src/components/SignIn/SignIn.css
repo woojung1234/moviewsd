@@ -297,7 +297,7 @@ button:hover {
     left:0;
     opacity:1;
     text-decoration:none;
-    visibility:visible;
+    visibility:hidden;
     color:#fff;
     padding:10px;
     transition: all 0.2s ease;

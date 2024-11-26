@@ -81,7 +81,7 @@
               <span class="checkbox remember">
                 <input type="checkbox" id="terms" v-model="acceptTerms" required />
                 <label for="terms" class="read-text"
-                >I have read <b>Terms and Conditions</b></label
+                >회원가입을 <b>동의</b>합니다.</label
                 >
               </span>
               <button :disabled="!isRegisterFormValid">Register</button>
