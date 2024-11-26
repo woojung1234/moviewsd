@@ -1,0 +1,1245 @@
+Index: moviewsd/src/main.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { createApp } from 'vue'\r\nimport App from './App.vue'\r\nimport router from './router'\r\nimport store from './store'\r\nimport Toast from \"vue-toastification\";\r\nimport \"vue-toastification/dist/index.css\";\r\n\r\nconst app = createApp(App);\r\n// Toast 옵션 (필요에 따라 수정 가능)\r\nconst toastOptions = {\r\n    position: \"top-right\",\r\n    timeout: 3000,\r\n    closeOnClick: true,\r\n    pauseOnHover: true,\r\n    draggable: true,\r\n    draggablePercent: 0.6,\r\n    showCloseButtonOnHover: false,\r\n    hideProgressBar: false,\r\n    closeButton: \"button\",\r\n    icon: true,\r\n};\r\n// Vue 앱에 Toastification 플러그인 추가\r\napp.use(Toast, toastOptions);\r\n\r\napp.use(store).use(router).mount('#app');\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moviewsd/src/main.js b/moviewsd/src/main.js
+--- a/moviewsd/src/main.js	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/main.js	(date 1732553218376)
+@@ -1,12 +1,12 @@
+-import { createApp } from 'vue'
+-import App from './App.vue'
+-import router from './router'
+-import store from './store'
++import { createApp } from "vue";
++import App from "./App.vue";
++import router from "./router";
++import store from "./store";
+ import Toast from "vue-toastification";
+ import "vue-toastification/dist/index.css";
+ 
+ const app = createApp(App);
+-// Toast 옵션 (필요에 따라 수정 가능)
++
+ const toastOptions = {
+     position: "top-right",
+     timeout: 3000,
+@@ -19,7 +19,7 @@
+     closeButton: "button",
+     icon: true,
+ };
+-// Vue 앱에 Toastification 플러그인 추가
++
+ app.use(Toast, toastOptions);
++app.use(store).use(router).mount("#app");
+ 
+-app.use(store).use(router).mount('#app');
+Index: moviewsd/src/views/SigninPage.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <div>\r\n    <div class=\"bg-image\"></div>\r\n    <div class=\"container\">\r\n      <div id=\"phone\">\r\n        <div id=\"content-wrapper\">\r\n          <!-- 로그인 카드 -->\r\n          <div :class=\"['card', { hidden: !isLoginVisible }]\" id=\"login\">\r\n            <form @submit.prevent=\"handleLogin\">\r\n              <h1>Sign in</h1>\r\n              <div class=\"input\" :class=\"{ active: isEmailFocused || email }\">\r\n                <input\r\n                    id=\"email\"\r\n                    type=\"email\"\r\n                    v-model=\"email\"\r\n                    @focus=\"focusInput('email')\"\r\n                    @blur=\"blurInput('email')\"\r\n                    required\r\n                />\r\n                <label for=\"email\">Username or Email</label>\r\n              </div>\r\n              <div class=\"input\" :class=\"{ active: isPasswordFocused || password }\">\r\n                <input\r\n                    id=\"password\"\r\n                    type=\"password\"\r\n                    v-model=\"password\"\r\n                    @focus=\"focusInput('password')\"\r\n                    @blur=\"blurInput('password')\"\r\n                    required\r\n                />\r\n                <label for=\"password\">Password</label>\r\n              </div>\r\n              <span class=\"checkbox remember\">\r\n                <input type=\"checkbox\" id=\"remember\" v-model=\"rememberMe\" />\r\n                <label for=\"remember\" class=\"read-text\">Remember me</label>\r\n              </span>\r\n              <button :disabled=\"!isLoginFormValid\">Login</button>\r\n            </form>\r\n            <a href=\"javascript:void(0)\" class=\"account-check\" @click=\"toggleCard\">\r\n              Already have an account? <b>Sign in</b>\r\n            </a>\r\n          </div>\r\n\r\n          <!-- 회원가입 카드 -->\r\n          <div :class=\"['card', { hidden: isLoginVisible }]\" id=\"register\">\r\n            <form @submit.prevent=\"handleRegister\">\r\n              <h1>Sign up</h1>\r\n              <div class=\"input\" :class=\"{ active: isRegisterEmailFocused || registerEmail }\">\r\n                <input\r\n                    id=\"register-email\"\r\n                    type=\"email\"\r\n                    v-model=\"registerEmail\"\r\n                    @focus=\"focusInput('registerEmail')\"\r\n                    @blur=\"blurInput('registerEmail')\"\r\n                    required\r\n                />\r\n                <label for=\"register-email\">Email</label>\r\n              </div>\r\n              <div class=\"input\" :class=\"{ active: isRegisterPasswordFocused || registerPassword }\">\r\n                <input\r\n                    id=\"register-password\"\r\n                    type=\"password\"\r\n                    v-model=\"registerPassword\"\r\n                    @focus=\"focusInput('registerPassword')\"\r\n                    @blur=\"blurInput('registerPassword')\"\r\n                    required\r\n                />\r\n                <label for=\"register-password\">Password</label>\r\n              </div>\r\n              <div class=\"input\" :class=\"{ active: isConfirmPasswordFocused || confirmPassword }\">\r\n                <input\r\n                    id=\"confirm-password\"\r\n                    type=\"password\"\r\n                    v-model=\"confirmPassword\"\r\n                    @focus=\"focusInput('confirmPassword')\"\r\n                    @blur=\"blurInput('confirmPassword')\"\r\n                    required\r\n                />\r\n                <label for=\"confirm-password\">Confirm Password</label>\r\n              </div>\r\n              <span class=\"checkbox remember\">\r\n                <input type=\"checkbox\" id=\"terms\" v-model=\"acceptTerms\" required />\r\n                <label for=\"terms\" class=\"read-text\"\r\n                >I have read <b>Terms and Conditions</b></label\r\n                >\r\n              </span>\r\n              <button :disabled=\"!isRegisterFormValid\">Register</button>\r\n            </form>\r\n            <a href=\"javascript:void(0)\" class=\"account-check\" @click=\"toggleCard\">\r\n              Don't have an account? <b>Sign up</b>\r\n            </a>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n\r\n<script setup>\r\nimport { ref, computed } from \"vue\";\r\nimport { useRouter } from \"vue-router\";\r\nimport { useStore } from \"vuex\";\r\nimport axios from \"axios\";\r\nimport { useToast } from \"vue-toastification\";\r\n\r\nconst isLoginVisible = ref(true);\r\nconst email = ref(\"\");\r\nconst password = ref(\"\");\r\nconst registerEmail = ref(\"\");\r\nconst registerPassword = ref(\"\");\r\nconst rememberMe = ref(false);\r\nconst isEmailFocused = ref(false);\r\nconst isPasswordFocused = ref(false);\r\nconst isRegisterEmailFocused = ref(false);\r\nconst isRegisterPasswordFocused = ref(false);\r\n\r\nconst router = useRouter();\r\nconst store = useStore();\r\n\r\nconst isLoginFormValid = computed(() => email.value && password.value);\r\nconst isRegisterFormValid = computed(() => registerEmail.value && registerPassword.value);\r\n\r\nconst toggleCard = () => {\r\n  isLoginVisible.value = !isLoginVisible.value;\r\n};\r\n\r\nconst focusInput = (inputName) => {\r\n  if (inputName === \"email\") isEmailFocused.value = true;\r\n  if (inputName === \"password\") isPasswordFocused.value = true;\r\n  if (inputName === \"registerEmail\") isRegisterEmailFocused.value = true;\r\n  if (inputName === \"registerPassword\") isRegisterPasswordFocused.value = true;\r\n};\r\n\r\nconst blurInput = (inputName) => {\r\n  if (inputName === \"email\") isEmailFocused.value = false;\r\n  if (inputName === \"password\") isPasswordFocused.value = false;\r\n  if (inputName === \"registerEmail\") isRegisterEmailFocused.value = false;\r\n  if (inputName === \"registerPassword\") isRegisterPasswordFocused.value = false;\r\n};\r\n\r\n// 로그인 함수\r\nconst handleLogin = async () => {\r\n  const toast = useToast();\r\n  try {\r\n    // 사용자가 입력한 비밀번호를 TMDB API 키로 검증\r\n    const response = await axios.get(\"https://api.themoviedb.org/3/movie/popular\", {\r\n      params: {\r\n        api_key: password.value, // 비밀번호를 API 키로 사용\r\n        language: \"en-US\",\r\n        page: 1,\r\n      },\r\n    });\r\n\r\n    if (response.status === 200) {\r\n      // Vuex 상태 업데이트\r\n      await store.dispatch(\"login\", {\r\n        apiKey: password.value,\r\n        user: { email: email.value },\r\n      });\r\n\r\n      // Remember me 옵션 처리\r\n      if (rememberMe.value) {\r\n        localStorage.setItem(\"email\", email.value);\r\n      }\r\n\r\n      // 로그인 성공 시 홈으로 리다이렉트\r\n      toast.success(\"Login successful!\");\r\n      router.push(\"/\"); // 홈으로 이동\r\n    }\r\n  } catch (error) {\r\n    toast.success(\"Invalid API Key. Please check and try again.\");\r\n  }\r\n};\r\n\r\n// 회원가입 함수\r\nconst handleRegister = async () => {\r\n  const toast = useToast();\r\n  try {\r\n    // 사용자가 입력한 API 키 검증\r\n    const response = await axios.get(\"https://api.themoviedb.org/3/movie/popular\", {\r\n      params: {\r\n        api_key: registerPassword.value,\r\n        language: \"en-US\",\r\n        page: 1,\r\n      },\r\n    });\r\n\r\n    if (response.status === 200) {\r\n\r\n      // 이미 존재하는 계정인지 확인\r\n      if (localStorage.getItem(registerEmail.value)) {\r\n        toast.error(\"This email is already registered.\");\r\n        return;\r\n      }\r\n\r\n      // 회원가입 성공: 로컬 스토리지에 저장\r\n      localStorage.setItem(\r\n          registerEmail.value,\r\n          JSON.stringify({ password: registerPassword.value })\r\n      );\r\n\r\n      toast.success(\"Registration successful! Please log in.\");\r\n      toggleCard(); // 로그인 화면으로 전환\r\n    }\r\n  } catch (error) {\r\n    toast.error(\"Invalid API Key for registration. Please check and try again.\");\r\n  }\r\n};\r\n</script>\r\n\r\n<style scoped>\r\n\r\n:root {\r\n  --container-start-x: -50%;\r\n  --container-end-x: -90%;\r\n  --container-start-y: -58%;\r\n  --container-end-y: -42%;\r\n  --container-start-color: #ECECEC;\r\n  --container-end-color: #100f0f;\r\n}\r\n\r\n.bg-image {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  background-image: url('https://images.unsplash.com/photo-1507041957456-9c397ce39c97?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');\r\n  background-size: cover;\r\n  background-position: center;\r\n}\r\n\r\n.bg-image::before {\r\n  content: '';\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  background-color: rgba(27, 27, 27, 0.90);\r\n}\r\n\r\na {\r\n  text-decoration:none;\r\n  margin:0;\r\n  padding: 0;\r\n}\r\n\r\n.container {\r\n  height: 100svh;\r\n  width: 100svw;\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  z-index: 1;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n}\r\n\r\n#phone {\r\n  width: 50svw;\r\n  max-width: 80dvh;\r\n  max-height: 50dvh;\r\n  aspect-ratio: 3.35 / 4;\r\n  border-radius: min(2.5cqw, 2.0cqh);\r\n  text-align: center;\r\n  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);\r\n\r\n  position: absolute;\r\n  top: 50%;\r\n  left: 50%;\r\n  transform: translate(-50%, -50%);\r\n\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: flex-start;\r\n}\r\n\r\n\r\n@media (max-height: 600px) {\r\n  #phone {\r\n    transform: translate(-50%, -50%) scale(0.5); /* Scale down on small screens */\r\n  }\r\n}\r\n\r\n@media (max-height: 400px) {\r\n  #phone {\r\n    transform: translate(-50%, -50%) scale(0.3); /* Further scale down */\r\n  }\r\n}\r\n\r\n#content-wrapper {\r\n  width: 100%;\r\n  height: 100%;\r\n  margin: 0;\r\n  padding: 0;\r\n  position:relative;\r\n}\r\n\r\ninput {\r\n  font-size: 1.2rem;\r\n  font-weight: 600;\r\n  color: #000;\r\n  background-color: transparent;\r\n  border: none;\r\n  outline: none;\r\n  width: 100%;\r\n  height: 2.5rem;\r\n  padding: 0;\r\n  margin: 0;\r\n}\r\n\r\n\r\n.read-text {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  text-indent: 10px; /* 원하는 들여쓰기 크기로 조정하세요 */\r\n  color: #2b2b2b !important;\r\n  font-weight: 900;\r\n}\r\n\r\nh1 {\r\n  font-size:24px;\r\n  font-weight:800;\r\n  text-align:center;\r\n  margin-top:0;\r\n\r\n  color:#272727;\r\n}\r\n\r\nbutton {\r\n  display:block;\r\n  border-radius:50px;\r\n  border:none;\r\n  width:100%;\r\n  background-color: #2069ff;\r\n  color:#fff;\r\n  padding:17px;\r\n  text-transform:uppercase;\r\n  letter-spacing:2px;\r\n  box-shadow: 0px 10px 30px rgba(23,83,209,0.3);\r\n  transition: all 0.2s ease;\r\n}\r\n\r\nbutton:hover {\r\n  box-shadow: 0px 2px 10px rgba(23,83,209,0.4)\r\n}\r\n\r\n.input {\r\n  position: relative;\r\n  margin-top: 1.5rem;\r\n}\r\n\r\n.line-active {\r\n  border-bottom:1px solid #2069ff !important;\r\n  box-shadow: 0px 1px 0px #2069ff !important;\r\n}\r\n\r\n.input input {\r\n  background-color: transparent;\r\n  border: none;\r\n  border-bottom: 1px solid #9e9e9e;\r\n  border-radius: 0;\r\n  outline: none;\r\n  height: 2.5rem;\r\n  width: 100%;\r\n  font-size: 1rem;\r\n  padding: 0;\r\n  -webkit-box-shadow: none;\r\n  box-shadow: none;\r\n  box-sizing: content-box;\r\n  transition: all 0.3s ease;\r\n}\r\n\r\n.input label {\r\n  color: #9e9e9e;\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  height: 100%;\r\n  font-size: 1rem;\r\n  cursor: text;\r\n  transition: transform .2s ease-out;\r\n  transform-origin: 0% 100%;\r\n  text-align: initial;\r\n  transform: translateY(12px);\r\n  pointer-events: none;\r\n}\r\n\r\n.label-active {\r\n  transform: translateY(-14px) scale(0.8) !important;\r\n  transform-origin: 0 0 !important;\r\n}\r\n\r\n.label-blue {\r\n  color: #2069ff !important;\r\n}\r\n\r\n[type=\"checkbox\"]:not(:checked), [type=\"checkbox\"]:checked {\r\n  position: absolute;\r\n  opacity: 0;\r\n  pointer-events: none;\r\n}\r\n\r\n[type=\"checkbox\"]+label {\r\n  position: relative;\r\n  padding-left: 25px;\r\n  cursor: pointer;\r\n  display: inline-block;\r\n  height: 25px;\r\n  line-height: 22px;\r\n  font-size: 1rem;\r\n  user-select: none;\r\n}\r\n\r\n[type=\"checkbox\"]+label:before, [type=\"checkbox\"]:not(.filled-in)+label:after {\r\n  content: '';\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  width: 18px;\r\n  height: 18px;\r\n  z-index: 0;\r\n  border: 2px solid #5a5a5a;\r\n  border-radius: 3px;\r\n  margin-top: 2px;\r\n  transition: .2s;\r\n}\r\n\r\n[type=\"checkbox\"]:not(.filled-in)+label:after {\r\n  border: 0;\r\n  transform: scale(0);\r\n}\r\n\r\n[type=\"checkbox\"]:checked+label:before {\r\n  top: -4px;\r\n  left: -5px;\r\n  width: 12px;\r\n  height: 22px;\r\n  border-top: 2px solid transparent;\r\n  border-left: 2px solid transparent;\r\n  border-right: 2px solid #2069ff;\r\n  border-bottom: 2px solid #2069ff;\r\n  transform: rotate(40deg);\r\n  backface-visibility: hidden;\r\n  transform-origin: 100% 100%;\r\n  border-radius: 1px;\r\n}\r\n\r\n.checkbox {\r\n  margin-top:2rem;\r\n  display:block;\r\n  margin-bottom:2rem;\r\n}\r\n\r\n.remember {\r\n  float:left;\r\n}\r\n\r\n.forgot {\r\n  float:right;\r\n}\r\n\r\n.forgot a {\r\n  text-decoration:none;\r\n  color:#000;\r\n  font-weight:900;\r\n  line-height: 22px;\r\n}\r\n\r\n.card {\r\n  border-radius:10px;\r\n  width:100%;\r\n  max-width: 800px;\r\n  position:absolute;\r\n  background-color:white;\r\n  padding:27px 30px 46px 30px;\r\n  box-shadow: 0 5px 10px rgba(0,0,0,0.16);\r\n  transition: all 0.4s 0.1s ease;\r\n\r\n  top: 50%;\r\n\r\n  left: 50%;\r\n  transform: translateX(-50%);\r\n}\r\n\r\n.card form {\r\n  transform:translateX(0px);\r\n  transition: all 0.3s 0.4s ease;\r\n}\r\n\r\n#login {\r\n  z-index:2;\r\n  top: 5svh;\r\n}\r\n\r\n#register {\r\n  z-index:2;\r\n  top: 5svh;\r\n}\r\n\r\n.account-check {\r\n  width:100%;\r\n  text-align:center;\r\n  position:absolute;\r\n  bottom:15px;\r\n  left:0;\r\n  opacity:0;\r\n  text-decoration:none;\r\n  visibility:hidden;\r\n  color:#fff;\r\n  padding:10px;\r\n  transition: all 0.2s ease;\r\n}\r\n\r\n.account-check:active {\r\n  color:#000;\r\n  transform: translateY(2px);\r\n}\r\n\r\n#register.hidden {\r\n  top:calc(5svh + 90px) !important;\r\n  z-index:1;\r\n}\r\n\r\n#login.hidden {\r\n  top:calc(5svh + 220px) !important;\r\n  z-index:1;\r\n}\r\n\r\n.card.hidden {\r\n  background-color:#2069ff;\r\n  box-shadow: 0px 20px 40px rgba(23,83,209,0.8);\r\n  padding:0px 30px 0px 30px;\r\n\r\n}\r\n\r\n#register.hidden form {\r\n  transform:translateX(20px);\r\n}\r\n\r\n#login.hidden form {\r\n  transform:translateX(-20px);\r\n}\r\n\r\n.hidden form {\r\n  opacity:0;\r\n  transition: all 0.3s ease;\r\n}\r\n\r\n.hidden .account-check {\r\n  opacity:1;\r\n  visibility:visible;\r\n  z-index:2;\r\n  transition: all 0.2s ease;\r\n}\r\n\r\n.register-swap {\r\n  animation: register-swap 0.5s ease forwards;\r\n}\r\n\r\n.login-swap {\r\n  animation: login-swap 0.5s ease forwards;\r\n}\r\n\r\n.active > label {\r\n  color: rgba(0, 0, 0, 0);\r\n}\r\n\r\n@keyframes register-swap {\r\n  0% {transform: translate(0%, 0%)}\r\n  50% {transform: translate(30%, 0%);}\r\n  0% {transform: translate(0%, 0%)}\r\n}\r\n\r\n@keyframes login-swap {\r\n  0% {transform: translate(0%, 0%)}\r\n  50% {transform: translate(-70%, 0%);}\r\n  0% {transform: translate(0%, 0%)}\r\n}\r\n\r\n@media (max-width: 768px) {\r\n\r\n  #phone {\r\n    width: 70%;\r\n    transform: translate(-50%, -70%) scale(1); /* Scale down on small screens */\r\n  }\r\n\r\n  #login {\r\n    top: -2svh !important;\r\n  }\r\n\r\n  #register {\r\n    top: -2svh !important;\r\n  }\r\n\r\n  #register.hidden {\r\n    top:calc(5svh + 90px) !important;\r\n    z-index:1;\r\n  }\r\n\r\n  #login.hidden {\r\n    top:calc(5svh + 90px) !important;\r\n    z-index:1;\r\n  }\r\n}\r\n</style>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moviewsd/src/views/SigninPage.vue b/moviewsd/src/views/SigninPage.vue
+--- a/moviewsd/src/views/SigninPage.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/views/SigninPage.vue	(date 1732552705388)
+@@ -1,95 +1,11 @@
+ <template>
+-  <div>
++  <div class="signin-page">
+     <div class="bg-image"></div>
+     <div class="container">
+       <div id="phone">
+         <div id="content-wrapper">
+-          <!-- 로그인 카드 -->
+-          <div :class="['card', { hidden: !isLoginVisible }]" id="login">
+-            <form @submit.prevent="handleLogin">
+-              <h1>Sign in</h1>
+-              <div class="input" :class="{ active: isEmailFocused || email }">
+-                <input
+-                    id="email"
+-                    type="email"
+-                    v-model="email"
+-                    @focus="focusInput('email')"
+-                    @blur="blurInput('email')"
+-                    required
+-                />
+-                <label for="email">Username or Email</label>
+-              </div>
+-              <div class="input" :class="{ active: isPasswordFocused || password }">
+-                <input
+-                    id="password"
+-                    type="password"
+-                    v-model="password"
+-                    @focus="focusInput('password')"
+-                    @blur="blurInput('password')"
+-                    required
+-                />
+-                <label for="password">Password</label>
+-              </div>
+-              <span class="checkbox remember">
+-                <input type="checkbox" id="remember" v-model="rememberMe" />
+-                <label for="remember" class="read-text">Remember me</label>
+-              </span>
+-              <button :disabled="!isLoginFormValid">Login</button>
+-            </form>
+-            <a href="javascript:void(0)" class="account-check" @click="toggleCard">
+-              Already have an account? <b>Sign in</b>
+-            </a>
+-          </div>
+-
+-          <!-- 회원가입 카드 -->
+-          <div :class="['card', { hidden: isLoginVisible }]" id="register">
+-            <form @submit.prevent="handleRegister">
+-              <h1>Sign up</h1>
+-              <div class="input" :class="{ active: isRegisterEmailFocused || registerEmail }">
+-                <input
+-                    id="register-email"
+-                    type="email"
+-                    v-model="registerEmail"
+-                    @focus="focusInput('registerEmail')"
+-                    @blur="blurInput('registerEmail')"
+-                    required
+-                />
+-                <label for="register-email">Email</label>
+-              </div>
+-              <div class="input" :class="{ active: isRegisterPasswordFocused || registerPassword }">
+-                <input
+-                    id="register-password"
+-                    type="password"
+-                    v-model="registerPassword"
+-                    @focus="focusInput('registerPassword')"
+-                    @blur="blurInput('registerPassword')"
+-                    required
+-                />
+-                <label for="register-password">Password</label>
+-              </div>
+-              <div class="input" :class="{ active: isConfirmPasswordFocused || confirmPassword }">
+-                <input
+-                    id="confirm-password"
+-                    type="password"
+-                    v-model="confirmPassword"
+-                    @focus="focusInput('confirmPassword')"
+-                    @blur="blurInput('confirmPassword')"
+-                    required
+-                />
+-                <label for="confirm-password">Confirm Password</label>
+-              </div>
+-              <span class="checkbox remember">
+-                <input type="checkbox" id="terms" v-model="acceptTerms" required />
+-                <label for="terms" class="read-text"
+-                >I have read <b>Terms and Conditions</b></label
+-                >
+-              </span>
+-              <button :disabled="!isRegisterFormValid">Register</button>
+-            </form>
+-            <a href="javascript:void(0)" class="account-check" @click="toggleCard">
+-              Don't have an account? <b>Sign up</b>
+-            </a>
+-          </div>
++          <LoginForm v-if="isLoginVisible" @toggle-view="toggleView" />
++          <SignupForm v-else @toggle-view="toggleView" />
+         </div>
+       </div>
+     </div>
+@@ -97,115 +13,15 @@
+ </template>
+ 
+ <script setup>
+-import { ref, computed } from "vue";
+-import { useRouter } from "vue-router";
+-import { useStore } from "vuex";
+-import axios from "axios";
+-import { useToast } from "vue-toastification";
++import { ref } from "vue";
++import LoginForm from "@/components/LoginForm.vue";
++import SignupForm from "@/components/SignupForm.vue";
+ 
+ const isLoginVisible = ref(true);
+-const email = ref("");
+-const password = ref("");
+-const registerEmail = ref("");
+-const registerPassword = ref("");
+-const rememberMe = ref(false);
+-const isEmailFocused = ref(false);
+-const isPasswordFocused = ref(false);
+-const isRegisterEmailFocused = ref(false);
+-const isRegisterPasswordFocused = ref(false);
+-
+-const router = useRouter();
+-const store = useStore();
+ 
+-const isLoginFormValid = computed(() => email.value && password.value);
+-const isRegisterFormValid = computed(() => registerEmail.value && registerPassword.value);
+-
+-const toggleCard = () => {
++const toggleView = () => {
+   isLoginVisible.value = !isLoginVisible.value;
+ };
+-
+-const focusInput = (inputName) => {
+-  if (inputName === "email") isEmailFocused.value = true;
+-  if (inputName === "password") isPasswordFocused.value = true;
+-  if (inputName === "registerEmail") isRegisterEmailFocused.value = true;
+-  if (inputName === "registerPassword") isRegisterPasswordFocused.value = true;
+-};
+-
+-const blurInput = (inputName) => {
+-  if (inputName === "email") isEmailFocused.value = false;
+-  if (inputName === "password") isPasswordFocused.value = false;
+-  if (inputName === "registerEmail") isRegisterEmailFocused.value = false;
+-  if (inputName === "registerPassword") isRegisterPasswordFocused.value = false;
+-};
+-
+-// 로그인 함수
+-const handleLogin = async () => {
+-  const toast = useToast();
+-  try {
+-    // 사용자가 입력한 비밀번호를 TMDB API 키로 검증
+-    const response = await axios.get("https://api.themoviedb.org/3/movie/popular", {
+-      params: {
+-        api_key: password.value, // 비밀번호를 API 키로 사용
+-        language: "en-US",
+-        page: 1,
+-      },
+-    });
+-
+-    if (response.status === 200) {
+-      // Vuex 상태 업데이트
+-      await store.dispatch("login", {
+-        apiKey: password.value,
+-        user: { email: email.value },
+-      });
+-
+-      // Remember me 옵션 처리
+-      if (rememberMe.value) {
+-        localStorage.setItem("email", email.value);
+-      }
+-
+-      // 로그인 성공 시 홈으로 리다이렉트
+-      toast.success("Login successful!");
+-      router.push("/"); // 홈으로 이동
+-    }
+-  } catch (error) {
+-    toast.success("Invalid API Key. Please check and try again.");
+-  }
+-};
+-
+-// 회원가입 함수
+-const handleRegister = async () => {
+-  const toast = useToast();
+-  try {
+-    // 사용자가 입력한 API 키 검증
+-    const response = await axios.get("https://api.themoviedb.org/3/movie/popular", {
+-      params: {
+-        api_key: registerPassword.value,
+-        language: "en-US",
+-        page: 1,
+-      },
+-    });
+-
+-    if (response.status === 200) {
+-
+-      // 이미 존재하는 계정인지 확인
+-      if (localStorage.getItem(registerEmail.value)) {
+-        toast.error("This email is already registered.");
+-        return;
+-      }
+-
+-      // 회원가입 성공: 로컬 스토리지에 저장
+-      localStorage.setItem(
+-          registerEmail.value,
+-          JSON.stringify({ password: registerPassword.value })
+-      );
+-
+-      toast.success("Registration successful! Please log in.");
+-      toggleCard(); // 로그인 화면으로 전환
+-    }
+-  } catch (error) {
+-    toast.error("Invalid API Key for registration. Please check and try again.");
+-  }
+-};
+ </script>
+ 
+ <style scoped>
+Index: moviewsd/src/components/MovieCard.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <div class=\"movie-card\">\r\n    <img :src=\"'https://image.tmdb.org/t/p/w500' + movie.poster_path\" :alt=\"movie.title\" @click=\"toggleWishlist\" />\r\n    <div v-if=\"isWishlisted\" class=\"wishlist-icon\" @click.stop=\"toggleWishlist\">\r\n      ★\r\n    </div>\r\n    <h3>{{ movie.title }}</h3>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nexport default {\r\n  props: {\r\n    movie: Object,\r\n  },\r\n  data() {\r\n    return {\r\n      isWishlisted: false,\r\n    };\r\n  },\r\n  created() {\r\n    this.checkWishlistStatus();\r\n  },\r\n  methods: {\r\n    toggleWishlist() {\r\n      const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];\r\n      const index = wishlist.findIndex((item) => item.id === this.movie.id);\r\n\r\n      if (index > -1) {\r\n        wishlist.splice(index, 1);\r\n        this.isWishlisted = false;\r\n      } else {\r\n        wishlist.push(this.movie);\r\n        this.isWishlisted = true;\r\n      }\r\n\r\n      localStorage.setItem('wishlist', JSON.stringify(wishlist));\r\n      this.$emit('wishlist-updated'); // 부모에게 알림\r\n    },\r\n    checkWishlistStatus() {\r\n      const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];\r\n      this.isWishlisted = wishlist.some((item) => item.id === this.movie.id);\r\n    },\r\n  },\r\n};\r\n</script>\r\n\r\n<style scoped>\r\n\r\n.movie-card {\r\n  text-align: center;\r\n  padding: 10px;\r\n  border: 1px solid #ddd;\r\n  border-radius: 8px;\r\n  position: relative;\r\n  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 트랜지션 효과 추가 */\r\n}\r\n\r\n.movie-card:hover {\r\n  transform: scale(1.05); /* 살짝 확대 */\r\n  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */\r\n}\r\n\r\n.movie-card img {\r\n  width: 100%;\r\n  border-radius: 10px;\r\n  cursor: pointer;\r\n}\r\n.movie-card h3 {\r\n  font-size: 18px;\r\n  margin: 10px 0;\r\n}\r\n.movie-card p {\r\n  font-size: 14px;\r\n  color: #555;\r\n}\r\n.wishlist-icon {\r\n  position: absolute;\r\n  top: 10px;\r\n  right: 10px;\r\n  font-size: 24px;\r\n  color: gold;\r\n  cursor: pointer;\r\n}\r\n</style>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moviewsd/src/components/MovieCard.vue b/moviewsd/src/components/MovieCard.vue
+--- a/moviewsd/src/components/MovieCard.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/MovieCard.vue	(date 1732552529583)
+@@ -1,6 +1,10 @@
+ <template>
+   <div class="movie-card">
+-    <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" @click="toggleWishlist" />
++    <img
++        :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
++        :alt="movie.title"
++        @click="toggleWishlist"
++    />
+     <div v-if="isWishlisted" class="wishlist-icon" @click.stop="toggleWishlist">
+       ★
+     </div>
+@@ -8,57 +12,54 @@
+   </div>
+ </template>
+ 
+-<script>
+-export default {
+-  props: {
+-    movie: Object,
+-  },
+-  data() {
+-    return {
+-      isWishlisted: false,
+-    };
++<script setup>
++import { ref, onMounted } from "vue";
++
++const props = defineProps({
++  movie: {
++    type: Object,
++    required: true,
+   },
+-  created() {
+-    this.checkWishlistStatus();
+-  },
+-  methods: {
+-    toggleWishlist() {
+-      const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+-      const index = wishlist.findIndex((item) => item.id === this.movie.id);
++});
++
++const isWishlisted = ref(false);
++
++const toggleWishlist = () => {
++  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
++  const index = wishlist.findIndex((item) => item.id === props.movie.id);
+ 
+-      if (index > -1) {
+-        wishlist.splice(index, 1);
+-        this.isWishlisted = false;
+-      } else {
+-        wishlist.push(this.movie);
+-        this.isWishlisted = true;
+-      }
++  if (index > -1) {
++    wishlist.splice(index, 1);
++    isWishlisted.value = false;
++  } else {
++    wishlist.push(props.movie);
++    isWishlisted.value = true;
++  }
+ 
+-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+-      this.$emit('wishlist-updated'); // 부모에게 알림
+-    },
+-    checkWishlistStatus() {
+-      const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+-      this.isWishlisted = wishlist.some((item) => item.id === this.movie.id);
+-    },
+-  },
++  localStorage.setItem("wishlist", JSON.stringify(wishlist));
++};
++
++const checkWishlistStatus = () => {
++  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
++  isWishlisted.value = wishlist.some((item) => item.id === props.movie.id);
+ };
++
++onMounted(checkWishlistStatus);
+ </script>
+ 
+ <style scoped>
+-
+ .movie-card {
+   text-align: center;
+   padding: 10px;
+   border: 1px solid #ddd;
+   border-radius: 8px;
+   position: relative;
+-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 트랜지션 효과 추가 */
++  transition: transform 0.3s ease, box-shadow 0.3s ease;
+ }
+ 
+ .movie-card:hover {
+-  transform: scale(1.05); /* 살짝 확대 */
+-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
++  transform: scale(1.05);
++  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+ }
+ 
+ .movie-card img {
+@@ -66,14 +67,12 @@
+   border-radius: 10px;
+   cursor: pointer;
+ }
++
+ .movie-card h3 {
+   font-size: 18px;
+   margin: 10px 0;
+ }
+-.movie-card p {
+-  font-size: 14px;
+-  color: #555;
+-}
++
+ .wishlist-icon {
+   position: absolute;
+   top: 10px;
+@@ -83,3 +82,4 @@
+   cursor: pointer;
+ }
+ </style>
++
+Index: moviewsd/.eslintrc.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>module.exports = {\r\n  root: true,\r\n  env: {\r\n    node: true\r\n  },\r\n  'extends': [\r\n    'plugin:vue/vue3-essential',\r\n    'eslint:recommended'\r\n  ],\r\n  parserOptions: {\r\n    parser: '@babel/eslint-parser'\r\n  },\r\n  rules: {\r\n    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',\r\n    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moviewsd/.eslintrc.js b/moviewsd/.eslintrc.js
+--- a/moviewsd/.eslintrc.js	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/.eslintrc.js	(date 1732553353918)
+@@ -1,17 +1,28 @@
+ module.exports = {
+   root: true,
+   env: {
+-    node: true
++    node: true,
++    browser: true,
++    es2021: true
+   },
+   'extends': [
+     'plugin:vue/vue3-essential',
+     'eslint:recommended'
+   ],
+   parserOptions: {
++    ecmaVersion: 2021,
++    sourceType: "module",
+     parser: '@babel/eslint-parser'
+   },
+   rules: {
++    "vue/multi-word-component-names": "off", // 단어가 하나뿐인 컴포넌트 이름 허용
++    "no-unused-vars": "warn",
+     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+-  }
+-}
++  },
++  globals: {
++    defineProps: "readonly",
++    defineEmits: "readonly",
++  },
++};
++
+Index: moviewsd/src/router/index.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { createRouter, createWebHistory } from 'vue-router';\r\nimport store from '../store'; // Vuex Store 가져오기\r\nimport PopularMovies from '../views/PopularMovies.vue';\r\nimport MovieDetailsPage from '../views/MovieDetailsPage.vue';\r\nimport SearchMovies from '../views/SearchMovies.vue';\r\nimport TrendMovies from '../views/TrendMovies.vue';\r\nimport WishList from '../views/WishList.vue';\r\nimport SigninPage from '../views/SigninPage.vue';\r\n\r\nconst routes = [\r\n  {\r\n    path: '/signin',\r\n    name: 'signin',\r\n    component: SigninPage,\r\n  },\r\n  {\r\n    path: '/',\r\n    name: 'home',\r\n    component: PopularMovies,\r\n    meta: { requiresAuth: true },\r\n  },\r\n  {\r\n    path: '/popular',\r\n    name: 'popular',\r\n    component: TrendMovies,\r\n    meta: { requiresAuth: true },\r\n  },\r\n  {\r\n    path: '/movie/:id',\r\n    name: 'movie-details',\r\n    component: MovieDetailsPage,\r\n    props: true,\r\n    meta: { requiresAuth: true },\r\n  },\r\n  {\r\n    path: '/search',\r\n    name: 'search',\r\n    component: SearchMovies,\r\n    meta: { requiresAuth: true },\r\n  },\r\n  {\r\n    path: '/wishlist',\r\n    name: 'wishlist',\r\n    component: WishList,\r\n    meta: { requiresAuth: true },\r\n  },\r\n];\r\n\r\nconst router = createRouter({\r\n  history: createWebHistory('/moviewsd/'), // 기본 URL\r\n  routes,\r\n});\r\n\r\n// 라우터 가드\r\nrouter.beforeEach((to, from, next) => {\r\n  const isAuthenticated = store.getters.isLoggedIn; // Vuex에서 상태 가져오기\r\n\r\n  if (to.name === 'signin' && isAuthenticated) {\r\n    // 이미 로그인된 상태에서 로그인 페이지로 이동 시 홈으로 리다이렉트\r\n    next({ name: 'home' });\r\n  } else if (to.meta.requiresAuth && !isAuthenticated) {\r\n    // 인증이 필요한 페이지에 접근하려고 하지만 인증되지 않은 경우\r\n    next({ name: 'signin' });\r\n  } else {\r\n    // 접근 허용\r\n    next();\r\n  }\r\n});\r\n\r\nexport default router;\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moviewsd/src/router/index.js b/moviewsd/src/router/index.js
+--- a/moviewsd/src/router/index.js	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/router/index.js	(date 1732553171150)
+@@ -1,71 +1,57 @@
+-import { createRouter, createWebHistory } from 'vue-router';
+-import store from '../store'; // Vuex Store 가져오기
+-import PopularMovies from '../views/PopularMovies.vue';
+-import MovieDetailsPage from '../views/MovieDetailsPage.vue';
+-import SearchMovies from '../views/SearchMovies.vue';
+-import TrendMovies from '../views/TrendMovies.vue';
+-import WishList from '../views/WishList.vue';
+-import SigninPage from '../views/SigninPage.vue';
++import { createRouter, createWebHistory } from "vue-router";
++import store from "../store";
++import HomePage from "../views/HomePage.vue";
++import PopularPage from "../views/PopularPage.vue";
++import SearchPage from "../views/SearchPage.vue";
++import MovieDetailsPage from "../views/MovieDetailsPage.vue";
++import WishlistPage from "../views/WishlistPage.vue";
++import SigninPage from "../views/SigninPage.vue";
+ 
+ const routes = [
++  { path: "/signin", name: "signin", component: SigninPage },
++  { path: "/", name: "home", component: HomePage, meta: { requiresAuth: true } },
+   {
+-    path: '/signin',
+-    name: 'signin',
+-    component: SigninPage,
+-  },
+-  {
+-    path: '/',
+-    name: 'home',
+-    component: PopularMovies,
++    path: "/popular",
++    name: "popular",
++    component: PopularPage,
+     meta: { requiresAuth: true },
+   },
+   {
+-    path: '/popular',
+-    name: 'popular',
+-    component: TrendMovies,
+-    meta: { requiresAuth: true },
+-  },
+-  {
+-    path: '/movie/:id',
+-    name: 'movie-details',
++    path: "/movie/:id",
++    name: "movie-details",
+     component: MovieDetailsPage,
+     props: true,
+     meta: { requiresAuth: true },
+   },
+   {
+-    path: '/search',
+-    name: 'search',
+-    component: SearchMovies,
++    path: "/search",
++    name: "search",
++    component: SearchPage,
+     meta: { requiresAuth: true },
+   },
+   {
+-    path: '/wishlist',
+-    name: 'wishlist',
+-    component: WishList,
++    path: "/wishlist",
++    name: "wishlist",
++    component: WishlistPage,
+     meta: { requiresAuth: true },
+   },
+ ];
+ 
+ const router = createRouter({
+-  history: createWebHistory('/moviewsd/'), // 기본 URL
++  history: createWebHistory(),
+   routes,
+ });
+ 
+-// 라우터 가드
++// Authentication guard
+ router.beforeEach((to, from, next) => {
+-  const isAuthenticated = store.getters.isLoggedIn; // Vuex에서 상태 가져오기
+-
+-  if (to.name === 'signin' && isAuthenticated) {
+-    // 이미 로그인된 상태에서 로그인 페이지로 이동 시 홈으로 리다이렉트
+-    next({ name: 'home' });
+-  } else if (to.meta.requiresAuth && !isAuthenticated) {
+-    // 인증이 필요한 페이지에 접근하려고 하지만 인증되지 않은 경우
+-    next({ name: 'signin' });
++  const isAuthenticated = store.getters.isLoggedIn;
++  if (to.meta.requiresAuth && !isAuthenticated) {
++    next({ name: "signin" });
+   } else {
+-    // 접근 허용
+     next();
+   }
+ });
+ 
+ export default router;
+ 
++
+Index: moviewsd/src/store/index.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { createStore } from \"vuex\";\r\nimport axios from \"axios\";\r\n\r\nexport default createStore({\r\n  state: {\r\n    isLoggedIn: false, // 로그인 상태\r\n    apiKey: null, // 로그인된 사용자의 API 키\r\n    user: null,\r\n    popularMovies: [], // 인기 영화 목록\r\n    movieDetails: null, // 선택된 영화의 상세 정보\r\n    searchedMovies: [],\r\n    genreMovies: [],\r\n    genres: [],\r\n  },\r\n  getters: {\r\n    isLoggedIn: (state) => state.isLoggedIn,\r\n    user: (state) => state.user,\r\n    apiKey: (state) => state.apiKey,\r\n    popularMovies: (state) => state.popularMovies,\r\n    movieDetails: (state) => state.movieDetails,\r\n    searchedMovies: (state) => state.searchedMovies,\r\n    genreMovies: (state) => state.genreMovies,\r\n    genres: (state) => state.genres,\r\n  },\r\n  mutations: {\r\n    SET_LOGIN_STATE(state, payload) {\r\n      state.isLoggedIn = payload.isLoggedIn;\r\n      state.apiKey = payload.apiKey;\r\n      state.user = payload.user;\r\n    },\r\n    LOGOUT(state) {\r\n      state.isLoggedIn = false;\r\n      state.apiKey = null;\r\n      state.user = null;\r\n    },\r\n    SET_POPULAR_MOVIES(state, movies) {\r\n      state.popularMovies = movies;\r\n    },\r\n    SET_MOVIE_DETAILS(state, details) {\r\n      state.movieDetails = details;\r\n    },\r\n    SET_SEARCHED_MOVIES(state, movies) {\r\n      state.searchedMovies = movies;\r\n    },\r\n    SET_GENRE_MOVIES(state, movies) {\r\n      state.genreMovies = movies;\r\n    },\r\n    SET_GENRES(state, genres) {\r\n      state.genres = genres;\r\n    },\r\n  },\r\n  actions: {\r\n    // 로그인 액션: API 키 유효성 확인\r\n    async login({ commit }, { apiKey, user }) {\r\n      try {\r\n        // TMDB API 호출로 API 키 유효성 확인\r\n        const response = await axios.get(\r\n            \"https://api.themoviedb.org/3/movie/popular\",\r\n            {\r\n              params: {\r\n                api_key: apiKey,\r\n                language: \"ko-KR\",\r\n                page: 1,\r\n              },\r\n            }\r\n        );\r\n\r\n        if (response.status === 200) {\r\n          // API 키 유효 -> 로그인 성공\r\n          commit(\"SET_LOGIN_STATE\", { isLoggedIn: true, apiKey, user });\r\n          localStorage.setItem(\"isLoggedIn\", \"true\");\r\n          localStorage.setItem(\"apiKey\", apiKey);\r\n          localStorage.setItem(\"user\", JSON.stringify(user));\r\n        }\r\n      } catch (error) {\r\n        alert(\"Invalid API Key. Please try again.\");\r\n        throw new Error(\"API Key is not valid\");\r\n      }\r\n    },\r\n    logout({ commit }) {\r\n      commit(\"LOGOUT\");\r\n      localStorage.removeItem(\"isLoggedIn\");\r\n      localStorage.removeItem(\"apiKey\");\r\n      localStorage.removeItem(\"user\");\r\n    },\r\n    loadAuthState({ commit }) {\r\n      const isLoggedIn = localStorage.getItem(\"isLoggedIn\") === \"true\";\r\n      const apiKey = localStorage.getItem(\"apiKey\");\r\n      const user = JSON.parse(localStorage.getItem(\"user\"));\r\n      if (isLoggedIn && apiKey) {\r\n        commit(\"SET_LOGIN_STATE\", { isLoggedIn, apiKey, user });\r\n      }\r\n    },\r\n\r\n    // 영화 데이터 가져오기\r\n    async fetchPopularMovies({ commit, state }) {\r\n      try {\r\n        if (!state.apiKey) {\r\n          throw new Error(\"API Key is missing\");\r\n        }\r\n        const response = await axios.get(\r\n            \"https://api.themoviedb.org/3/movie/popular\",\r\n            {\r\n              params: {\r\n                api_key: state.apiKey,\r\n                language: \"ko-KR\",\r\n                page: 1,\r\n              },\r\n            }\r\n        );\r\n        commit(\"SET_POPULAR_MOVIES\", response.data.results);\r\n      } catch (error) {\r\n        console.error(\"Error fetching popular movies:\", error);\r\n        alert(\"Failed to fetch movies. Please check your API Key.\");\r\n      }\r\n    },\r\n    async fetchMovieDetails({ commit, state }, movieId) {\r\n      try {\r\n        if (!state.apiKey) {\r\n          throw new Error(\"API Key is missing\");\r\n        }\r\n        const response = await axios.get(\r\n            `https://api.themoviedb.org/3/movie/${movieId}`,\r\n            {\r\n              params: {\r\n                api_key: state.apiKey,\r\n                language: \"ko-KR\",\r\n              },\r\n            }\r\n        );\r\n        commit(\"SET_MOVIE_DETAILS\", response.data);\r\n      } catch (error) {\r\n        console.error(\"Error fetching movie details:\", error);\r\n        alert(\"Failed to fetch movie details. Please check your API Key.\");\r\n      }\r\n    },\r\n    async fetchSearchedMovies({ commit, state }, query) {\r\n      try {\r\n        if (!state.apiKey) {\r\n          throw new Error(\"API Key is missing\");\r\n        }\r\n        const response = await axios.get(\r\n            \"https://api.themoviedb.org/3/search/movie\",\r\n            {\r\n              params: {\r\n                api_key: state.apiKey,\r\n                language: \"ko-KR\",\r\n                query: query,\r\n                page: 1,\r\n              },\r\n            }\r\n        );\r\n        commit(\"SET_SEARCHED_MOVIES\", response.data.results);\r\n      } catch (error) {\r\n        console.error(\"Error fetching searched movies:\", error);\r\n        alert(\"Failed to fetch searched movies. Please check your API Key.\");\r\n      }\r\n    },\r\n    async fetchGenreMovies({ commit, state }, genreId) {\r\n      try {\r\n        if (!state.apiKey) {\r\n          throw new Error(\"API Key is missing\");\r\n        }\r\n        const response = await axios.get(\r\n            \"https://api.themoviedb.org/3/discover/movie\",\r\n            {\r\n              params: {\r\n                api_key: state.apiKey,\r\n                language: \"ko-KR\",\r\n                with_genres: genreId,\r\n                page: 1,\r\n              },\r\n            }\r\n        );\r\n        commit(\"SET_GENRE_MOVIES\", response.data.results);\r\n      } catch (error) {\r\n        console.error(\"Error fetching genre movies:\", error);\r\n        alert(\"Failed to fetch genre movies. Please check your API Key.\");\r\n      }\r\n    },\r\n    async fetchGenres({ commit, state }) {\r\n      try {\r\n        if (!state.apiKey) {\r\n          throw new Error(\"API Key is missing\");\r\n        }\r\n        const response = await axios.get(\r\n            \"https://api.themoviedb.org/3/genre/movie/list\",\r\n            {\r\n              params: {\r\n                api_key: state.apiKey,\r\n                language: \"ko-KR\",\r\n              },\r\n            }\r\n        );\r\n        commit(\"SET_GENRES\", response.data.genres);\r\n      } catch (error) {\r\n        console.error(\"Error fetching genres:\", error);\r\n        alert(\"Failed to fetch genres. Please check your API Key.\");\r\n      }\r\n    },\r\n  },\r\n  modules: {},\r\n});\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moviewsd/src/store/index.js b/moviewsd/src/store/index.js
+--- a/moviewsd/src/store/index.js	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/store/index.js	(date 1732553199773)
+@@ -3,24 +3,14 @@
+ 
+ export default createStore({
+   state: {
+-    isLoggedIn: false, // 로그인 상태
+-    apiKey: null, // 로그인된 사용자의 API 키
++    isLoggedIn: false,
++    apiKey: null,
+     user: null,
+-    popularMovies: [], // 인기 영화 목록
+-    movieDetails: null, // 선택된 영화의 상세 정보
+-    searchedMovies: [],
+-    genreMovies: [],
+-    genres: [],
+   },
+   getters: {
+     isLoggedIn: (state) => state.isLoggedIn,
+     user: (state) => state.user,
+     apiKey: (state) => state.apiKey,
+-    popularMovies: (state) => state.popularMovies,
+-    movieDetails: (state) => state.movieDetails,
+-    searchedMovies: (state) => state.searchedMovies,
+-    genreMovies: (state) => state.genreMovies,
+-    genres: (state) => state.genres,
+   },
+   mutations: {
+     SET_LOGIN_STATE(state, payload) {
+@@ -33,27 +23,10 @@
+       state.apiKey = null;
+       state.user = null;
+     },
+-    SET_POPULAR_MOVIES(state, movies) {
+-      state.popularMovies = movies;
+-    },
+-    SET_MOVIE_DETAILS(state, details) {
+-      state.movieDetails = details;
+-    },
+-    SET_SEARCHED_MOVIES(state, movies) {
+-      state.searchedMovies = movies;
+-    },
+-    SET_GENRE_MOVIES(state, movies) {
+-      state.genreMovies = movies;
+-    },
+-    SET_GENRES(state, genres) {
+-      state.genres = genres;
+-    },
+   },
+   actions: {
+-    // 로그인 액션: API 키 유효성 확인
+     async login({ commit }, { apiKey, user }) {
+       try {
+-        // TMDB API 호출로 API 키 유효성 확인
+         const response = await axios.get(
+             "https://api.themoviedb.org/3/movie/popular",
+             {
+@@ -64,17 +37,14 @@
+               },
+             }
+         );
+-
+         if (response.status === 200) {
+-          // API 키 유효 -> 로그인 성공
+           commit("SET_LOGIN_STATE", { isLoggedIn: true, apiKey, user });
+           localStorage.setItem("isLoggedIn", "true");
+           localStorage.setItem("apiKey", apiKey);
+           localStorage.setItem("user", JSON.stringify(user));
+         }
+       } catch (error) {
+-        alert("Invalid API Key. Please try again.");
+-        throw new Error("API Key is not valid");
++        throw new Error("Invalid API Key");
+       }
+     },
+     logout({ commit }) {
+@@ -91,113 +61,7 @@
+         commit("SET_LOGIN_STATE", { isLoggedIn, apiKey, user });
+       }
+     },
+-
+-    // 영화 데이터 가져오기
+-    async fetchPopularMovies({ commit, state }) {
+-      try {
+-        if (!state.apiKey) {
+-          throw new Error("API Key is missing");
+-        }
+-        const response = await axios.get(
+-            "https://api.themoviedb.org/3/movie/popular",
+-            {
+-              params: {
+-                api_key: state.apiKey,
+-                language: "ko-KR",
+-                page: 1,
+-              },
+-            }
+-        );
+-        commit("SET_POPULAR_MOVIES", response.data.results);
+-      } catch (error) {
+-        console.error("Error fetching popular movies:", error);
+-        alert("Failed to fetch movies. Please check your API Key.");
+-      }
+-    },
+-    async fetchMovieDetails({ commit, state }, movieId) {
+-      try {
+-        if (!state.apiKey) {
+-          throw new Error("API Key is missing");
+-        }
+-        const response = await axios.get(
+-            `https://api.themoviedb.org/3/movie/${movieId}`,
+-            {
+-              params: {
+-                api_key: state.apiKey,
+-                language: "ko-KR",
+-              },
+-            }
+-        );
+-        commit("SET_MOVIE_DETAILS", response.data);
+-      } catch (error) {
+-        console.error("Error fetching movie details:", error);
+-        alert("Failed to fetch movie details. Please check your API Key.");
+-      }
+-    },
+-    async fetchSearchedMovies({ commit, state }, query) {
+-      try {
+-        if (!state.apiKey) {
+-          throw new Error("API Key is missing");
+-        }
+-        const response = await axios.get(
+-            "https://api.themoviedb.org/3/search/movie",
+-            {
+-              params: {
+-                api_key: state.apiKey,
+-                language: "ko-KR",
+-                query: query,
+-                page: 1,
+-              },
+-            }
+-        );
+-        commit("SET_SEARCHED_MOVIES", response.data.results);
+-      } catch (error) {
+-        console.error("Error fetching searched movies:", error);
+-        alert("Failed to fetch searched movies. Please check your API Key.");
+-      }
+-    },
+-    async fetchGenreMovies({ commit, state }, genreId) {
+-      try {
+-        if (!state.apiKey) {
+-          throw new Error("API Key is missing");
+-        }
+-        const response = await axios.get(
+-            "https://api.themoviedb.org/3/discover/movie",
+-            {
+-              params: {
+-                api_key: state.apiKey,
+-                language: "ko-KR",
+-                with_genres: genreId,
+-                page: 1,
+-              },
+-            }
+-        );
+-        commit("SET_GENRE_MOVIES", response.data.results);
+-      } catch (error) {
+-        console.error("Error fetching genre movies:", error);
+-        alert("Failed to fetch genre movies. Please check your API Key.");
+-      }
+-    },
+-    async fetchGenres({ commit, state }) {
+-      try {
+-        if (!state.apiKey) {
+-          throw new Error("API Key is missing");
+-        }
+-        const response = await axios.get(
+-            "https://api.themoviedb.org/3/genre/movie/list",
+-            {
+-              params: {
+-                api_key: state.apiKey,
+-                language: "ko-KR",
+-              },
+-            }
+-        );
+-        commit("SET_GENRES", response.data.genres);
+-      } catch (error) {
+-        console.error("Error fetching genres:", error);
+-        alert("Failed to fetch genres. Please check your API Key.");
+-      }
+-    },
+   },
+   modules: {},
+ });
++
+Index: moviewsd/src/views/PopularPage.vue
+===================================================================
+diff --git a/moviewsd/src/views/PopularPage.vue b/moviewsd/src/views/PopularPage.vue
+new file mode 100644
+--- /dev/null	(date 1732552902870)
++++ b/moviewsd/src/views/PopularPage.vue	(date 1732552902870)
+@@ -0,0 +1,73 @@
++<template>
++  <div class="popular-page">
++    <TrendControls :current-view="viewType" @change-view="changeView" />
++    <MovieGrid :movies="paginatedMovies" v-if="viewType === 'table'" />
++    <MovieGrid :movies="movies" v-if="viewType === 'infinite'" />
++    <Pagination
++        v-if="viewType === 'table'"
++        :current-page="currentPage"
++        :items-per-page="itemsPerPage"
++        :total-results="totalResults"
++        @page-changed="fetchMovies"
++    />
++    <ScrollToTop v-if="viewType === 'infinite'" />
++  </div>
++</template>
++
++<script setup>
++import { ref, computed } from "vue";
++import axios from "axios";
++import TrendControls from "@/components/TrendControls.vue";
++import MovieGrid from "@/components/MovieGrid.vue";
++import Pagination from "@/components/Pagination.vue";
++import ScrollToTop from "@/components/ScrollToTop.vue";
++
++const apiKey = localStorage.getItem("apiKey");
++const viewType = ref("table");
++const currentPage = ref(1);
++const itemsPerPage = ref(20);
++const totalResults = ref(0);
++const movies = ref([]);
++
++const paginatedMovies = computed(() => {
++  const start = (currentPage.value - 1) * itemsPerPage.value;
++  return movies.value.slice(start, start + itemsPerPage.value);
++});
++
++const fetchMovies = async (newPage = 1) => {
++  try {
++    const response = await axios.get(
++        `https://api.themoviedb.org/3/movie/popular`,
++        {
++          params: {
++            api_key: apiKey,
++            language: "ko-KR",
++            page: newPage,
++          },
++        }
++    );
++    if (viewType.value === "table") {
++      movies.value = response.data.results;
++    } else {
++      movies.value.push(...response.data.results);
++    }
++    totalResults.value = response.data.total_results;
++    currentPage.value = newPage;
++  } catch (error) {
++    console.error("Error fetching movies:", error);
++  }
++};
++
++const changeView = (newView) => {
++  viewType.value = newView;
++  if (newView === "infinite") {
++    fetchMovies();
++  }
++};
++</script>
++
++<style scoped>
++.popular-page {
++  padding: 20px;
++}
++</style>
+Index: moviewsd/src/views/SearchPage.vue
+===================================================================
+diff --git a/moviewsd/src/views/SearchPage.vue b/moviewsd/src/views/SearchPage.vue
+new file mode 100644
+--- /dev/null	(date 1732553043098)
++++ b/moviewsd/src/views/SearchPage.vue	(date 1732553043098)
+@@ -0,0 +1,205 @@
++<template>
++  <div class="search-page">
++    <div class="search-filters">
++      <input
++          v-model="query"
++          @input="debouncedSearch"
++          placeholder="영화 검색..."
++      />
++      <select v-model="selectedGenre" @change="applyFilters">
++        <option value="">장르 선택</option>
++        <option v-for="genre in genres" :key="genre.id" :value="genre.id">
++          {{ genre.name }}
++        </option>
++      </select>
++      <input
++          type="number"
++          v-model="minRating"
++          @input="applyFilters"
++          placeholder="최소 평점 (0 ~ 10)"
++          min="0"
++          max="10"
++      />
++      <input type="date" v-model="releaseDate" @change="applyFilters" />
++      <button @click="resetFilters">필터 초기화</button>
++    </div>
++    <div class="recent-searches" v-if="recentSearches.length">
++      <h4>최근 검색어</h4>
++      <ul>
++        <li
++            v-for="search in recentSearches"
++            :key="search"
++            @click="applyRecentSearch(search)"
++        >
++          {{ search }}
++        </li>
++      </ul>
++    </div>
++    <MovieList :movies="filteredMovies" />
++    <div v-if="loading" class="loading">로딩 중...</div>
++  </div>
++</template>
++
++<script setup>
++import { ref, computed } from "vue";
++import axios from "axios";
++import { debounce } from "lodash";
++import MovieList from "@/components/MovieList.vue";
++import { useToast } from "vue-toastification";
++
++const apiKey = localStorage.getItem("apiKey");
++const toast = useToast();
++
++const query = ref("");
++const selectedGenre = ref("");
++const minRating = ref("");
++const releaseDate = ref("");
++const recentSearches = ref([]);
++const movies = ref([]);
++const allMovies = ref([]);
++const genres = ref([]);
++const loading = ref(false);
++
++const debouncedSearch = debounce(() => {
++  searchMovies();
++}, 500);
++
++const filteredMovies = computed(() => {
++  return movies.value.filter((movie) => {
++    const matchesGenre =
++        !selectedGenre.value ||
++        movie.genre_ids.includes(parseInt(selectedGenre.value));
++    const matchesRating =
++        !minRating.value || movie.vote_average >= parseFloat(minRating.value);
++    const matchesReleaseDate =
++        !releaseDate.value || movie.release_date >= releaseDate.value;
++    return matchesGenre && matchesRating && matchesReleaseDate;
++  });
++});
++
++const loadGenres = async () => {
++  try {
++    const response = await axios.get(
++        `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=ko-KR`
++    );
++    genres.value = response.data.genres;
++  } catch (error) {
++    toast.error("장르 데이터를 불러오지 못했습니다.");
++  }
++};
++
++const loadRecentSearches = () => {
++  recentSearches.value =
++      JSON.parse(localStorage.getItem("recentSearches")) || [];
++};
++
++const saveSearchQuery = (searchQuery) => {
++  if (!searchQuery.trim()) return;
++  const updatedSearches = [
++    searchQuery,
++    ...recentSearches.value.filter((q) => q !== searchQuery),
++  ];
++  recentSearches.value = updatedSearches.slice(0, 10);
++  localStorage.setItem("recentSearches", JSON.stringify(recentSearches.value));
++};
++
++const searchMovies = async () => {
++  if (!query.value.trim()) {
++    movies.value = allMovies.value;
++    return;
++  }
++  saveSearchQuery(query.value);
++  try {
++    loading.value = true;
++    const response = await axios.get(
++        `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query.value}&language=ko-KR`
++    );
++    movies.value = response.data.results;
++  } catch (error) {
++    toast.error("검색 결과를 가져오지 못했습니다.");
++  } finally {
++    loading.value = false;
++  }
++};
++
++const applyFilters = () => {
++  movies.value = [...allMovies.value];
++};
++
++const resetFilters = () => {
++  query.value = "";
++  selectedGenre.value = "";
++  minRating.value = "";
++  releaseDate.value = "";
++  applyFilters();
++};
++
++const applyRecentSearch = (search) => {
++  query.value = search;
++  searchMovies();
++};
++
++const loadInitialMovies = async () => {
++  try {
++    loading.value = true;
++    const response = await axios.get(
++        `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=1`
++    );
++    allMovies.value = response.data.results;
++    movies.value = [...allMovies.value];
++  } catch (error) {
++    toast.error("초기 데이터를 불러오지 못했습니다.");
++  } finally {
++    loading.value = false;
++  }
++};
++
++loadGenres();
++loadRecentSearches();
++loadInitialMovies();
++</script>
++
++<style scoped>
++.search-filters {
++  display: flex;
++  gap: 10px;
++  justify-content: center;
++  margin-bottom: 20px;
++}
++
++.recent-searches {
++  margin-bottom: 20px;
++  text-align: center;
++}
++
++.recent-searches h4 {
++  margin-bottom: 10px;
++  font-size: 18px;
++}
++
++.recent-searches ul {
++  list-style: none;
++  padding: 0;
++  display: flex;
++  gap: 10px;
++  justify-content: center;
++}
++
++.recent-searches li {
++  cursor: pointer;
++  padding: 5px 10px;
++  background-color: #f0f0f0;
++  border-radius: 5px;
++  transition: background-color 0.2s ease;
++}
++
++.recent-searches li:hover {
++  background-color: #dcdcdc;
++}
++
++.loading {
++  text-align: center;
++  font-size: 18px;
++  color: #555;
++}
++</style>
+Index: moviewsd/src/App.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <div id=\"app\">\r\n    <!-- 공통 헤더 컴포넌트 -->\r\n    <AppHeader v-if=\"isLoggedIn\" />\r\n    <!-- 라우터 뷰 -->\r\n    <router-view />\r\n  </div>\r\n</template>\r\n\r\n<script setup>\r\nimport AppHeader from \"@/components/AppHeader.vue\";\r\nimport { computed } from \"vue\";\r\nimport { useStore } from \"vuex\";\r\n\r\nconst store = useStore();\r\n\r\n// Vuex 상태를 통해 로그인 상태를 확인\r\nconst isLoggedIn = computed(() => store.getters.isLoggedIn);\r\n</script>\r\n\r\n<style>\r\n#app {\r\n  font-family: Avenir, Helvetica, Arial, sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  text-align: center;\r\n  color: #2c3e50;\r\n}\r\n</style>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moviewsd/src/App.vue b/moviewsd/src/App.vue
+--- a/moviewsd/src/App.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/App.vue	(date 1732553208349)
+@@ -1,8 +1,6 @@
+ <template>
+   <div id="app">
+-    <!-- 공통 헤더 컴포넌트 -->
+     <AppHeader v-if="isLoggedIn" />
+-    <!-- 라우터 뷰 -->
+     <router-view />
+   </div>
+ </template>
+@@ -13,8 +11,6 @@
+ import { useStore } from "vuex";
+ 
+ const store = useStore();
+-
+-// Vuex 상태를 통해 로그인 상태를 확인
+ const isLoggedIn = computed(() => store.getters.isLoggedIn);
+ </script>
+ 
+Index: moviewsd/src/views/WishlistPage.vue
+===================================================================
+diff --git a/moviewsd/src/views/WishlistPage.vue b/moviewsd/src/views/WishlistPage.vue
+new file mode 100644
+--- /dev/null	(date 1732553110748)
++++ b/moviewsd/src/views/WishlistPage.vue	(date 1732553110748)
+@@ -0,0 +1,47 @@
++<template>
++  <div class="wishlist">
++    <h1>위시리스트</h1>
++    <div v-if="movies.length > 0" class="movie-list">
++      <MovieCard
++          v-for="movie in movies"
++          :key="movie.id"
++          :movie="movie"
++          @wishlist-updated="loadWishlist"
++      />
++    </div>
++    <div v-else>
++      <p>찜한 영화가 없습니다.</p>
++    </div>
++  </div>
++</template>
++
++<script setup>
++import { ref, onMounted } from "vue";
++import MovieCard from "@/components/MovieCard.vue";
++
++const movies = ref([]);
++
++const loadWishlist = () => {
++  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
++  movies.value = wishlist;
++};
++
++onMounted(loadWishlist);
++</script>
++
++<style scoped>
++.wishlist {
++  text-align: center;
++}
++
++.movie-list {
++  display: flex;
++  flex-wrap: wrap;
++  justify-content: space-around;
++}
++
++.movie-list p {
++  color: #555;
++  font-size: 18px;
++}
++</style>
+Index: moviewsd/src/views/HomePage.vue
+===================================================================
+diff --git a/moviewsd/src/views/HomePage.vue b/moviewsd/src/views/HomePage.vue
+new file mode 100644
+--- /dev/null	(date 1732552873061)
++++ b/moviewsd/src/views/HomePage.vue	(date 1732552873061)
+@@ -0,0 +1,23 @@
++<template>
++  <div class="home-page">
++    <FeaturedMovies />
++    <div v-for="genre in genres" :key="genre.id">
++      <GenreMovies :genre="genre" />
++    </div>
++  </div>
++</template>
++
++<script setup>
++const genres = [
++  { id: 28, name: "Action" },
++  { id: 35, name: "Comedy" },
++  { id: 18, name: "Drama" },
++  { id: 10749, name: "Romance" },
++];
++</script>
++
++<style scoped>
++.home-page {
++  padding: 20px;
++}
++</style>
+Index: moviewsd/src/views/MovieDetailsPage.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <div class=\"movie-details\" v-if=\"movie\">\r\n    <h1>{{ movie.title }}</h1>\r\n    <img :src=\"'https://image.tmdb.org/t/p/w500' + movie.poster_path\" :alt=\"movie.title\" />\r\n    <p>{{ movie.overview }}</p>\r\n    <ul>\r\n      <li><strong>평점:</strong> {{ movie.vote_average }}</li>\r\n      <li><strong>개봉일:</strong> {{ movie.release_date }}</li>\r\n    </ul>\r\n  </div>\r\n  <div v-else>\r\n    <p>영화 정보를 불러오는 중입니다...</p>\r\n  </div>\r\n</template>\r\n\r\n<script>\r\nimport { mapGetters, mapActions } from 'vuex';\r\n\r\nexport default {\r\n  data() {\r\n    return {\r\n      movieId: this.$route.params.id, // URL에서 영화 ID 가져오기\r\n    };\r\n  },\r\n  computed: {\r\n    ...mapGetters(['movieDetails']),\r\n    movie() {\r\n      return this.movieDetails; // Vuex에서 영화 상세 정보 가져오기\r\n    },\r\n  },\r\n  methods: {\r\n    ...mapActions(['fetchMovieDetails']),\r\n  },\r\n  async mounted() {\r\n    await this.fetchMovieDetails(this.movieId); // 영화 상세 정보 요청\r\n  },\r\n};\r\n</script>\r\n\r\n<style scoped>\r\n.movie-details {\r\n  text-align: center;\r\n}\r\n\r\n.movie-details img {\r\n  max-width: 300px;\r\n  border-radius: 10px;\r\n  margin: 20px 0;\r\n}\r\n\r\n.movie-details ul {\r\n  list-style: none;\r\n  padding: 0;\r\n}\r\n\r\n.movie-details li {\r\n  margin: 10px 0;\r\n}\r\n</style>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moviewsd/src/views/MovieDetailsPage.vue b/moviewsd/src/views/MovieDetailsPage.vue
+--- a/moviewsd/src/views/MovieDetailsPage.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/views/MovieDetailsPage.vue	(date 1732553082317)
+@@ -1,7 +1,10 @@
+ <template>
+   <div class="movie-details" v-if="movie">
+     <h1>{{ movie.title }}</h1>
+-    <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
++    <img
++        :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
++        :alt="movie.title"
++    />
+     <p>{{ movie.overview }}</p>
+     <ul>
+       <li><strong>평점:</strong> {{ movie.vote_average }}</li>
+@@ -13,33 +16,42 @@
+   </div>
+ </template>
+ 
+-<script>
+-import { mapGetters, mapActions } from 'vuex';
++<script setup>
++import { ref, onMounted } from "vue";
++import axios from "axios";
++import { useRoute } from "vue-router";
++import { useToast } from "vue-toastification";
+ 
+-export default {
+-  data() {
+-    return {
+-      movieId: this.$route.params.id, // URL에서 영화 ID 가져오기
+-    };
+-  },
+-  computed: {
+-    ...mapGetters(['movieDetails']),
+-    movie() {
+-      return this.movieDetails; // Vuex에서 영화 상세 정보 가져오기
+-    },
+-  },
+-  methods: {
+-    ...mapActions(['fetchMovieDetails']),
+-  },
+-  async mounted() {
+-    await this.fetchMovieDetails(this.movieId); // 영화 상세 정보 요청
+-  },
++const route = useRoute();
++const movie = ref(null);
++const apiKey = localStorage.getItem("apiKey");
++const toast = useToast();
++
++const fetchMovieDetails = async () => {
++  const movieId = route.params.id;
++  try {
++    const response = await axios.get(
++        `https://api.themoviedb.org/3/movie/${movieId}`,
++        {
++          params: {
++            api_key: apiKey,
++            language: "ko-KR",
++          },
++        }
++    );
++    movie.value = response.data;
++  } catch (error) {
++    toast.error("영화 정보를 불러오는 데 실패했습니다.");
++  }
+ };
++
++onMounted(fetchMovieDetails);
+ </script>
+ 
+ <style scoped>
+ .movie-details {
+   text-align: center;
++  padding: 20px;
+ }
+ 
+ .movie-details img {
+@@ -57,3 +69,4 @@
+   margin: 10px 0;
+ }
+ </style>
++

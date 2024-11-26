@@ -1,0 +1,450 @@
+Index: moviewsd/src/components/MovieList.vue
+===================================================================
+diff --git a/moviewsd/src/components/MovieList.vue b/moviewsd/src/components/MovieList.vue
+--- a/moviewsd/src/components/MovieList.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/MovieList.vue	(date 1732559313689)
+@@ -1,0 +1,32 @@
++<template>
++  <div class="movie-list">
++    <MovieCard
++        v-for="movie in movies"
++        :key="movie.id"
++        :movie="movie"
++    />
++  </div>
++</template>
++
++<script setup>
++import { defineProps } from "vue";
++import MovieCard from "@/components/MovieCard.vue";
++
++const props = defineProps({
++  movies: {
++    type: Array,
++    required: true,
++  },
++});
++</script>
++
++<style scoped>
++.movie-list {
++  display: grid;
++  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
++  gap: 20px;
++  padding: 20px;
++  justify-content: center;
++}
++</style>
++
+Index: moviewsd/src/components/MovieGrid.vue
+===================================================================
+diff --git a/moviewsd/src/components/MovieGrid.vue b/moviewsd/src/components/MovieGrid.vue
+--- a/moviewsd/src/components/MovieGrid.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/MovieGrid.vue	(date 1732559827162)
+@@ -1,0 +1,33 @@
++<template>
++  <div class="movie-grid">
++    <MovieCard
++        v-for="movie in movies"
++        :key="movie.id"
++        :movie="movie"
++    />
++  </div>
++</template>
++
++<script setup>
++import { defineProps } from "vue";
++import MovieCard from "@/components/MovieCard.vue";
++
++const props = defineProps({
++  movies: {
++    type: Array,
++    required: true,
++  },
++});
++</script>
++
++<style scoped>
++.movie-grid {
++  display: grid;
++  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
++  gap: 20px;
++  padding: 20px;
++  justify-content: center;
++}
++</style>
++
++
+Index: moviewsd/src/components/LoginForm.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <form @submit.prevent=\"handleLogin\">\r\n    <h1>로그인</h1>\r\n    <div class=\"input\" :class=\"{ active: isEmailFocused || email }\">\r\n      <input\r\n          id=\"email\"\r\n          type=\"email\"\r\n          v-model=\"email\"\r\n          @focus=\"focusInput('email')\"\r\n          @blur=\"blurInput('email')\"\r\n          required\r\n      />\r\n      <label for=\"email\">Email</label>\r\n    </div>\r\n    <div class=\"input\" :class=\"{ active: isPasswordFocused || password }\">\r\n      <input\r\n          id=\"password\"\r\n          type=\"password\"\r\n          v-model=\"password\"\r\n          @focus=\"focusInput('password')\"\r\n          @blur=\"blurInput('password')\"\r\n          required\r\n      />\r\n      <label for=\"password\">Password</label>\r\n    </div>\r\n    <span class=\"checkbox remember\">\r\n      <input type=\"checkbox\" id=\"remember\" v-model=\"rememberMe\" />\r\n      <label for=\"remember\" class=\"read-text\">Remember me</label>\r\n    </span>\r\n    <button :disabled=\"!isLoginFormValid\">Login</button>\r\n  </form>\r\n</template>\r\n\r\n<script setup>\r\nimport { ref, computed } from \"vue\";\r\nimport { useRouter } from \"vue-router\";\r\nimport { useStore } from \"vuex\";\r\nimport { useToast } from \"vue-toastification\";\r\n\r\nconst email = ref(\"\");\r\nconst password = ref(\"\");\r\nconst rememberMe = ref(false);\r\nconst isEmailFocused = ref(false);\r\nconst isPasswordFocused = ref(false);\r\n\r\nconst router = useRouter();\r\nconst store = useStore();\r\nconst toast = useToast();\r\n\r\nconst isLoginFormValid = computed(() => email.value && password.value);\r\n\r\nconst focusInput = (inputName) => {\r\n  if (inputName === \"email\") isEmailFocused.value = true;\r\n  if (inputName === \"password\") isPasswordFocused.value = true;\r\n};\r\n\r\nconst blurInput = (inputName) => {\r\n  if (inputName === \"email\") isEmailFocused.value = false;\r\n  if (inputName === \"password\") isPasswordFocused.value = false;\r\n};\r\n\r\nconst handleLogin = async () => {\r\n  try {\r\n    const response = await store.dispatch(\"login\", {\r\n      apiKey: password.value,\r\n      user: { email: email.value },\r\n    });\r\n    if (response) {\r\n      if (rememberMe.value) {\r\n        localStorage.setItem(\"email\", email.value);\r\n      }\r\n      toast.success(\"Login successful!\");\r\n      router.push(\"/\");\r\n    }\r\n  } catch (error) {\r\n    toast.error(\"Login failed. Please check your credentials.\");\r\n  }\r\n};\r\n</script>\r\n\r\n<style scoped>\r\n</style>\r\n
+===================================================================
+diff --git a/moviewsd/src/components/LoginForm.vue b/moviewsd/src/components/LoginForm.vue
+--- a/moviewsd/src/components/LoginForm.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/LoginForm.vue	(date 1732559081194)
+@@ -79,4 +79,66 @@
+ </script>
+ 
+ <style scoped>
++.input {
++  position: relative;
++  margin-top: 1.5rem;
++}
++
++.input input {
++  background-color: transparent;
++  border: none;
++  border-bottom: 1px solid #9e9e9e;
++  border-radius: 0;
++  outline: none;
++  height: 2.5rem;
++  width: 100%;
++  font-size: 1rem;
++  padding: 0;
++  box-shadow: none;
++  transition: all 0.3s ease;
++}
++
++.input label {
++  color: #9e9e9e;
++  position: absolute;
++  top: 0;
++  left: 0;
++  height: 100%;
++  font-size: 1rem;
++  cursor: text;
++  transition: transform 0.2s ease-out;
++  transform-origin: 0% 100%;
++  text-align: initial;
++  transform: translateY(12px);
++  pointer-events: none;
++}
++
++.input.active > label {
++  transform: translateY(-14px) scale(0.8);
++  color: #2069ff;
++}
++
++.checkbox {
++  margin-top: 2rem;
++  display: block;
++}
++
++button {
++  display: block;
++  border-radius: 50px;
++  border: none;
++  width: 100%;
++  background-color: #2069ff;
++  color: #fff;
++  padding: 17px;
++  text-transform: uppercase;
++  letter-spacing: 2px;
++  box-shadow: 0px 10px 30px rgba(23, 83, 209, 0.3);
++  transition: all 0.2s ease;
++}
++
++button:hover {
++  box-shadow: 0px 2px 10px rgba(23, 83, 209, 0.4);
++}
+ </style>
++
+Index: moviewsd/src/components/TrendControls.vue
+===================================================================
+diff --git a/moviewsd/src/components/TrendControls.vue b/moviewsd/src/components/TrendControls.vue
+--- a/moviewsd/src/components/TrendControls.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/TrendControls.vue	(date 1732559334648)
+@@ -1,0 +1,62 @@
++<template>
++  <div class="trend-controls">
++    <button
++        v-for="option in viewOptions"
++        :key="option.value"
++        :class="{ active: option.value === currentView }"
++        @click="changeView(option.value)"
++    >
++      {{ option.label }}
++    </button>
++  </div>
++</template>
++
++<script setup>
++const props = defineProps({
++  currentView: {
++    type: String,
++    required: true,
++  },
++});
++
++const emits = defineEmits(["change-view"]);
++
++const viewOptions = [
++  { label: "Table View", value: "table" },
++  { label: "Infinite Scroll", value: "infinite" },
++];
++
++const changeView = (view) => {
++  emits("change-view", view);
++};
++</script>
++
++<style scoped>
++.trend-controls {
++  display: flex;
++  justify-content: center;
++  margin: 20px 0;
++}
++
++button {
++  margin: 0 10px;
++  padding: 10px 20px;
++  background-color: #42b983;
++  color: white;
++  border: none;
++  border-radius: 4px;
++  cursor: pointer;
++  font-size: 14px;
++  transition: background-color 0.3s ease, transform 0.2s ease;
++}
++
++button:hover {
++  background-color: #369f6d;
++  transform: scale(1.05);
++}
++
++button.active {
++  background-color: #1e90ff;
++  transform: scale(1.1);
++}
++</style>
+Index: moviewsd/src/components/SignupForm.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <form @submit.prevent=\"handleRegister\">\r\n    <h1>회원가입</h1>\r\n    <div class=\"input\" :class=\"{ active: isEmailFocused || email }\">\r\n      <input\r\n          id=\"register-email\"\r\n          type=\"email\"\r\n          v-model=\"email\"\r\n          @focus=\"focusInput('email')\"\r\n          @blur=\"blurInput('email')\"\r\n          required\r\n      />\r\n      <label for=\"register-email\">Email</label>\r\n    </div>\r\n    <div class=\"input\" :class=\"{ active: isPasswordFocused || password }\">\r\n      <input\r\n          id=\"register-password\"\r\n          type=\"password\"\r\n          v-model=\"password\"\r\n          @focus=\"focusInput('password')\"\r\n          @blur=\"blurInput('password')\"\r\n          required\r\n      />\r\n      <label for=\"register-password\">Password</label>\r\n    </div>\r\n    <div class=\"input\" :class=\"{ active: isConfirmPasswordFocused || confirmPassword }\">\r\n      <input\r\n          id=\"confirm-password\"\r\n          type=\"password\"\r\n          v-model=\"confirmPassword\"\r\n          @focus=\"focusInput('confirmPassword')\"\r\n          @blur=\"blurInput('confirmPassword')\"\r\n          required\r\n      />\r\n      <label for=\"confirm-password\">Confirm Password</label>\r\n    </div>\r\n    <span class=\"checkbox\">\r\n      <input type=\"checkbox\" id=\"terms\" v-model=\"acceptTerms\" required />\r\n      <label for=\"terms\">I agree to the Terms and Conditions</label>\r\n    </span>\r\n    <button :disabled=\"!isSignupFormValid\">Register</button>\r\n  </form>\r\n</template>\r\n\r\n<script setup>\r\nimport { ref, computed } from \"vue\";\r\nimport { useToast } from \"vue-toastification\";\r\n\r\nconst email = ref(\"\");\r\nconst password = ref(\"\");\r\nconst confirmPassword = ref(\"\");\r\nconst acceptTerms = ref(false);\r\nconst isEmailFocused = ref(false);\r\nconst isPasswordFocused = ref(false);\r\nconst isConfirmPasswordFocused = ref(false);\r\n\r\nconst toast = useToast();\r\n\r\nconst isSignupFormValid = computed(() => {\r\n  return email.value && password.value && confirmPassword.value === password.value && acceptTerms.value;\r\n});\r\n\r\nconst focusInput = (inputName) => {\r\n  if (inputName === \"email\") isEmailFocused.value = true;\r\n  if (inputName === \"password\") isPasswordFocused.value = true;\r\n  if (inputName === \"confirmPassword\") isConfirmPasswordFocused.value = true;\r\n};\r\n\r\nconst blurInput = (inputName) => {\r\n  if (inputName === \"email\") isEmailFocused.value = false;\r\n  if (inputName === \"password\") isPasswordFocused.value = false;\r\n  if (inputName === \"confirmPassword\") isConfirmPasswordFocused.value = false;\r\n};\r\n\r\nconst handleRegister = async () => {\r\n  try {\r\n    const existingAccount = localStorage.getItem(email.value);\r\n    if (existingAccount) {\r\n      toast.error(\"This email is already registered.\");\r\n      return;\r\n    }\r\n\r\n    localStorage.setItem(email.value, JSON.stringify({ password: password.value }));\r\n    toast.success(\"Registration successful!\");\r\n  } catch (error) {\r\n    toast.error(\"Registration failed. Please try again.\");\r\n  }\r\n};\r\n</script>\r\n\r\n<style scoped>\r\n</style>\r\n
+===================================================================
+diff --git a/moviewsd/src/components/SignupForm.vue b/moviewsd/src/components/SignupForm.vue
+--- a/moviewsd/src/components/SignupForm.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/SignupForm.vue	(date 1732559265867)
+@@ -89,4 +89,66 @@
+ </script>
+ 
+ <style scoped>
++.input {
++  position: relative;
++  margin-top: 1.5rem;
++}
++
++.input input {
++  background-color: transparent;
++  border: none;
++  border-bottom: 1px solid #9e9e9e;
++  border-radius: 0;
++  outline: none;
++  height: 2.5rem;
++  width: 100%;
++  font-size: 1rem;
++  padding: 0;
++  box-shadow: none;
++  transition: all 0.3s ease;
++}
++
++.input label {
++  color: #9e9e9e;
++  position: absolute;
++  top: 0;
++  left: 0;
++  height: 100%;
++  font-size: 1rem;
++  cursor: text;
++  transition: transform 0.2s ease-out;
++  transform-origin: 0% 100%;
++  text-align: initial;
++  transform: translateY(12px);
++  pointer-events: none;
++}
++
++.input.active > label {
++  transform: translateY(-14px) scale(0.8);
++  color: #2069ff;
++}
++
++.checkbox {
++  margin-top: 2rem;
++  display: block;
++}
++
++button {
++  display: block;
++  border-radius: 50px;
++  border: none;
++  width: 100%;
++  background-color: #2069ff;
++  color: #fff;
++  padding: 17px;
++  text-transform: uppercase;
++  letter-spacing: 2px;
++  box-shadow: 0px 10px 30px rgba(23, 83, 209, 0.3);
++  transition: all 0.2s ease;
++}
++
++button:hover {
++  box-shadow: 0px 2px 10px rgba(23, 83, 209, 0.4);
++}
+ </style>
++
+Index: moviewsd/src/components/Pagination.vue
+===================================================================
+diff --git a/moviewsd/src/components/Pagination.vue b/moviewsd/src/components/Pagination.vue
+--- a/moviewsd/src/components/Pagination.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/Pagination.vue	(date 1732559347201)
+@@ -1,0 +1,67 @@
++<template>
++  <div class="pagination">
++    <button @click="changePage('previous')" :disabled="currentPage === 1">이전</button>
++    <span>페이지 {{ currentPage }}</span>
++    <button @click="changePage('next')" :disabled="currentPage * itemsPerPage >= totalResults">다음</button>
++  </div>
++</template>
++
++<script setup>
++const props = defineProps({
++  currentPage: {
++    type: Number,
++    required: true,
++  },
++  itemsPerPage: {
++    type: Number,
++    required: true,
++  },
++  totalResults: {
++    type: Number,
++    required: true,
++  },
++});
++
++const emits = defineEmits(["page-changed"]);
++
++const changePage = (direction) => {
++  const newPage = direction === "previous" ? props.currentPage - 1 : props.currentPage + 1;
++  emits("page-changed", newPage);
++};
++</script>
++
++<style scoped>
++.pagination {
++  display: flex;
++  justify-content: center;
++  align-items: center;
++  margin: 20px 0;
++}
++
++button {
++  margin: 0 10px;
++  padding: 10px 20px;
++  background-color: #42b983;
++  color: white;
++  border: none;
++  border-radius: 4px;
++  cursor: pointer;
++  font-size: 14px;
++  transition: background-color 0.3s ease, transform 0.2s ease;
++}
++
++button:hover {
++  background-color: #369f6d;
++  transform: scale(1.05);
++}
++
++button:disabled {
++  background-color: #ccc;
++  cursor: not-allowed;
++}
++
++span {
++  font-size: 16px;
++  font-weight: bold;
++}
++</style>
+Index: moviewsd/src/components/FeaturedMovies.vue
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><template>\r\n  <div class=\"featured-movie\" v-if=\"movie\">\r\n    <img\r\n        :src=\"'https://image.tmdb.org/t/p/original' + movie.backdrop_path\"\r\n        :alt=\"movie.title\"\r\n        class=\"featured-image\"\r\n    />\r\n    <div class=\"featured-info\">\r\n      <h1>{{ movie.title }}</h1>\r\n      <p>{{ movie.overview }}</p>\r\n      <div class=\"button-group\">\r\n        <button class=\"play-button\" @click=\"playMovie\">▶ 재생</button>\r\n        <button class=\"details-button\" @click=\"goToDetails(movie.id)\">상세정보</button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n\r\n<script setup>\r\nimport { ref, onMounted } from \"vue\";\r\nimport axios from \"axios\";\r\nimport { useToast } from \"vue-toastification\";\r\n\r\nconst movie = ref(null);\r\nconst apiKey = localStorage.getItem(\"apiKey\");\r\nconst toast = useToast();\r\n\r\nconst fetchFeaturedMovie = async () => {\r\n  try {\r\n    const response = await axios.get(\r\n        `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=ko-KR&page=1`\r\n    );\r\n    movie.value = response.data.results[0];\r\n  } catch (error) {\r\n    toast.error(\"대표 영화를 불러오는 데 실패했습니다.\");\r\n  }\r\n};\r\n\r\nconst playMovie = () => {\r\n  toast.info(\"결제가 필요합니다.\");\r\n};\r\n\r\nconst goToDetails = (movieId) => {\r\n  this.$router.push({ name: \"movie-details\", params: { id: movieId } });\r\n};\r\n\r\nonMounted(fetchFeaturedMovie);\r\n</script>\r\n\r\n<style scoped>\r\n.featured-movie {\r\n  position: relative;\r\n  margin-bottom: 40px;\r\n}\r\n\r\n.featured-image {\r\n  width: 100%;\r\n  max-height: 400px;\r\n  object-fit: cover;\r\n  border-radius: 10px;\r\n}\r\n\r\n.featured-info {\r\n  position: absolute;\r\n  bottom: 20px;\r\n  left: 20px;\r\n  color: white;\r\n  background-color: rgba(0, 0, 0, 0.6);\r\n  padding: 20px;\r\n  border-radius: 10px;\r\n  max-width: 500px;\r\n}\r\n\r\n.button-group {\r\n  margin-top: 20px;\r\n}\r\n\r\nbutton {\r\n  background-color: #ff6347;\r\n  border: none;\r\n  border-radius: 5px;\r\n  padding: 10px 20px;\r\n  color: white;\r\n  font-size: 14px;\r\n  font-weight: bold;\r\n  cursor: pointer;\r\n  transition: transform 0.3s ease, background-color 0.3s ease;\r\n}\r\n\r\nbutton:hover {\r\n  transform: scale(1.1);\r\n  background-color: #ff4500;\r\n}\r\n\r\n.play-button {\r\n  margin-right: 10px;\r\n}\r\n\r\n.details-button {\r\n  background-color: #1e90ff;\r\n}\r\n\r\n.details-button:hover {\r\n  background-color: #4682b4;\r\n}\r\n</style>\r\n
+===================================================================
+diff --git a/moviewsd/src/components/FeaturedMovies.vue b/moviewsd/src/components/FeaturedMovies.vue
+--- a/moviewsd/src/components/FeaturedMovies.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/FeaturedMovies.vue	(date 1732559281577)
+@@ -37,7 +37,7 @@
+ };
+ 
+ const playMovie = () => {
+-  toast.info("결제가 필요합니다.");
++  toast.info("재생 기능은 아직 구현되지 않았습니다!");
+ };
+ 
+ const goToDetails = (movieId) => {
+@@ -104,3 +104,4 @@
+   background-color: #4682b4;
+ }
+ </style>
++
+Index: moviewsd/src/components/ScrollToTop.vue
+===================================================================
+diff --git a/moviewsd/src/components/ScrollToTop.vue b/moviewsd/src/components/ScrollToTop.vue
+--- a/moviewsd/src/components/ScrollToTop.vue	(revision 90f72503ed57f154bb86d80fc8d76efed5abd3ce)
++++ b/moviewsd/src/components/ScrollToTop.vue	(date 1732559379031)
+@@ -1,0 +1,54 @@
++<template>
++  <button
++      v-if="isVisible"
++      class="scroll-to-top"
++      @click="scrollToTop"
++  >
++    ▲
++  </button>
++</template>
++
++<script setup>
++import { ref, onMounted, onUnmounted } from "vue";
++
++const isVisible = ref(false);
++
++const handleScroll = () => {
++  isVisible.value = window.scrollY > 300;
++};
++
++const scrollToTop = () => {
++  window.scrollTo({ top: 0, behavior: "smooth" });
++};
++
++onMounted(() => {
++  window.addEventListener("scroll", handleScroll);
++});
++
++onUnmounted(() => {
++  window.removeEventListener("scroll", handleScroll);
++});
++</script>
++
++<style scoped>
++.scroll-to-top {
++  position: fixed;
++  bottom: 50px;
++  right: 20px;
++  padding: 10px 15px;
++  background-color: #42b983;
++  color: white;
++  border: none;
++  border-radius: 50%;
++  font-size: 18px;
++  font-weight: bold;
++  cursor: pointer;
++  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
++  transition: transform 0.2s ease, background-color 0.2s ease;
++}
++
++.scroll-to-top:hover {
++  transform: scale(1.1);
++  background-color: #369f6d;
++}
++</style>

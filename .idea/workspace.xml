@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="good">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,8 +22,19 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/moviewsd" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {}
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {}
+}</component>
+  <component name="GitHubPullRequestState"><![CDATA[{
+  "prStates": [
+    {
+      "id": {
+        "id": "PR_kwDONPWSs86DJQc0",
+        "number": 12
+      },
+      "lastSeen": 1732607040883
+    }
+  ]
 }]]></component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
@@ -45,7 +57,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/home",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/projects/moviewsd/src/assets",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -56,6 +69,12 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\projects\moviewsd\src\assets" />
+      <recent name="C:\projects\moviewsd\public" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -79,6 +98,9 @@
       <workItem from="1732069890543" duration="50082000" />
       <workItem from="1732430883564" duration="5709000" />
       <workItem from="1732515148963" duration="3037000" />
+      <workItem from="1732605280650" duration="1413000" />
+      <workItem from="1732606725796" duration="174000" />
+      <workItem from="1732606912242" duration="30741000" />
     </task>
     <task id="LOCAL-00001" summary="good">
       <option name="closed" value="true" />

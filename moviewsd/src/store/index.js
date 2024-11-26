@@ -1,5 +1,8 @@
 import { createStore } from "vuex";
 import axios from "axios";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 export default createStore({
   state: {
@@ -73,7 +76,7 @@ export default createStore({
           localStorage.setItem("user", JSON.stringify(user));
         }
       } catch (error) {
-        alert("Invalid API Key. Please try again.");
+        toast.error("Invalid API Key. Please try again.");
         throw new Error("API Key is not valid");
       }
     },
@@ -111,7 +114,7 @@ export default createStore({
         commit("SET_POPULAR_MOVIES", response.data.results);
       } catch (error) {
         console.error("Error fetching popular movies:", error);
-        alert("Failed to fetch movies. Please check your API Key.");
+        toast.error("Failed to fetch movies. Please check your API Key.");
       }
     },
     async fetchMovieDetails({ commit, state }, movieId) {
@@ -131,7 +134,7 @@ export default createStore({
         commit("SET_MOVIE_DETAILS", response.data);
       } catch (error) {
         console.error("Error fetching movie details:", error);
-        alert("Failed to fetch movie details. Please check your API Key.");
+        toast.error("Failed to fetch movie details. Please check your API Key.");
       }
     },
     async fetchSearchedMovies({ commit, state }, query) {
@@ -153,7 +156,7 @@ export default createStore({
         commit("SET_SEARCHED_MOVIES", response.data.results);
       } catch (error) {
         console.error("Error fetching searched movies:", error);
-        alert("Failed to fetch searched movies. Please check your API Key.");
+        toast.error("Failed to fetch searched movies. Please check your API Key.");
       }
     },
     async fetchGenreMovies({ commit, state }, genreId) {
@@ -175,7 +178,7 @@ export default createStore({
         commit("SET_GENRE_MOVIES", response.data.results);
       } catch (error) {
         console.error("Error fetching genre movies:", error);
-        alert("Failed to fetch genre movies. Please check your API Key.");
+        toast.error("Failed to fetch genre movies. Please check your API Key.");
       }
     },
     async fetchGenres({ commit, state }) {
@@ -195,7 +198,7 @@ export default createStore({
         commit("SET_GENRES", response.data.genres);
       } catch (error) {
         console.error("Error fetching genres:", error);
-        alert("Failed to fetch genres. Please check your API Key.");
+        toast.error("Failed to fetch genres. Please check your API Key.");
       }
     },
   },

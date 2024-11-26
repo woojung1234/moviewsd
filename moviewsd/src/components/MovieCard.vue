@@ -46,20 +46,29 @@ export default {
 </script>
 
 <style scoped>
+
 .movie-card {
-  position: relative;
-  width: 200px;
-  margin: 20px;
   text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 트랜지션 효과 추가 */
 }
+
+.movie-card:hover {
+  transform: scale(1.05); /* 살짝 확대 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+}
+
 .movie-card img {
   width: 100%;
   border-radius: 10px;
   cursor: pointer;
 }
 .movie-card h3 {
-  font-size: 18px;
-  margin: 10px 0;
+  font-size: 13px;
+  margin: 0px 0;
 }
 .movie-card p {
   font-size: 14px;
@@ -69,7 +78,7 @@ export default {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 24px;
+  font-size: 13px;
   color: gold;
   cursor: pointer;
 }
