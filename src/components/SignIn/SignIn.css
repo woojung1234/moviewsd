@@ -91,8 +91,8 @@ a {
         position: absolute;
         bottom: 15px;
         left: 0;
-        opacity: 1; /* 항상 표시 */
-        visibility: visible;
+        opacity: 0; /* 항상 표시 */
+        visibility: hidden;
         color: #fff;
         padding: 10px;
         z-index: 2;
