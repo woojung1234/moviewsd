@@ -5,18 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e5d11c1-391a-4d70-96db-5727dfc7ad3c" name="Changes" comment="good">
-      <change afterPath="$PROJECT_DIR$/src/components/LoginCard.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/RegisterCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PopularMovie/PopularCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PopularMovie/PopularCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PopularMovie/PopularCard.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SignIn/SignIn.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SignIn/SignIn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/SignIn/SignIn.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/TrendMovie/TrendCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/TrendMovie/TrendCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/TrendMovie/TrendCard.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Auth/AuthCard.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Auth/Checkbox.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Auth/InputField.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Auth/LoginForm.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Auth/RegisterForm.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/PopularMovies.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/PopularMovies.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/SigninPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/SigninPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/TrendMovies.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/TrendMovies.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="remake" />
+        <entry key="$PROJECT_DIR$" value="main" />
         <entry key="$PROJECT_DIR$/moviewsd" value="main" />
       </map>
     </option>
@@ -54,20 +55,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;hotfix/split&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -93,6 +94,10 @@
       <workItem from="1732515148963" duration="3037000" />
       <workItem from="1732580153171" duration="96000" />
       <workItem from="1732580366615" duration="2475000" />
+      <workItem from="1732582924172" duration="2026000" />
+      <workItem from="1732585905029" duration="1702000" />
+      <workItem from="1732592456170" duration="5071000" />
+      <workItem from="1732598028469" duration="3891000" />
     </task>
     <task id="LOCAL-00001" summary="good">
       <option name="closed" value="true" />

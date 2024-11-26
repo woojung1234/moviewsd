@@ -17,3 +17,4 @@ export default {
 </script>
 
 <style src="@/components/TrendMovie/TrendCard.css" scoped></style>
+
