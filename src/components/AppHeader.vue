@@ -1,16 +1,47 @@
 <template>
-  <nav class="header" @mouseover="hoverHeader(true)" @mouseleave="hoverHeader(false)">
-    <router-link to="/">홈</router-link> |
-    <router-link to="/popular">인기 영화</router-link> |
-    <router-link to="/search">검색하기</router-link> |
-    <router-link to="/wishlist">좋아하는 영화</router-link> |
-    <button v-if="isLoggedIn" @click="logout">로그아웃</button>
-    <router-link v-else to="/signin">로그인</router-link>
-  </nav>
+  <header class="header">
+    <!-- 로고 -->
+    <div class="logo">
+      <button @click="goToHome" aria-label="로고">
+        <font-awesome-icon :icon="['fas', 'tape']" />
+      </button>
+    </div>
+
+    <!-- 중앙 네비게이션 -->
+    <nav class="nav-links">
+      <!-- 홈 -->
+      <button @click="goToHome" aria-label="홈">
+        <font-awesome-icon :icon="['fas', 'house']" />
+      </button>
+      <!-- 인기 영화 -->
+      <button @click="goToPopular" aria-label="인기 영화">
+        <font-awesome-icon :icon="['fas', 'fire']" />
+      </button>
+      <!-- 좋아하는 영화 -->
+      <button @click="goToWishlist" aria-label="좋아하는 영화">
+        <font-awesome-icon :icon="['fas', 'heart']" />
+      </button>
+      <!-- 검색 -->
+      <button class="fab" @click="goToSearch" aria-label="검색">
+        <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+      </button>
+    </nav>
+
+    <!-- 우측 로그아웃 -->
+    <div class="auth">
+      <button v-if="isLoggedIn" @click="logout" aria-label="로그아웃">
+        <font-awesome-icon :icon="['fas', 'right-from-bracket']" />
+      </button>
+      <button v-else @click="goToSignIn" aria-label="로그인">
+        <font-awesome-icon :icon="['fas', 'user']" />
+      </button>
+    </div>
+  </header>
 </template>
 
+
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -19,66 +50,112 @@ const router = useRouter();
 
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-// 헤더 상태: 마우스 호버 시 스타일 변경
-const isHeaderHovered = ref(false);
-
-const hoverHeader = (isHovered) => {
-  isHeaderHovered.value = isHovered;
-};
-
 const logout = () => {
   store.dispatch("logout");
   router.push("/signin");
 };
+const goToSearch = () => {
+  router.push('/search');
+};
+const goToHome = () => {
+  router.push("/");
+};
+const goToPopular = () => {
+  router.push("/popular");
+};
+const goToWishlist = () => {
+  router.push("/wishlist");
+};
+
 </script>
+
 
 <style scoped>
 
 .header {
-  padding: 10px 20px; /* 수직 여백을 더 추가 */
-  margin: 0;
-  background-color: rgba(31, 31, 31, 1); /* 초기 불투명도 100% */
+  padding: 10px 20px;
+  background-color: rgba(31, 31, 31, 0.9);
   display: flex;
-  justify-content: center;
-  align-items: center; /* 세로 중앙 정렬 */
-  gap: 15px; /* 링크 사이의 간격 증가 */
-  transition: background-color 0.3s ease, height 0.3s ease;
-  height: 20px; /* 헤더 높이 증가 */
+  justify-content: space-between;
+  align-items: center;
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* 헤더 호버 상태 */
 .header:hover {
-  background-color: #343434; /* 진한 색상 */
+  background-color: rgba(50, 50, 50, 1);
 }
 
-.header a {
-  text-decoration: none;
-  font-weight: bold;
-  color: #e6e6e6; /* 링크 색상 */
-  transition: transform 0.3s ease, color 0.3s ease; /* 확대 효과 추가 */
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
-.header a.router-link-exact-active {
-  color: #f5b041; /* 활성화된 링크 색상 */
+.nav-links {
+  display: flex;
+  gap: 20px; /* 버튼 간 간격 */
+  align-items: center;
 }
 
-/* 버튼 스타일 */
 button {
   background: none;
   border: none;
   color: #e6e6e6;
-  font-weight: bold;
+  font-size: 20px; /* 아이콘 크기 */
   cursor: pointer;
-  transition: transform 0.3s ease, color 0.3s ease; /* 확대 효과 추가 */
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-/* 버튼과 링크에 마우스를 올릴 때 효과 */
-button:hover,
-.header a:hover {
-  transform: scale(1.1); /* 버튼 및 링크 확대 */
+button:hover {
   color: #ffbf00; /* 호버 시 강조 색상 */
+  transform: scale(1.1); /* 살짝 확대 */
 }
+
+/* FAB 스타일 */
+.fab {
+  background-color: rgba(50, 50, 50, 1);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.fab:hover {
+  background-color: #ffa500;
+  transform: scale(1.1);
+}
+
+/* 로고 스타일 */
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-links button {
+    font-size: 18px; /* 모바일에서 버튼 크기 조정 */
+  }
+}
+
+
 </style>
