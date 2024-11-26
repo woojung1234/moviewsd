@@ -13,7 +13,7 @@ html, body {
 }
 
 .trend-movies {
-    flex: 1; /* 헤더 아래 남은 공간 모두 사용 */
+    flex: 10; /* 헤더 아래 남은 공간 모두 사용 */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -24,7 +24,7 @@ html, body {
 header, .header {
     margin: 0;
     padding: 0;
-    height: 50px; /* 고정 높이 설정 */
+    height: 40px; /* 고정 높이 설정 */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -33,9 +33,9 @@ header, .header {
 }
 
 .view-options button {
-    margin: 10px;
-    padding: 10px 15px;
-    background-color: #42b983;
+
+    padding: 10px 0px;
+    background-color: #4281b9;
     color: white;
     border: none;
     cursor: pointer;
@@ -44,7 +44,7 @@ header, .header {
 }
 
 .view-options button:hover {
-    background-color: #369f6d;
+    background-color: #36649f;
 }
 
 .movie-list {
@@ -54,30 +54,33 @@ header, .header {
 }
 
 .movie-card {
-    flex: 0 0 auto; /* 카드들이 고정 크기로 배치되도록 설정 */
-    width: 150px; /* 각 카드의 고정 너비 */
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 .movie-card img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 10px;
+    width: 100%; /* 카드 너비에 맞게 이미지 조정 */
+    height: auto;
+    border-radius: 5px;
 }
 
 .movie-card h3 {
-    font-size: 16px;
-    margin-top: 10px;
+    font-size: 14px; /* 텍스트 크기 조정 */
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%; /* 긴 제목도 정렬되도록 */
 }
 
 .table-view {
-    height: calc(100vh - 200px); /* 헤더와 페이지 네이션을 제외한 높이 */
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 가로 스크롤 없이 조정 */
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 카드 크기에 따라 열 수 자동 조정 */
+    gap: 10px;
     justify-content: center;
-    align-content: center;
+    align-content: start; /* 카드가 위쪽부터 정렬되도록 */
+     /* 페이지 높이에 맞춰 조정 (헤더와 페이지네이션 제외) */
     overflow: hidden; /* 스크롤 비활성화 */
 }
 
@@ -98,25 +101,26 @@ header, .header {
 /* 페이지네이션 버튼을 화면 하단 중앙에 고정 */
 .pagination {
     position: fixed;
-    bottom: 10px;  /* 화면 하단에서 20px 떨어진 위치 */
+    bottom: 10px; /* 화면 하단에 고정 */
     left: 50%;
-    transform: translateX(-50%);  /* 가운데 정렬 */
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
-    align-items: center;
-    background-color: white;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 100;  /* 다른 요소들 위에 표시되도록 */
+    gap: 5px; /* 버튼 간격 */
 }
 
 .pagination button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    background-color: #42b983;
+    background-color: #4281b9;
     color: white;
     border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
     cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #36649f;
 }
 
 .pagination button:disabled {
@@ -125,26 +129,45 @@ header, .header {
 }
 
 .pagination span {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
 }
 .scroll-to-top {
     position: fixed;
-    bottom: 50px; /* 화면 하단에서 50px 위 */
+    bottom: 20px; /* 화면 하단에서 20px 위 */
     right: 20px; /* 화면 오른쪽에서 20px 안쪽 */
-    padding: 10px 15px;
-    background-color: #42b983;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, background-color 0.2s ease; /* 빠르게 커짐 */
+    width: 40px; /* 버튼의 가로 길이 */
+    height: 40px; /* 버튼의 세로 길이 */
+    border-radius: 50%; /* 버튼을 동그랗게 */
+    background-color: #4281b9; /* 버튼 배경색 */
+    color: white; /* 버튼 아이콘 색상 */
+    display: flex;
+    justify-content: center; /* 아이콘을 수평 가운데 정렬 */
+    align-items: center; /* 아이콘을 수직 가운데 정렬 */
+    border: none; /* 버튼 테두리 제거 */
+    font-size: 16px; /* 아이콘 크기 */
+    cursor: pointer; /* 마우스를 올렸을 때 포인터 커서 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .scroll-to-top:hover {
-    transform: scale(1.1); /* 살짝만 커짐 */
-    background-color: #369f6d; /* 호버 시 색상 변경 */
+    transform: scale(1.1); /* 살짝 확대 */
+    background-color: #36649f; /* 호버 시 배경색 */
+}
+@media (max-width: 768px) {
+    .movie-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* 더 작은 카드 */
+        gap: 10px;
+    }
+
+    .movie-card {
+        width: auto;
+        height: auto;
+    }
+
+    .movie-card img {
+        height: 150px;
+    }
 }

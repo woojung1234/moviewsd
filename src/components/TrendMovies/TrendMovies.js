@@ -37,17 +37,19 @@ export default {
     },
     methods: {
         calculateItemsPerPage() {
-            const cardHeight = 320;
-            const cardWidth = 220;
-            const headerHeight = 100;
-            const paginationHeight = 50;
-            const availableHeight = window.innerHeight - headerHeight - paginationHeight - 50;
-            const availableWidth = window.innerWidth - 50;
+            if (this.viewType === 'table') {
+                const cardHeight = 200; // 영화 카드 높이
+                const cardWidth = 120; // 영화 카드 너비
+                const headerHeight = 100; // 헤더 높이
+                const paginationHeight = 50; // 페이지네이션 높이
+                const availableHeight = window.innerHeight - headerHeight - paginationHeight - 50; // 사용 가능한 높이
+                const availableWidth = window.innerWidth - 20; // 좌우 여백
 
-            const rows = Math.floor(availableHeight / cardHeight);
-            const cols = Math.floor(availableWidth / cardWidth);
+                const rows = Math.floor(availableHeight / cardHeight); // 표시할 행 수
+                const cols = Math.floor(availableWidth / cardWidth); // 표시할 열 수
 
-            this.itemsPerPage = rows * cols;
+                this.itemsPerPage = rows * cols; // 한 페이지에 표시할 영화 개수
+            }
         },
         async fetchMovies() {
             const apiKey = '1cc6831125c4a1baf8f809dc1f68ec14';
@@ -99,11 +101,11 @@ export default {
         },
         scrollToTop() {
             const container = this.$refs.scrollContainer;
-            container.scrollTo({ top: 0, behavior: "smooth" });
+            container.scrollTo({ top: 0, behavior: "smooth" }); // 부드럽게 최상단으로 이동
         },
         checkScroll() {
             const container = this.$refs.scrollContainer;
-            this.isScrolled = container.scrollTop > 300;
+            this.isScrolled = container.scrollTop > 30; // 스크롤 위치가 300px 이상일 때 버튼 표시
         },
     },
 };

@@ -14,9 +14,9 @@
           :movie="movie"
       />
       <div class="pagination">
-        <button @click="changePage('previous')" :disabled="page === 1">이전</button>
-        <span>페이지 {{ page }}</span>
-        <button @click="changePage('next')" :disabled="page * itemsPerPage >= totalResults">다음</button>
+        <button @click="changePage('previous')" :disabled="page === 1">{{ page - 1 }}</button>
+        <span>{{ page }}</span>
+        <button @click="changePage('next')" :disabled="page * itemsPerPage >= totalResults">{{ page + 1 }}</button>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
     </div>
     <!-- 무한 스크롤 모드에서만 보이는 "맨 위로" 버튼 -->
     <button
-        v-if="viewType === 'infinite' && isScrolled"
+        v-if="viewType === 'infinite' "
         class="scroll-to-top"
         @click="scrollToTop"
     >

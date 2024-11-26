@@ -67,8 +67,8 @@ export default {
   cursor: pointer;
 }
 .movie-card h3 {
-  font-size: 18px;
-  margin: 10px 0;
+  font-size: 13px;
+  margin: 0px 0;
 }
 .movie-card p {
   font-size: 14px;
@@ -78,7 +78,7 @@ export default {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 24px;
+  font-size: 13px;
   color: gold;
   cursor: pointer;
 }
