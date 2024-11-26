@@ -370,51 +370,27 @@ button:hover {
 }
 
 @media (max-width: 768px) {
+
     #phone {
-        width: 90%; /* 화면 너비의 90% */
-        max-width: 360px; /* 최대 너비 제한 */
-        min-width: 300px; /* 최소 너비 */
-        height: auto; /* 높이를 자동으로 설정 */
-        max-height: 90vh; /* 최대 높이 제한 */
-        min-height: 400px; /* 최소 높이 설정 */
-        top: 38%; /* 기존 위치에서 비밀번호 칸만큼 위로 이동 */
-        transform: translate(-50%, -38%); /* 위쪽으로 이동한 값을 보정 */
-        border-radius: 15px; /* 둥근 모서리 */
-        overflow: hidden; /* 넘침 방지 */
-        display: flex; /* 내부 정렬 */
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0px 10px 30px rgba(23, 83, 209, 0.3); /* 그림자 유지 */
+        width: 70%;
+        transform: translate(-50%, -50%) scale(1); /* Scale down on small screens */
     }
 
-    .card {
-        width: 100%; /* 카드가 부모 크기에 맞도록 */
-        padding: 20px; /* 내부 여백 */
-        max-width: 320px; /* 카드 너비 제한 */
-        margin: 0 auto; /* 카드 중앙 정렬 */
+    #login {
+        top: -2svh !important;
     }
 
-    h1 {
-        font-size: 18px; /* 제목 크기 축소 */
-        margin-bottom: 15px; /* 제목 아래 간격 */
+    #register {
+        top: -2svh !important;
     }
 
-    .input {
-        margin-top: 1rem; /* 입력 필드 간 간격 */
+    #register.hidden {
+        top:calc(5svh + 90px) !important;
+        z-index:1;
     }
 
-    button {
-        padding: 10px 15px; /* 버튼 크기 축소 */
-        font-size: 14px; /* 버튼 글자 크기 조정 */
-        max-width: 300px; /* 버튼 너비 제한 */
-        margin: 10px auto; /* 버튼 중앙 정렬 */
-    }
-
-    .account-check {
-        font-size: 14px; /* 전환 링크 크기 */
-        margin-top: 20px;
-        padding: 10px;
-        position: relative; /* 위치 조정 */
+    #login.hidden {
+        top:calc(5svh + 90px) !important;
+        z-index:1;
     }
 }
