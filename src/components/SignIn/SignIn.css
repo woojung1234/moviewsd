@@ -66,9 +66,9 @@ a {
 }
 
 
-@media (max-height: 768px) {
+@media (max-height: 700px) {
     #phone {
-        transform: translate(-50%, -50%) scale(0.5); /* Scale down on small screens */
+        transform: translate(-50%, -50%) scale(1); /* Scale down on small screens */
     }
     #login,
     #register {
