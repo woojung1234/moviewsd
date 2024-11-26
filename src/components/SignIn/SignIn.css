@@ -330,7 +330,7 @@ button:hover {
 }
 
 #login.hidden form {
-    transform:translateX(-20px);
+    transform:translateX(20px);
 }
 
 .hidden form {

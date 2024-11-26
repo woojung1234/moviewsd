@@ -37,7 +37,7 @@
               <button :disabled="!isLoginFormValid">Login</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Don't have an account? <b>Sign up</b>
+              Already have an account? <b>Sign in</b>
             </a>
           </div>
 
@@ -87,7 +87,7 @@
               <button :disabled="!isRegisterFormValid">Register</button>
             </form>
             <a href="javascript:void(0)" class="account-check" @click="toggleCard">
-              Already have an account? <b>Sign in</b>
+              Don't have an account? <b>Sign up</b>
             </a>
           </div>
         </div>
